@@ -9,6 +9,10 @@ pip intall django
 
 pip install django-cors-headers
 
+pip install mysqlclient
+
+pip install web.py
+
 ```
 
 #### 配置mysql(修改./backend/settings.py)
