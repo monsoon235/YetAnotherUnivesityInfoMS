@@ -1,22 +1,3 @@
-# from __future__ import unicode_literals
-#
-# from django.db import models
-#
-# # Create your models here.
-# # -*- coding: utf-8 -*-
-#
-# from django.db import models
-#
-#
-# # Create your models here.
-# class Student(models.Model):
-#     student_name = models.CharField(max_length=64)
-#     add_time = models.DateTimeField(auto_now_add=True)
-#
-#     def __unicode__(self):
-#         return self.student_name
-
-
 from django.db import models
 
 
@@ -35,10 +16,18 @@ class Major(models.Model):
 
 
 class Person(models.Model):
+    class IDTypeChoice(models.IntegerChoices):
+        ID_CARD = 0, 'id_card'
+        PASSPORT = 1, 'passport'
+
+    class GenderChoice(models.IntegerChoices):
+        MALE = 0, 'male'
+        FEMALE = 1, 'female'
+
     id = models.CharField(max_length=20, primary_key=True)
-    id_type = models.TextChoices('id_type', 'id_card passport')
+    id_type = models.IntegerField(choices=IDTypeChoice.choices, default=IDTypeChoice.ID_CARD)
     name = models.CharField(max_length=45)
-    gender = models.TextChoices('gender', 'male female')
+    gender = models.IntegerField(choices=GenderChoice.choices, default=GenderChoice.MALE)
     birth = models.DateField()
     country = models.CharField(max_length=45)
     family_address = models.CharField(max_length=45, null=True)
@@ -47,11 +36,15 @@ class Person(models.Model):
 
 
 class Teacher(models.Model):
+    class TitleChoice(models.IntegerChoices):
+        PROFESSOR = 0, 'professor'
+        VICE_PROFESSOR = 1, 'vice_professor'
+
     id = models.CharField(max_length=10, primary_key=True)
-    person_id = models.ForeignKey(Person, on_delete=models.PROTECT)
+    person_id = models.OneToOneField(Person, on_delete=models.PROTECT)
     enroll_date = models.DateField()
     email = models.EmailField()
-    title = models.TextChoices('title', 'professor vice_professor')
+    title = models.IntegerField(choices=TitleChoice.choices, default=TitleChoice.PROFESSOR)
     major_id = models.ForeignKey(Major, on_delete=models.PROTECT)
 
 
@@ -69,51 +62,77 @@ class Class(models.Model):
 
 class Student(models.Model):
     id = models.CharField(max_length=10, primary_key=True)
-    person_id = models.ForeignKey(Person, on_delete=models.PROTECT)
+    person_id = models.OneToOneField(Person, on_delete=models.PROTECT)
     enroll_date = models.DateField()
     email = models.EmailField()
     class_id = models.ForeignKey(Class, on_delete=models.PROTECT)
 
 
 class Course(models.Model):
+    class AssessmentChoice(models.IntegerChoices):
+        EXAM = 0, 'exam'
+        REPLY = 1, 'reply'
+
     id = models.CharField(max_length=10, primary_key=True)
     name = models.CharField(max_length=20)
-    assessment = models.TextChoices('assessment', 'exam reply')
+    assessment = models.IntegerField(choices=AssessmentChoice.choices, default=AssessmentChoice.EXAM)
     major_id = models.ForeignKey(Major, on_delete=models.PROTECT)
 
 
 class Lecture(models.Model):
+    class TermChoice(models.IntegerChoices):
+        SPRING = 0, 'spring'
+        AUTUMN = 1, 'autumn'
+
     id = models.CharField(max_length=10, primary_key=True)
     course_id = models.ForeignKey(Course, on_delete=models.PROTECT)
     teacher_id = models.ForeignKey(Teacher, on_delete=models.PROTECT)
     year = models.IntegerField()
-    term = models.Choices('term', 'Spring Autumn')
-    time = models.IntegerChoices('time', ' '.join(str(i) for i in range(1, 46)))
+    term = models.IntegerField(choices=TermChoice.choices, default=TermChoice.SPRING)
+    time = models.IntegerField(default=1)
+
+    # class Meta:
+    #     db_constraints = {
+    #         'time_choice': 'check(time>=1 and time <=45)',
+    #     }
 
 
 class Selection(models.Model):
-    id = models.TextField(max_length=20, primary_key=True)
+    id = models.CharField(max_length=20, primary_key=True)
     lecture_id = models.ForeignKey(Lecture, on_delete=models.PROTECT)
     student_id = models.ForeignKey(Student, on_delete=models.PROTECT)
     score = models.IntegerField(null=True)
 
 
 class Adjustment(models.Model):
-    id = models.TextField(max_length=20)
-    from_class_id = models.ForeignKey(Class, on_delete=models.PROTECT)
-    to_class_id = models.ForeignKey(Class, on_delete=models.PROTECT)
-    type = models.Choices('type', 'change_major downgrade')
+    class TypeChoice(models.IntegerChoices):
+        CHANGE_MAJOR = 0, 'change_major'
+        DOWNGRADE = 1, 'downgrade'
+
+    id = models.CharField(max_length=20, primary_key=True)
+    from_class_id = models.ForeignKey(Class, on_delete=models.PROTECT, related_name='from_class_id')
+    to_class_id = models.ForeignKey(Class, on_delete=models.PROTECT, related_name='to_class_id')
+    type = models.IntegerField(choices=TypeChoice.choices, default=TypeChoice.CHANGE_MAJOR)
     date = models.DateField()
     student_id = models.ForeignKey(Student, on_delete=models.PROTECT)
 
 
 class ChangeMajor(models.Model):
-    student_id = models.ForeignKey(Student, on_delete=models.PROTECT, primary_key=True)
-    adjustment_id = models.ForeignKey(Adjustment, on_delete=models.PROTECT)
-    ccyl_change = models.TextChoices('ccyl_change', 'yes no none')
+    class CCYLChange(models.IntegerChoices):
+        YES = 0, 'yes'
+        NO = 1, 'no'
+        NONE = 2, 'none'
+
+    student_id = models.OneToOneField(Student, on_delete=models.PROTECT, primary_key=True)
+    adjustment_id = models.OneToOneField(Adjustment, on_delete=models.PROTECT)
+    ccyl_change = models.IntegerField(choices=CCYLChange.choices, default=CCYLChange.NONE)
 
 
 class Downgrade(models.Model):
-    student_id = models.ForeignKey(Student, on_delete=models.PROTECT, primary_key=True)
-    adjustment_id = models.ForeignKey(Adjustment, on_delete=models.PROTECT)
-    reason = models.TextChoices('reason', 'suspend support_teaching')
+    class ReasonChoice(models.IntegerChoices):
+        SUSPEND = 0, 'suspend'
+        SUPPORT_TEACHING = 1, 'support_teaching'
+
+    student_id = models.OneToOneField(Student, on_delete=models.PROTECT, primary_key=True)
+    adjustment_id = models.OneToOneField(Adjustment, on_delete=models.PROTECT)
+    reason = models.IntegerField(choices=ReasonChoice.choices, default=ReasonChoice.SUSPEND)
