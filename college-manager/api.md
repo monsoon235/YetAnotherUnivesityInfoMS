@@ -4,6 +4,38 @@
 
 ```
 GET  api/<function>/<action>?<param1>=xxx&<param2>=xxx
+
+POST  api/<function>/<action>     body 中携带数据
+```
+
+get, del 操作使用 GET
+
+add, mod 操作使用 POST, body 内容如下
+
+- add
+
+```json
+{
+  "id":"xxx",
+  "name":"xxx",
+  // ...
+}
+```
+
+- mod
+
+```json
+{
+  "where":{
+    "id":"xxx",
+    "name":"xxx",
+    // ...
+  },
+  "update":{
+    "name":"yyy",
+    // ...
+  }
+}
 ```
 
 返回结果：
@@ -32,11 +64,7 @@ GET  api/<function>/<action>?<param1>=xxx&<param2>=xxx
 
 校区信息管理
 
-筛选参数：
-
-1. id
-2. name
-3. address
+筛选参数：`id`,`name`,`address`
 
 ### get
 
@@ -91,7 +119,13 @@ GET  api/campus/del?id=PB01
 主键已存在时会返回错误，`not null` 字段没指定时也会返回错误。
 
 ```
-GET  api/campus/add&id=PB03&name=Cindy&address=us
+POST  api/campus/add
+
+{
+  "id":"PB03",
+  "name":"Cindy",
+  "address":"us"
+}
 ```
 
 ```json
@@ -110,7 +144,16 @@ GET  api/campus/add&id=PB03&name=Cindy&address=us
 示例：
 
 ```
-GET   api/campus/mod?id=PB01&name_mod=Andy
+POST   api/campus/mod
+
+{
+  "where": {
+    "id":"PB01"
+  },
+  "update":{
+    "name":"Andy"
+  }
+}
 ```
 
 ```json
@@ -120,18 +163,52 @@ GET   api/campus/mod?id=PB01&name_mod=Andy
 }
 ```
 
-(专业) api/major
+## major
 
-(班级) api/class
+大致和 campus 一样
 
-(学生) api/student
+筛选字段有 `id`, `name`, `address`, `campus_id`, `charge_teacher_id`.
 
-(教师) api/teacher
+返回字段中再加上 `campus_name`, `charge_teacher_name`.
 
-(学籍异动) api/adjustment
+## class
 
-(课程)  api/course
+筛选字段有 `id`, `name`, `found_date`, `grade`, `major_id`, `charge_teacher_id`.
 
-(开课)  api/lecture
+返回字段中加上 `major_name`, `charge_teacher_name`.
 
-(选课)  api/selection
+## student
+
+筛选字段有 `id`, `person_id`, `enroll_date`, `email`, `class_id`.
+
+返回字段中加上 `major_name`, `class_name`, `person_name`, `person_id_type`, `gender`, `birth`, `country`, `family_address`, `family_zipcode`, `family_tel`.
+
+<!-- todo 是否需要返回更多的信息？ -->
+
+## teacher
+
+筛选字段有 `id`, `person_id`, `enroll_date`, `email`, `title`, `major_id`.
+
+返回的字段除了以上，还有 `major_name`, `person_name`, `person_id_type`, `gender`, `birth`, `country`, `family_address`, `family_zipcode`, `family_tel`.
+
+## course
+
+筛选字段有 `id`, `name`, `assessment`, `major_id`.
+
+返回的字段除了以上，还有 `major_name`.
+
+## lecture
+
+筛选字段有 `id`, `course_id`, `teacher_id`, `year`, `term`, `time`.
+
+返回的字段除了以上，还有 `course_name`, `teacher_name`.
+
+## selection
+
+筛选字段有 `id`, `course_id`, `student_id`, `score`.
+
+返回的字段除了以上，还有 `course_name`, `teacher_name`, `student_name`.
+
+## adjustment
+
+<!-- todo  待定 -->
