@@ -144,6 +144,7 @@ export default new Router({
       { path: 'classMessage', component: stuClassMessage},
       { path: 'scoreMsg', component: stuScoreMsg},
       { path: 'notice', component: stuNotice},
+      { path: 'selectCourse', component: stuSelectCourse},
       { path: '*', component: stuStart },
 
     ]
