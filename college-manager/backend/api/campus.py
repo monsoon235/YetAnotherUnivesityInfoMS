@@ -1,17 +1,18 @@
 import json
 
 import django.views.decorators.csrf
-from django.core import serializers
 from django.http import HttpRequest, JsonResponse
 
 from .models import *
+
+where_params = ['id', 'name', 'address']
 
 
 def check_params(params: dict) -> dict:
     return {
         k: v
         for k, v in params.items()
-        if k in ['id', 'name', 'address']
+        if k in where_params
     }
 
 
@@ -19,15 +20,9 @@ def get(request: HttpRequest):
     response = {}
     try:
         params = check_params(request.GET.dict())
-        result = Campus.objects.filter(**params)
-        result = json.loads(serializers.serialize("json", result))
-        data = [{
-            'id': item['pk'],
-            'name': item['fields']['name'],
-            'address': item['fields']['address']
-        } for item in result]
+        result = Campus.objects.filter(**params).values()
         response['code'] = 1
-        response['list'] = data
+        response['list'] = list(result)
     except Exception as e:
         response['code'] = 0
         response['msg'] = str(e)
@@ -71,12 +66,13 @@ def delete(request: HttpRequest):
 def mod(request: HttpRequest):
     response = {}
     try:
-        where = check_params(request.POST.get('where', {}))
-        update = check_params(request.POST.get('update', {}))
+        params = json.loads(request.body)
+        where = check_params(params.get('where', {}))
+        update = check_params(params.get('update', {}))
         if 'id' in update:
             response['code'] = 0
             response['msg'] = 'can not modify id'
-        Campus.objects.filter(**where).update(update)
+        Campus.objects.filter(**where).update(**update)
         response['code'] = 1
     except Exception as e:
         response['code'] = 0

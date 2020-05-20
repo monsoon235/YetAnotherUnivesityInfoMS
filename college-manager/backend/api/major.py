@@ -1,17 +1,19 @@
 import json
 
 import django.views.decorators.csrf
-from django.core import serializers
+from django.db.models import F
 from django.http import HttpRequest, JsonResponse
 
 from .models import *
+
+where_params = ['id', 'name', 'address', 'campus_id', 'charge_person_id']
 
 
 def check_params(params: dict) -> dict:
     return {
         k: v
         for k, v in params.items()
-        if k in ['id', 'name', 'address', 'campus_id', 'charge_teacher_id']
+        if k in where_params
     }
 
 
@@ -19,18 +21,14 @@ def get(request: HttpRequest):
     response = {}
     try:
         params = check_params(request.GET.dict())
-        result = Major.objects.filter(**params)
-        result = json.loads(serializers.serialize("json", result))
-        data = [{
-            'id': item['pk'],
-            'name': item['fields']['name'],
-            'address': item['fields']['address'],
-            'campus_id': item['fields']['campus_id'],
-            # 'charge_teacher_id': item['fields']['charge_teacher_id']
-        } for item in result]
+        result = Major.objects.filter(**params).values(
+            *where_params,
+            campus_name=F('campus__name'), charge_person_name=F('charge_person__name')
+        )
         response['code'] = 1
-        response['list'] = data
+        response['list'] = list(result)
     except Exception as e:
+        print(e)
         response['code'] = 0
         response['msg'] = str(e)
     return JsonResponse(response)
@@ -75,12 +73,13 @@ def delete(request: HttpRequest):
 def mod(request: HttpRequest):
     response = {}
     try:
-        where = check_params(request.POST.get('where', {}))
-        update = check_params(request.POST.get('update', {}))
+        params = json.loads(request.body)
+        where = check_params(params.get('where', {}))
+        update = check_params(params.get('update', {}))
         if 'id' in update:
             response['code'] = 0
             response['msg'] = 'can not modify id'
-        Major.objects.filter(**where).update(update)
+        Major.objects.filter(**where).update(**update)
         response['code'] = 1
     except Exception as e:
         response['code'] = 0
