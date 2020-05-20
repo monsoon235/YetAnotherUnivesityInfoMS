@@ -179,17 +179,17 @@ POST   api/campus/mod
 
 ## student
 
-筛选字段有 `id`, `person_id`, `enroll_date`, `email`, `class_id`.
+筛选字段有 `id`, `person_id`, `enroll_date`, `email`, `class_id`, `major_name`, `class_name`, `person_name`, `person_id_type`, `gender`, `birth`, `country`, `family_address`, `family_zipcode`, `family_tel`.
 
-返回字段中加上 `major_name`, `class_name`, `person_name`, `person_id_type`, `gender`, `birth`, `country`, `family_address`, `family_zipcode`, `family_tel`.
+返回字段同上。
 
 <!-- todo 是否需要返回更多的信息？ -->
 
 ## teacher
 
-筛选字段有 `id`, `person_id`, `enroll_date`, `email`, `title`, `major_id`.
+筛选字段有 `id`, `person_id`, `enroll_date`, `email`, `title`, `major_id`, `major_name`, `person_name`, `person_id_type`, `gender`, `birth`, `country`, `family_address`, `family_zipcode`, `family_tel`.
 
-返回的字段除了以上，还有 `major_name`, `person_name`, `person_id_type`, `gender`, `birth`, `country`, `family_address`, `family_zipcode`, `family_tel`.
+返回的字段同上。
 
 ## course
 
