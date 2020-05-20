@@ -31,8 +31,8 @@ class Major(models.Model):
     id = models.CharField(max_length=10, primary_key=True)
     name = models.CharField(max_length=45)
     address = models.CharField(max_length=45)
-    campus_id = models.ForeignKey(Campus, on_delete=models.PROTECT)
-    charge_person_id = models.ForeignKey(Person, on_delete=models.PROTECT)
+    campus = models.ForeignKey(Campus, on_delete=models.PROTECT)
+    charge_person = models.ForeignKey(Person, on_delete=models.PROTECT)
 
 
 class Teacher(models.Model):
@@ -41,14 +41,11 @@ class Teacher(models.Model):
         VICE_PROFESSOR = 1, 'vice_professor'
 
     id = models.CharField(max_length=10, primary_key=True)
-    person_id = models.OneToOneField(Person, on_delete=models.PROTECT)
+    person = models.OneToOneField(Person, on_delete=models.PROTECT)
     enroll_date = models.DateField()
     email = models.EmailField()
     title = models.IntegerField(choices=TitleChoice.choices, default=TitleChoice.PROFESSOR)
-    major_id = models.ForeignKey(Major, on_delete=models.PROTECT)
-
-
-Major.charge_teacher_id = models.ForeignKey(Teacher, on_delete=models.PROTECT)
+    major = models.ForeignKey(Major, on_delete=models.PROTECT)
 
 
 class Class(models.Model):
@@ -56,16 +53,16 @@ class Class(models.Model):
     name = models.CharField(max_length=20)
     found_date = models.DateField()
     grade = models.IntegerField()
-    major_id = models.ForeignKey(Major, on_delete=models.PROTECT)
-    charge_teacher_id = models.ForeignKey(Teacher, on_delete=models.PROTECT)
+    major = models.ForeignKey(Major, on_delete=models.PROTECT)
+    charge_teacher = models.ForeignKey(Teacher, on_delete=models.PROTECT)
 
 
 class Student(models.Model):
     id = models.CharField(max_length=10, primary_key=True)
-    person_id = models.OneToOneField(Person, on_delete=models.PROTECT)
+    person = models.OneToOneField(Person, on_delete=models.PROTECT)
     enroll_date = models.DateField()
     email = models.EmailField()
-    class_id = models.ForeignKey(Class, on_delete=models.PROTECT)
+    class0 = models.ForeignKey(Class, on_delete=models.PROTECT)
 
 
 class Course(models.Model):
@@ -76,7 +73,7 @@ class Course(models.Model):
     id = models.CharField(max_length=10, primary_key=True)
     name = models.CharField(max_length=20)
     assessment = models.IntegerField(choices=AssessmentChoice.choices, default=AssessmentChoice.EXAM)
-    major_id = models.ForeignKey(Major, on_delete=models.PROTECT)
+    major = models.ForeignKey(Major, on_delete=models.PROTECT)
 
 
 class Lecture(models.Model):
@@ -85,8 +82,8 @@ class Lecture(models.Model):
         AUTUMN = 1, 'autumn'
 
     id = models.CharField(max_length=10, primary_key=True)
-    course_id = models.ForeignKey(Course, on_delete=models.PROTECT)
-    teacher_id = models.ForeignKey(Teacher, on_delete=models.PROTECT)
+    course = models.ForeignKey(Course, on_delete=models.PROTECT)
+    teacher = models.ForeignKey(Teacher, on_delete=models.PROTECT)
     year = models.IntegerField()
     term = models.IntegerField(choices=TermChoice.choices, default=TermChoice.SPRING)
     time = models.IntegerField(default=1)
@@ -99,8 +96,8 @@ class Lecture(models.Model):
 
 class Selection(models.Model):
     id = models.CharField(max_length=20, primary_key=True)
-    lecture_id = models.ForeignKey(Lecture, on_delete=models.PROTECT)
-    student_id = models.ForeignKey(Student, on_delete=models.PROTECT)
+    lecture = models.ForeignKey(Lecture, on_delete=models.PROTECT)
+    student = models.ForeignKey(Student, on_delete=models.PROTECT)
     score = models.IntegerField(null=True)
 
 
@@ -110,11 +107,11 @@ class Adjustment(models.Model):
         DOWNGRADE = 1, 'downgrade'
 
     id = models.CharField(max_length=20, primary_key=True)
-    from_class_id = models.ForeignKey(Class, on_delete=models.PROTECT, related_name='from_class_id')
-    to_class_id = models.ForeignKey(Class, on_delete=models.PROTECT, related_name='to_class_id')
+    from_class = models.ForeignKey(Class, on_delete=models.PROTECT, related_name='from_class_id')
+    to_class = models.ForeignKey(Class, on_delete=models.PROTECT, related_name='to_class_id')
     type = models.IntegerField(choices=TypeChoice.choices, default=TypeChoice.CHANGE_MAJOR)
     date = models.DateField()
-    student_id = models.ForeignKey(Student, on_delete=models.PROTECT)
+    student = models.ForeignKey(Student, on_delete=models.PROTECT)
 
 
 class ChangeMajor(models.Model):
@@ -123,8 +120,8 @@ class ChangeMajor(models.Model):
         NO = 1, 'no'
         NONE = 2, 'none'
 
-    student_id = models.OneToOneField(Student, on_delete=models.PROTECT, primary_key=True)
-    adjustment_id = models.OneToOneField(Adjustment, on_delete=models.PROTECT)
+    student = models.OneToOneField(Student, on_delete=models.PROTECT, primary_key=True)
+    adjustment = models.OneToOneField(Adjustment, on_delete=models.PROTECT)
     ccyl_change = models.IntegerField(choices=CCYLChange.choices, default=CCYLChange.NONE)
 
 
@@ -133,6 +130,6 @@ class Downgrade(models.Model):
         SUSPEND = 0, 'suspend'
         SUPPORT_TEACHING = 1, 'support_teaching'
 
-    student_id = models.OneToOneField(Student, on_delete=models.PROTECT, primary_key=True)
-    adjustment_id = models.OneToOneField(Adjustment, on_delete=models.PROTECT)
+    student = models.OneToOneField(Student, on_delete=models.PROTECT, primary_key=True)
+    adjustment = models.OneToOneField(Adjustment, on_delete=models.PROTECT)
     reason = models.IntegerField(choices=ReasonChoice.choices, default=ReasonChoice.SUSPEND)
