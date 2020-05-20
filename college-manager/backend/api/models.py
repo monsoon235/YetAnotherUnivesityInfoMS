@@ -20,7 +20,7 @@ class Person(models.Model):
     id_type = models.IntegerField(choices=IDTypeChoice.choices, default=IDTypeChoice.ID_CARD)
     name = models.CharField(max_length=45)
     gender = models.IntegerField(choices=GenderChoice.choices, default=GenderChoice.MALE)
-    birth = models.DateField()
+    birth = models.DateTimeField()
     country = models.CharField(max_length=45)
     family_address = models.CharField(max_length=45, null=True)
     family_zipcode = models.CharField(max_length=10, null=True)
@@ -42,7 +42,7 @@ class Teacher(models.Model):
 
     id = models.CharField(max_length=10, primary_key=True)
     person = models.OneToOneField(Person, on_delete=models.PROTECT)
-    enroll_date = models.DateField()
+    enroll_date = models.DateTimeField()
     email = models.EmailField()
     title = models.IntegerField(choices=TitleChoice.choices, default=TitleChoice.PROFESSOR)
     major = models.ForeignKey(Major, on_delete=models.PROTECT)
@@ -51,7 +51,7 @@ class Teacher(models.Model):
 class Class(models.Model):
     id = models.CharField(max_length=10, primary_key=True)
     name = models.CharField(max_length=20)
-    found_date = models.DateField()
+    found_date = models.DateTimeField()
     grade = models.IntegerField()
     major = models.ForeignKey(Major, on_delete=models.PROTECT)
     charge_teacher = models.ForeignKey(Teacher, on_delete=models.PROTECT)
@@ -60,7 +60,7 @@ class Class(models.Model):
 class Student(models.Model):
     id = models.CharField(max_length=10, primary_key=True)
     person = models.OneToOneField(Person, on_delete=models.PROTECT)
-    enroll_date = models.DateField()
+    enroll_date = models.DateTimeField()
     email = models.EmailField()
     class0 = models.ForeignKey(Class, on_delete=models.PROTECT)
 
@@ -110,7 +110,7 @@ class Adjustment(models.Model):
     from_class = models.ForeignKey(Class, on_delete=models.PROTECT, related_name='from_class_id')
     to_class = models.ForeignKey(Class, on_delete=models.PROTECT, related_name='to_class_id')
     type = models.IntegerField(choices=TypeChoice.choices, default=TypeChoice.CHANGE_MAJOR)
-    date = models.DateField()
+    date = models.DateTimeField()
     student = models.ForeignKey(Student, on_delete=models.PROTECT)
 
 

@@ -179,7 +179,7 @@ POST   api/campus/mod
 
 ## student
 
-筛选字段有 `id`, `person_id`, `enroll_date`, `email`, `class_id`, `major_name`, `class_name`, `person_name`, `person_id_type`, `gender`, `birth`, `country`, `family_address`, `family_zipcode`, `family_tel`.
+筛选字段有 `id`, `enroll_date`, `email`, `class_id`, `class_name`, `major_id`, `major_name`, `person_id`, `person_name`, `person_id_type`, `gender`, `birth`, `country`, `family_address`, `family_zipcode`, `family_tel`.
 
 返回字段同上。
 
@@ -187,7 +187,7 @@ POST   api/campus/mod
 
 ## teacher
 
-筛选字段有 `id`, `person_id`, `enroll_date`, `email`, `title`, `major_id`, `major_name`, `person_name`, `person_id_type`, `gender`, `birth`, `country`, `family_address`, `family_zipcode`, `family_tel`.
+筛选字段有 `id`, `enroll_date`, `email`, `title`, `major_id`, `major_name`, `person_id`, `person_name`, `person_id_type`, `gender`, `birth`, `country`, `family_address`, `family_zipcode`, `family_tel`.
 
 返回的字段同上。
 
@@ -205,7 +205,7 @@ POST   api/campus/mod
 
 ## selection
 
-筛选字段有 `id`, `course_id`, `student_id`, `score`.
+筛选字段有 `id`, `lecture_id`, `student_id`, `score`.
 
 返回的字段除了以上，还有 `course_name`, `teacher_name`, `student_name`.
 
