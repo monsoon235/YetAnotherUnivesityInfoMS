@@ -7,14 +7,6 @@ class Campus(models.Model):
     address = models.CharField(max_length=45)
 
 
-class Major(models.Model):
-    id = models.CharField(max_length=10, primary_key=True)
-    name = models.CharField(max_length=45)
-    address = models.CharField(max_length=45)
-    campus_id = models.ForeignKey(Campus, on_delete=models.PROTECT)
-    # charge_teacher_id = models.ForeignKey(Teacher, on_delete=models.PROTECT)
-
-
 class Person(models.Model):
     class IDTypeChoice(models.IntegerChoices):
         ID_CARD = 0, 'id_card'
@@ -33,6 +25,14 @@ class Person(models.Model):
     family_address = models.CharField(max_length=45, null=True)
     family_zipcode = models.CharField(max_length=10, null=True)
     family_tel = models.CharField(max_length=20, null=True)
+
+
+class Major(models.Model):
+    id = models.CharField(max_length=10, primary_key=True)
+    name = models.CharField(max_length=45)
+    address = models.CharField(max_length=45)
+    campus_id = models.ForeignKey(Campus, on_delete=models.PROTECT)
+    charge_person_id = models.ForeignKey(Person, on_delete=models.PROTECT)
 
 
 class Teacher(models.Model):

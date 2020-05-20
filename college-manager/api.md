@@ -167,9 +167,9 @@ POST   api/campus/mod
 
 大致和 campus 一样
 
-筛选字段有 `id`, `name`, `address`, `campus_id`, `charge_teacher_id`.
+筛选字段有 `id`, `name`, `address`, `campus_id`, `charge_person_id`.
 
-返回字段中再加上 `campus_name`, `charge_teacher_name`.
+返回字段中再加上 `campus_name`, `charge_person_name`.
 
 ## class
 
