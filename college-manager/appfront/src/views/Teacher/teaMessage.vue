@@ -206,8 +206,8 @@ export default {
       this.$http.post(url, opt).then(function (res) {
             if(url === 'http://127.0.0.1:8000/api/teacher/mod') {
           // console.log("编辑用户信息")
-          _this.tableData = res.data.data
-        }
+              _this.tableData = res.data.data
+            }
       })
       .catch(function (error) {
         console.log(error)
@@ -224,7 +224,7 @@ export default {
             //opt.teacherName = opt.teacherName
             //console.log(opt.teacherName)
             // 修改
-              that.sendRequest('http://127.0.0.1:8000/api/teacher/mod',{params: opt})
+            that.sendRequest('http://127.0.0.1:8000/api/teacher/mod',{params: opt})
             }
           that.dialogFormVisible = false
           // that.getAllData()

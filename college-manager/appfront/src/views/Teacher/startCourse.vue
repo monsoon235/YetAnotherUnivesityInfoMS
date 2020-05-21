@@ -44,10 +44,11 @@
           <el-form-item label="开课时间" prop="course_time">
             <el-input v-model="form.course_time" autocomplete="off" placeholder="周一至周五的第一到第九节"></el-input>
           </el-form-item>
-        </el-form>
-        <el-form-item>
-          <el-button type="warning" plain @click="mysearch">搜索</el-button>
+            <el-form-item>
+          <el-button type="primary" plain @click="mysearch">搜索</el-button>
         </el-form-item>
+        </el-form>
+
         </div>
       </el-collapse-transition>
 			<el-table
@@ -185,10 +186,7 @@ export default {
 	    course_season:'',
 	    course_time:''
       },
-      rules: {
-        course_date: [
-          { type: 'number', message: '日期必须是数字', trigger: 'blur'}
-        ]
+      rules:{
       },
       searchRules: {
 
@@ -288,6 +286,13 @@ methods: {
       console.log('http://127.0.0.1:8000/api/course/get', {params: this.form})
       this.sendRequest('http://127.0.0.1:8000/api/course/get', {params: this.form})
     },
+    handleOpen(key, keyPath) {
+        console.log(key, keyPath);
+      },
+
+    handleClose(key, keyPath) {
+      console.log(key, keyPath);
+    }
 
 
 	},
