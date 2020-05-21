@@ -100,6 +100,10 @@ def add(request: HttpRequest):
         params = json.loads(request.body.decode())
         teacher_params = check_teacher_params(params)
         person_params = check_person_params(params)
+        if 'id' not in teacher_params:
+            return response_error('missing id')
+        if 'id' not in person_params:
+            return response_error('missing person_id')
         if Teacher.objects.filter(id=teacher_params['id']):
             return response_error('teacher id exists')
         if Person.objects.filter(id=person_params['id']):
