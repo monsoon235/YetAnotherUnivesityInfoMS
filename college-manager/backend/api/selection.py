@@ -2,8 +2,9 @@ import json
 
 import django.views.decorators.csrf
 from django.db.models import F
-from django.http import HttpRequest, JsonResponse
+from django.http import HttpRequest
 
+from .general import *
 from .models import *
 
 where_params = [
@@ -20,8 +21,8 @@ def check_params(params: dict) -> dict:
     return params
 
 
+@django.views.decorators.csrf.csrf_exempt
 def get(request: HttpRequest):
-    response = {}
     try:
         params = check_params(request.GET.dict())
         result = Selection.objects.filter(**params).values(
@@ -30,60 +31,36 @@ def get(request: HttpRequest):
             teacher_name=F('lecture__teacher__person__name'),
             student_name=F('student__person__name')
         )
-        response['code'] = 1
-        response['list'] = list(result)
+        return response_success(list(result))
     except Exception as e:
-        response['code'] = 0
-        response['msg'] = str(e)
-    return JsonResponse(response)
+        return response_error(str(e))
 
 
 @django.views.decorators.csrf.csrf_exempt
 def add(request: HttpRequest):
-    response = {}
     try:
         params = json.loads(request.body.decode())
-        if 'id' not in params:
-            response['code'] = 0
-            response['msg'] = 'missing id'
-        elif Selection.objects.filter(id=params['id']):
-            response['code'] = 0
-            response['msg'] = 'id exist'
-        else:
-            Selection(**params).save()
-            response['code'] = 1
+        params = check_params(params)
+        return general_add(Selection, params)
     except Exception as e:
-        response['code'] = 0
-        response['msg'] = str(e)
-    return JsonResponse(response)
+        return response_error(str(e))
 
 
+@django.views.decorators.csrf.csrf_exempt
 def delete(request: HttpRequest):
-    # todo 存在关联信息则不删除
-    response = {}
     try:
         params = check_params(request.GET.dict())
-        Selection.objects.filter(**params).delete()
-        response['code'] = 1
+        return general_del(Selection, params)
     except Exception as e:
-        response['code'] = 0
-        response['msg'] = str(e)
-    return JsonResponse(response)
+        return response_error(str(e))
 
 
 @django.views.decorators.csrf.csrf_exempt
 def mod(request: HttpRequest):
-    response = {}
     try:
         params = json.loads(request.body.decode())
         where = check_params(params.get('where', {}))
         update = check_params(params.get('update', {}))
-        if 'id' in update:
-            response['code'] = 0
-            response['msg'] = 'can not modify id'
-        Selection.objects.filter(**where).update(update)
-        response['code'] = 1
+        return general_mod(Selection, where, update)
     except Exception as e:
-        response['code'] = 0
-        response['msg'] = str(e)
-    return JsonResponse(response)
+        return response_error(str(e))
