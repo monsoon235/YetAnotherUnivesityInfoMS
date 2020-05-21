@@ -37,16 +37,6 @@ import examScore from '@/views/Manager/examScore.vue'
 
 import teaStart from '@/views/Teacher/start.vue'
 import teaMessage from '@/views/Teacher/teaMessage.vue'
-import teaCoursePlan from '@/views/Teacher/coursePlan.vue'
-import teaSchedule from '@/views/Teacher/courseSchedule.vue'
-import teaClassSchedule from '@/views/Teacher/classSchedule.vue'
-import teaClassMsgManager from '@/views/Teacher/classMsgManager.vue'
-import studentMsgManager from '@/views/Teacher/studentMsgManager.vue'
-import teaExamPlan from '@/views/Teacher/examPlan.vue'
-import classExamPlan from '@/views/Teacher/classExamPlan.vue'
-import teaScoreManager from '@/views/Teacher/scoreManager.vue'
-import teaNotice from '@/views/Teacher/notice.vue'
-import teaAttendanceManager from '@/views/Teacher/attendanceManager'
 import startCourse from '@/views/Teacher/startCourse'
 
 import stuStart from '@/views/Student/start.vue'
@@ -114,16 +104,6 @@ export default new Router({
     children: [
       { path: 'teaMessage', component: teaMessage },
       { path: 'startCourse', component:startCourse},
-      { path: 'coursePlan', component: teaCoursePlan},
-      { path: 'courseSchedule', component: teaSchedule},
-      { path: 'classSchedule', component: teaClassSchedule},
-      { path: 'classMsgManager', component: teaClassMsgManager},
-      { path: 'studentMsgManager', component: studentMsgManager},
-      { path: 'examPlan', component: teaExamPlan},
-      { path: 'classExamPlan', component: classExamPlan},
-      { path: 'scoreManager', component: teaScoreManager},
-      { path: 'notice', component: teaNotice},
-      { path: 'attendanceManager', component: teaAttendanceManager},
       { path: '*', component: teaStart },
 
 

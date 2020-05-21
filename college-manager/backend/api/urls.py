@@ -1,7 +1,7 @@
 from django.urls import path
 
 from . import  campus, class_, course, lecture, major, selection, student, teacher
-from . import campus, major#, teacher,#adjustment
+from . import  major  #,adjustment
 
 
 
@@ -9,8 +9,8 @@ from . import views
 
 urlpatterns = [
     path('', views.index),
-    # path('adjustment/get', adjustment.get),
-    # path('adjustment/add', adjustment.add),
+    #path('adjustment/get', adjustment.get),
+    #path('adjustment/add', adjustment.add),
     # path('adjustment/del', adjustment.delete),
     # path('adjustment/mod', adjustment.mod),
 
@@ -49,8 +49,8 @@ urlpatterns = [
     path('student/del', student.delete),
     path('student/mod', student.mod),
     #
-    #path('teacher/get', teacher.get),
-    #path('teacher/add', teacher.add),
-    #path('teacher/del', teacher.delete),
-    #path('teacher/mod', teacher.mod),
+    path('teacher/get', teacher.get),
+    path('teacher/add', teacher.add),
+    path('teacher/del', teacher.delete),
+    path('teacher/mod', teacher.mod),
 ]
