@@ -32,7 +32,7 @@ class Major(models.Model):
     name = models.CharField(max_length=45)
     address = models.CharField(max_length=45)
     campus = models.ForeignKey(Campus, on_delete=models.PROTECT)
-    charge_person = models.ForeignKey(Person, on_delete=models.PROTECT)
+    charge_person = models.ForeignKey(Person, on_delete=models.PROTECT, null=True)
 
 
 class Teacher(models.Model):
@@ -109,12 +109,15 @@ class Adjustment(models.Model):
         CHANGE_MAJOR = 0, 'change_major'
         DOWNGRADE = 1, 'downgrade'
 
-    id = models.CharField(max_length=20, primary_key=True)
+    id = models.AutoField(primary_key=True)
     from_class = models.ForeignKey(Class, on_delete=models.PROTECT, related_name='from_class_id')
     to_class = models.ForeignKey(Class, on_delete=models.PROTECT, related_name='to_class_id')
     type = models.IntegerField(choices=TypeChoice.choices, default=TypeChoice.CHANGE_MAJOR)
     date = models.DateTimeField()
     student = models.ForeignKey(Student, on_delete=models.PROTECT)
+
+    class Meta:
+        unique_together = ("student", "type")
 
 
 class ChangeMajor(models.Model):

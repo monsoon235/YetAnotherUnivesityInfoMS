@@ -37,12 +37,22 @@ def get(request: HttpRequest):
         return response_error(str(e))
 
 
+# 没有 id 需要特殊处理
 @django.views.decorators.csrf.csrf_exempt
 def add(request: HttpRequest):
     try:
         params = json.loads(request.body.decode())
         params = check_params(params)
-        return general_add(Lecture, params)
+        if 'lecture_id' not in params:
+            return response_error('missing lecture_id')
+        if 'class_id' not in params:
+            return response_error('missing class_id')
+        if Lecture.objects.filter(
+                lecture_id=params['lecture_id'],
+                class_id=params['class_id']):
+            return response_error('id exists')
+        Lecture(**params).save()
+        return response_success()
     except Exception as e:
         return response_error(str(e))
 
