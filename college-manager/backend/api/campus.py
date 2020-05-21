@@ -33,7 +33,7 @@ def get(request: HttpRequest):
 def add(request: HttpRequest):
     response = {}
     try:
-        params = check_params(request.POST.dict())
+        params = json.loads(request.body.decode())
         if 'id' not in params:
             response['code'] = 0
             response['msg'] = 'missing id'
@@ -66,7 +66,7 @@ def delete(request: HttpRequest):
 def mod(request: HttpRequest):
     response = {}
     try:
-        params = json.loads(request.body)
+        params = json.loads(request.body.decode())
         where = check_params(params.get('where', {}))
         update = check_params(params.get('update', {}))
         if 'id' in update:
