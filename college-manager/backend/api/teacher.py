@@ -14,6 +14,16 @@ where_params = [
     'family_address', 'family_zipcode', 'family_tel'
 ]
 
+teacher_params = [
+    'id', 'enroll_date', 'email', 'title',
+    'major_id', 'person_id',
+]
+
+person_params = [
+    'person_id', 'person_name', 'person_id_type', 'gender', 'birth', 'country',
+    'family_address', 'family_zipcode', 'family_tel'
+]
+
 
 def check_params(params: dict) -> dict:
     params = {
@@ -37,6 +47,29 @@ def check_params(params: dict) -> dict:
     return ret
 
 
+def check_teacher_params(params: dict) -> dict:
+    params = {
+        k: v for k, v in params.items()
+        if k in teacher_params
+    }
+    return params
+
+
+def check_person_params(params: dict) -> dict:
+    params = {
+        k: v for k, v in params.items()
+        if k in person_params
+    }
+    ret = {}
+    for k, v in params.items():
+        if k.startswith('person_'):
+            ret[k[7:]] = v
+        else:
+            ret[k] = v
+    return ret
+
+
+@django.views.decorators.csrf.csrf_exempt
 def get(request: HttpRequest):
     try:
         params = check_params(request.GET.dict())
@@ -62,11 +95,22 @@ def get(request: HttpRequest):
 
 @django.views.decorators.csrf.csrf_exempt
 def add(request: HttpRequest):
+    person_added = False
     try:
         params = json.loads(request.body.decode())
-        params = check_params(params)
-        return general_add(Teacher, params)
+        teacher_params = check_teacher_params(params)
+        person_params = check_person_params(params)
+        if Teacher.objects.filter(id=teacher_params['id']):
+            return response_error('teacher id exists')
+        if Person.objects.filter(id=person_params['id']):
+            return response_error('person id exists')
+        Person(**person_params).save()
+        person_added = True
+        Teacher(**teacher_params).save()
+        return response_success()
     except Exception as e:
+        if person_added:
+            Person.objects.filter(id=person_params['id']).delete()
         return response_error(str(e))
 
 

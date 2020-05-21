@@ -21,6 +21,7 @@ def check_params(params: dict) -> dict:
     return params
 
 
+@django.views.decorators.csrf.csrf_exempt
 def get(request: HttpRequest):
     try:
         params = check_params(request.GET.dict())

@@ -95,10 +95,13 @@ class Lecture(models.Model):
 
 
 class Selection(models.Model):
-    id = models.CharField(max_length=20, primary_key=True)
+    id = models.AutoField(primary_key=True)
     lecture = models.ForeignKey(Lecture, on_delete=models.PROTECT)
     student = models.ForeignKey(Student, on_delete=models.PROTECT)
     score = models.IntegerField(null=True)
+
+    class Meta:
+        unique_together = ("lecture", "student")
 
 
 class Adjustment(models.Model):
