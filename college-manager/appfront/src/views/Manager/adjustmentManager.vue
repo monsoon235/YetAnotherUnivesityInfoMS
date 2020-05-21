@@ -30,26 +30,61 @@
             class="demo-ruleForm"
           >
             <el-form-item
-              label="课程编号"
+              label="异动编号"
               prop="id"
               style="width: 20%; left: 30px; position: absolute;"
             >
               <el-input v-model="form.id"></el-input>
             </el-form-item>
-            <el-form-item label="课程名称" prop="name" style="width: 20%">
-              <el-input v-model="form.name"></el-input>
+
+            <el-form-item label="原班级代码" prop="from_class_id" style="width: 20%">
+              <el-input v-model="form.from_class_id"></el-input>
             </el-form-item>
-            <el-form-item label="开课专业" prop="major_id" style="width: 20%">
-              <el-input v-model="form.major_id"></el-input>
-            </el-form-item>
-            <el-form-item label="考核方式" prop="assessment" style="width: 20%; position: relative;">
-              <el-radio-group v-model="form.assessment">
-                <el-radio label="考试"></el-radio>
-                <el-radio label="当堂答辩"></el-radio>
-              </el-radio-group>
+            <el-form-item label="现班级代码" prop="to_class_id" style="width: 20%">
+              <el-input v-model="form.to_class_id"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="warning" plain @click="mysearchData">搜索</el-button>
+            </el-form-item>
+          </el-form>
+          <el-form
+            :inline="true"
+            :model="form"
+            :rules="searchRules"
+            ref="form"
+            label-width="100px"
+            class="demo-ruleForm"
+          >
+            <el-form-item label="异动类型" prop="type" style="left: 30px; position: absolute;">
+              <el-radio-group v-model="form.type">
+                <el-radio label="转专业"></el-radio>
+                <el-radio label="降级"></el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item
+              label="转出团关系"
+              v-if="form.type=='转专业'"
+              prop="yycl_change"
+              style="position: relative;"
+            >
+              <el-radio-group v-model="form.yycl_change">
+                <el-radio label="是"></el-radio>
+                <el-radio label="否"></el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item
+              label="降级原因"
+              v-if="form.type=='降级'"
+              prop="reason"
+              style="width: 20%; position: relative;"
+            >
+              <el-input v-model="form.reason"></el-input>
+            </el-form-item>
+            <el-form-item label="异动日期" prop="date" style="width: 20%; position: relative;">
+              <el-input v-model="form.date"></el-input>
+            </el-form-item>
+            <el-form-item label="学号" prop="student_id" style="width: 20%">
+              <el-input v-model="form.student_id"></el-input>
             </el-form-item>
           </el-form>
         </div>
@@ -59,11 +94,12 @@
     </el-row>
     <el-scrollbar>
       <el-table :data="tableData" stripe style="width: 100%">
-        <el-table-column prop="id" label="课程编号"></el-table-column>
-        <el-table-column prop="name" label="课程名称"></el-table-column>
-        <el-table-column prop="major_id" label="专业代码"></el-table-column>
-        <el-table-column prop="major_name" label="开课专业"></el-table-column>
-        <el-table-column prop="assessment" label="考核方式"></el-table-column>
+        <el-table-column prop="id" label="异动编号"></el-table-column>
+        <el-table-column prop="type" label="异动类型"></el-table-column>
+        <el-table-column prop="from_class_id" label="原班级代码"></el-table-column>
+        <el-table-column prop="to_class_id" label="现班级代码"></el-table-column>
+        <el-table-column prop="date" label="异动日期"></el-table-column>
+        <el-table-column prop="student_id" label="学号"></el-table-column>
 
         <el-table-column label="操作">
           <template slot-scope="scope">
@@ -76,17 +112,35 @@
 
     <el-dialog title="填写你的信息" :visible.sync="dialogFormVisible" style="height: 100%">
       <el-form :model="form" :rules="rules" ref="form">
-        <el-form-item label="课程编号" prop="id">
+        <el-form-item label="异动编号" prop="id">
           <el-input v-model="form.id" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="课程名称" prop="name">
-          <el-input v-model="form.name" autocomplete="off"></el-input>
+        <el-form-item label="异动类型" prop="type">
+          <el-radio-group v-model="form.type">
+            <el-radio label="转专业"></el-radio>
+            <el-radio label="降级"></el-radio>
+          </el-radio-group>
         </el-form-item>
-        <el-form-item label="开课专业" prop="major_id">
-          <el-input v-model="form.major_id" autocomplete="off"></el-input>
+        <el-form-item label="转出团关系" v-if="form.type=='转专业'" prop="isMember">
+          <el-radio-group v-model="form.yycl_change">
+            <el-radio label="是"></el-radio>
+            <el-radio label="否"></el-radio>
+          </el-radio-group>
         </el-form-item>
-        <el-form-item label="考核方式" prop="assessment">
-          <el-input v-model="form.assessment" autocomplete="off"></el-input>
+        <el-form-item label="降级原因" v-if="form.type=='降级'" prop="reason">
+          <el-input v-model="form.reason"></el-input>
+        </el-form-item>
+        <el-form-item label="原班级代码" prop="from_class_id">
+          <el-input v-model="form.from_class_id" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="现班级代码" prop="to_class_id">
+          <el-input v-model="form.to_class_id" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="异动日期" prop="date">
+          <el-input v-model="form.date" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="学号" prop="student_id">
+          <el-input v-model="form.student_id" autocomplete="off"></el-input>
         </el-form-item>
 
         <!-- <el-form-item label="地址">
@@ -155,20 +209,30 @@ export default {
       //direction: 'rtl',
       form: {
         id: "",
-        name: "",
-        major_id: "",
-        assessment: "",
-        major_name: ""
+        from_class_id: "",
+        to_class_id: "",
+        type: "",
+        date: "",
+        student_id: "",
+        yycl_change: "",
+        reason: ""
       },
 
       //两套rule体系
-      searchRules: {},
+      searchRules: {
+        date: [{ max: 7, message: "XXXX-YY", trigger: "blur" }]
+      },
 
       rules: {
         id: [{ required: true, message: "必填", trigger: "blur" }],
-        name: [{ required: true, message: "必填", trigger: "blur" }],
-        major_id: [{ required: true, message: "必填", trigger: "blur" }],
-        assessment: [{ required: true, message: "必填", trigger: "blur" }]
+        student_id: [{ required: true, message: "必填", trigger: "blur" }],
+        type: [{ required: true, message: "必填", trigger: "blur" }]
+        // age: [
+        //   { type: 'number', message: '年龄必须为数字值'}
+        // ],
+        // moblie: [
+        //   { type: 'number', message: '年龄必须为数字值'}
+        // ]
       }
     };
   },
@@ -182,7 +246,7 @@ export default {
     simplify(obj) {
       let newobj = new Object();
       for (let key in obj) {
-        if (obj[key] && key !== "major_name") newobj[key] = obj[key];
+        if (obj[key]) newobj[key] = obj[key];
       }
       return newobj;
     },
@@ -192,10 +256,10 @@ export default {
       this.$http
         .get(url, opt)
         .then(function(res) {
-          if (url === "http://127.0.0.1:8000/api/course/del") {
+          if (url === "http://127.0.0.1:8000/api/adjustment/del") {
             console.log(_this.tableData);
             _this.tableData.splice(_this.delIndex, 1);
-          } else if (url === "http://127.0.0.1:8000/api/course/get") {
+          } else if (url === "http://127.0.0.1:8000/api/adjustment/get") {
             console.log(res);
             _this.tableData = res.data["list"];
           }
@@ -213,9 +277,9 @@ export default {
         .then(function(res) {
           console.log(res);
           // 将数据存储起来
-          if (url === "http://127.0.0.1:8000/api/course/add") {
+          if (url === "http://127.0.0.1:8000/api/adjustment/add") {
             _this.getAllData();
-          } else if (url === "http://127.0.0.1:8000/api/course/mod") {
+          } else if (url === "http://127.0.0.1:8000/api/adjustment/mod") {
             for (let key in opt.update)
               _this.tableData[_this.editIndex][key] = opt.update[key];
             console.log(_this.tableData);
@@ -234,7 +298,6 @@ export default {
           if (that.isEdit) {
             let subForm = that.form;
             delete subForm.id;
-            delete subForm.major_name;
             let opt = {
               where: {
                 id: that.editId
@@ -242,12 +305,15 @@ export default {
               update: subForm
             };
             // 修改
-            that.sendPostRequest("http://127.0.0.1:8000/api/course/mod", opt);
+            that.sendPostRequest(
+              "http://127.0.0.1:8000/api/adjustment/mod",
+              opt
+            );
           } else {
             // 新增
             that.sendPostRequest(
-              "http://127.0.0.1:8000/api/course/add",
-              that.simplify(that.form)
+              "http://127.0.0.1:8000/api/adjustment/add",
+              that.form
             );
           }
 
@@ -263,11 +329,11 @@ export default {
     getAllData() {
       var _this = this;
       this.$http
-        .get("http://127.0.0.1:8000/api/course/get")
+        .get("http://127.0.0.1:8000/api/adjustment/get")
         .then(function(res) {
           var resbody = JSON.parse(res.bodyText);
           if (resbody["code"] == 0) {
-            _this.$message.error("查询专业失败");
+            _this.$message.error("查询学籍异动失败");
           } else {
             _this.tableData = res.data["list"];
           }
@@ -284,9 +350,13 @@ export default {
       this.dialogFormVisible = true;
       this.isEdit = true;
       this.form.id = selfData.id;
-      this.form.name = selfData.name;
-      this.form.major_id = selfData.major_id;
-      this.form.assessment = selfData.assessment;
+      this.form.from_class_id = selfData.from_class_id;
+      this.form.to_class_id = selfData.to_class;
+      this.form.type = selfData.type;
+      this.form.date = selfData.date;
+      this.form.student_id = selfData.student_id;
+      this.form.yycl_change = selfData.yycl_change;
+      this.form.reason = selfData.reason;
     },
 
     openDialog(index) {
@@ -298,14 +368,14 @@ export default {
     delData() {
       var _this = this;
       _this.dialogVisible = false;
-      this.sendGetRequest("http://127.0.0.1:8000/api/course/del", {
+      this.sendGetRequest("http://127.0.0.1:8000/api/adjustment/del", {
         params: { id: this.delId }
       });
     },
 
     mysearchData() {
       console.log(this.simplify(this.form));
-      this.sendGetRequest("http://127.0.0.1:8000/api/course/get", {
+      this.sendGetRequest("http://127.0.0.1:8000/api/adjustment/get", {
         params: this.simplify(this.form)
       });
     },

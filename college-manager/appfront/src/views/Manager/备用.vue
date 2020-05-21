@@ -1,6 +1,6 @@
 <template>
           <span class="demonstration">老师是否迟到</span>
-        <el-radio v-model="value0" label="1">A</el-radio>
+          <el-radio v-model="value0" label="1">A</el-radio>
           <el-radio v-model="value0" label="2">B</el-radio>
         </template>
     
