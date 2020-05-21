@@ -8,7 +8,7 @@ from .general import *
 from .models import *
 
 where_params = [
-    'id', 'lecture_id', 'student_id', 'score'
+    'lecture_id', 'student_id', 'score'
 ]
 
 
@@ -29,7 +29,9 @@ def get(request: HttpRequest):
             *where_params,
             course_name=F('lecture__course__name'),
             teacher_name=F('lecture__teacher__person__name'),
-            student_name=F('student__person__name')
+            student_name=F('student__person__name'),
+            year=F('lecture__year'),
+            term=F('lecture__term')
         )
         return response_success(list(result))
     except Exception as e:

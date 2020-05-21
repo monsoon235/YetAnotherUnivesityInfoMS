@@ -205,7 +205,7 @@ POST   api/campus/mod
 
 ## selection
 
-筛选字段有 `id`, `lecture_id`, `student_id`, `score`.
+筛选字段有 `lecture_id`, `student_id`, `score`.
 
 返回的字段除了以上，还有 `course_name`, `teacher_name`, `student_name`.
 
