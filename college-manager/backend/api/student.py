@@ -133,7 +133,12 @@ def add(request: HttpRequest):
 def delete(request: HttpRequest):
     try:
         params = check_params(request.GET.dict())
-        return general_del(Student, params)
+        # 找出要删的 student 对应的所有 person id,直接删除 person 即可
+        person_id_dict_list = Student.objects.filter(**params).values('person_id')
+        person_id_list = [item['person_id'] for item in person_id_dict_list]
+        for id in person_id_list:
+            Person.objects.filter(id=id).delete()
+        return response_success()
     except Exception as e:
         return response_error(str(e))
 
