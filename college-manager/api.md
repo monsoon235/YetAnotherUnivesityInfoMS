@@ -201,7 +201,7 @@ POST   api/campus/mod
 
 筛选字段有 `id`, `course_id`, `teacher_id`, `year`, `term`, `time`.
 
-返回的字段除了以上，还有 `course_name`, `teacher_name`.
+返回的字段除了以上，还有 `course_name`, `assessment`, `major_name`, `teacher_name`.
 
 ## selection
 
