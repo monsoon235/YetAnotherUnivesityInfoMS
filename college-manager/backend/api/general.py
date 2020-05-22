@@ -1,6 +1,7 @@
 import typing
 
 from django.db.models import ProtectedError
+from django.http import HttpRequest
 from django.http import JsonResponse
 
 
@@ -11,11 +12,11 @@ def response_success(list: typing.List = None) -> JsonResponse:
     return JsonResponse(response)
 
 
-def response_error(msg: str) -> JsonResponse:
+def response_error(msg: str, status=500) -> JsonResponse:
     return JsonResponse({
         'code': 0,
         'msg': msg
-    })
+    }, status=status)
 
 
 def general_get(model, params: dict):
@@ -56,3 +57,33 @@ def general_mod(model, where: dict, update: dict):
         return response_success()
     except Exception as e:
         return response_error(str(e))
+
+
+def hold_exception(func):
+    def wrapper(*args, **kw):
+        try:
+            return func(*args, **kw)
+        except Exception as e:
+            return response_error(str(e))
+
+    return wrapper
+
+
+def check_login(func):
+    def wrapper(request: HttpRequest, *args, **kw):
+        if request.user.is_authenticated:
+            return func(request, *args, **kw)
+        else:
+            return response_error('login required', status=403)
+
+    return wrapper
+
+
+def check_admin(func):
+    def wrapper(request: HttpRequest, *args, **kw):
+        if request.user.is_staff:
+            return func(request, *args, **kw)
+        else:
+            return response_error('permission denied', status=403)
+
+    return wrapper

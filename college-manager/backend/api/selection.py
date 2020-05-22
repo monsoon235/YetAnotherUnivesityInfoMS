@@ -2,7 +2,7 @@ import json
 
 import django.views.decorators.csrf
 from django.db.models import F
-from django.http import HttpRequest
+from django.views.decorators.http import require_http_methods
 
 from .general import *
 from .models import *
@@ -21,48 +21,44 @@ def check_params(params: dict) -> dict:
     return params
 
 
+@hold_exception
+@require_http_methods(['GET'])
 @django.views.decorators.csrf.csrf_exempt
 def get(request: HttpRequest):
-    try:
-        params = check_params(request.GET.dict())
-        result = Selection.objects.filter(**params).values(
-            *where_params,
-            course_name=F('lecture__course__name'),
-            teacher_name=F('lecture__teacher__person__name'),
-            student_name=F('student__person__name'),
-            year=F('lecture__year'),
-            term=F('lecture__term')
-        )
-        return response_success(list(result))
-    except Exception as e:
-        return response_error(str(e))
+    params = check_params(request.GET.dict())
+    result = Selection.objects.filter(**params).values(
+        *where_params,
+        course_name=F('lecture__course__name'),
+        teacher_name=F('lecture__teacher__person__name'),
+        student_name=F('student__person__name'),
+        year=F('lecture__year'),
+        term=F('lecture__term')
+    )
+    return response_success(list(result))
 
 
+@hold_exception
+@require_http_methods(['POST'])
 @django.views.decorators.csrf.csrf_exempt
 def add(request: HttpRequest):
-    try:
-        params = json.loads(request.body.decode())
-        params = check_params(params)
-        return general_add(Selection, params)
-    except Exception as e:
-        return response_error(str(e))
+    params = json.loads(request.body.decode())
+    params = check_params(params)
+    return general_add(Selection, params)
 
 
+@hold_exception
+@require_http_methods(['GET'])
 @django.views.decorators.csrf.csrf_exempt
 def delete(request: HttpRequest):
-    try:
-        params = check_params(request.GET.dict())
-        return general_del(Selection, params)
-    except Exception as e:
-        return response_error(str(e))
+    params = check_params(request.GET.dict())
+    return general_del(Selection, params)
 
 
+@hold_exception
+@require_http_methods(['POST'])
 @django.views.decorators.csrf.csrf_exempt
 def mod(request: HttpRequest):
-    try:
-        params = json.loads(request.body.decode())
-        where = check_params(params.get('where', {}))
-        update = check_params(params.get('update', {}))
-        return general_mod(Selection, where, update)
-    except Exception as e:
-        return response_error(str(e))
+    params = json.loads(request.body.decode())
+    where = check_params(params.get('where', {}))
+    update = check_params(params.get('update', {}))
+    return general_mod(Selection, where, update)

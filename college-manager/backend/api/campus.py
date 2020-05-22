@@ -1,8 +1,6 @@
 import json
 
 import django.views.decorators.csrf
-from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest
 from django.views.decorators.http import require_http_methods
 
 from .general import *
@@ -19,45 +17,41 @@ def check_params(params: dict) -> dict:
 
 
 # done
-# @login_required
+
+@check_login
+@hold_exception
 @require_http_methods(['GET'])
 @django.views.decorators.csrf.csrf_exempt
 def get(request: HttpRequest):
-    try:
-        params = check_params(request.GET.dict())
-        return general_get(Campus, params)
-    except Exception as e:
-        return response_error(str(e))
+    params = check_params(request.GET.dict())
+    return general_get(Campus, params)
 
 
+@check_admin
+@hold_exception
 @require_http_methods(['POST'])
 @django.views.decorators.csrf.csrf_exempt
 def add(request: HttpRequest):
-    try:
-        params = json.loads(request.body.decode())
-        params = check_params(params)
-        return general_add(Campus, params)
-    except Exception as e:
-        return response_error(str(e))
+    params = json.loads(request.body.decode())
+    params = check_params(params)
+    return general_add(Campus, params)
 
 
+@check_admin
+@hold_exception
 @require_http_methods(['GET'])
 @django.views.decorators.csrf.csrf_exempt
 def delete(request: HttpRequest):
-    try:
-        params = check_params(request.GET.dict())
-        return general_del(Campus, params)
-    except Exception as e:
-        return response_error(str(e))
+    params = check_params(request.GET.dict())
+    return general_del(Campus, params)
 
 
+@check_admin
+@hold_exception
 @require_http_methods(['POST'])
 @django.views.decorators.csrf.csrf_exempt
 def mod(request: HttpRequest):
-    try:
-        params = json.loads(request.body.decode())
-        where = check_params(params.get('where', {}))
-        update = check_params(params.get('update', {}))
-        return general_mod(Campus, where, update)
-    except Exception as e:
-        return response_error(str(e))
+    params = json.loads(request.body.decode())
+    where = check_params(params.get('where', {}))
+    update = check_params(params.get('update', {}))
+    return general_mod(Campus, where, update)
