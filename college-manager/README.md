@@ -1,5 +1,9 @@
 ## 基于vue.js + django + mysql的数据库系统
 
+##环境搭建
+
+pip install -r requirements.txt
+
 ## 1. 后端django初始化
 
 ```bash
