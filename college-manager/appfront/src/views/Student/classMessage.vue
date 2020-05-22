@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row>
-      <span class="font">以下是您所在班级的信息</span>
+      <span class="font">以下是您所任职班级的信息</span>
       <div class="searchbox" style="display: inline-block; float: right;">
         <el-button type="danger" plain @click="getAllData()">刷新</el-button>
       </div>
@@ -19,28 +19,28 @@
         label="适应阶段">
       </el-table-column> -->
       <el-table-column
-        prop="id"
+        prop="classId"
         label="班级编号">
       </el-table-column>
       <el-table-column
-        prop="name"
+        prop="className"
         label="班级名">
       </el-table-column>
       <el-table-column
-        prop="found_date"
-        label="创班日期">
+        prop="classroom"
+        label="教室">
       </el-table-column>
       <el-table-column
-        prop="grade"
-        label="年级">
+        prop="stuNumber"
+        label="学员数量">
       </el-table-column>
       <el-table-column
-        prop="charge_teacher_name"
+        prop="teacherName"
         label="班主任">
       </el-table-column>
       <el-table-column
-        prop="major_name"
-        label="专业">
+        prop="remark"
+        label="备注">
       </el-table-column>
     </el-table>
   </div>
@@ -63,12 +63,13 @@ export default {
     return {
       tableData: [],
       form: {
-      	id: '',
-      	name: '',
-        found_date: '',
-        grade: null,
-        major_name: '',
-        charge_teacher_name: '',
+      	classId: '',
+      	// stage: '',
+      	className: '',
+        classroom: "",
+        stuNumber: '',
+        teacherName: '',
+        remark: ''
       },
       cls: [],
       rules: {
@@ -79,15 +80,15 @@ methods: {
 		// 获取所有的用户信息
 	getAllData() {
 		var _this = this
-      this.$http.get('/api/student/get').then(function (res) {
+      this.$http.post('/student/findMsg', {studentName: JSON.parse(window.localStorage.stuInfo).username}).then(function (res) {
       	// console.log(res);
-        _this.$http.post('/api/class/get', {class_id: res.list.class_id}).then(function (res) {
+        _this.$http.post('/student/classAll', {className: res.data.className}).then(function (res) {
           console.log(res)
-          if(res.list.length === 0) {
+          if(res.data.length === 0) {
             alert('Sorry, 还没有您的班级信息，请联系教学管理者');
             return
           }
-          _this.tableData = res.list
+          _this.tableData = res.data
         })
         .catch(function (error) {
           console.log(error)

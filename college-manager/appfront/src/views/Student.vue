@@ -14,7 +14,7 @@
                     <el-radio-button :label="true">收起</el-radio-button>
                 </el-radio-group> -->
                 <el-menu :default-active="this.$route.path" :router="true" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse"  style="background-color: #B3C0D1">
-                    <!-- <el-submenu index="0">
+                    <el-submenu index="0">
                         <template slot="title">
                             <i class="el-icon-location"></i>
                             <span slot="title">首页</span>
@@ -22,7 +22,7 @@
                         <el-menu-item-group>
                             <el-menu-item v-for="(item,i) in stList" :key="i" :index="item.name">{{ item.navItem }}</el-menu-item>
                         </el-menu-item-group>
-                    </el-submenu> -->
+                    </el-submenu>
                     <el-submenu index="1">
                         <template slot="title">
                             <i class="el-icon-location"></i>
@@ -50,22 +50,13 @@
                             <el-menu-item v-for="(item,i) in jxList" :key="i" :index="item.name">{{ item.navItem }}</el-menu-item>
                         </el-menu-item-group>
                     </el-submenu>-->
-                    <!-- <el-submenu index="3">
+                    <el-submenu index="3">
                         <template slot="title">
                             <i class="el-icon-location"></i>
                             <span slot="title">本阶段课表</span>
                         </template>
                         <el-menu-item-group>
                             <el-menu-item v-for="(item,i) in kbList" :key="i" :index="item.name">{{ item.navItem }}</el-menu-item>
-                        </el-menu-item-group>
-                    </el-submenu> -->
-                    <el-submenu index="2">
-                        <template slot="title">
-                            <i class="el-icon-location"></i>
-                            <span slot="title">选课</span>
-                        </template>
-                        <el-menu-item-group>
-                            <el-menu-item v-for="(item,i) in xkList" :key="i" :index="item.name">{{ item.navItem }}</el-menu-item>
                         </el-menu-item-group>
                     </el-submenu>
                     <!--<el-submenu index="4">
@@ -137,7 +128,7 @@
   }
   .el-header {
     background-color: #B3C0D1;
-    color: rgb(15, 99, 224);
+    color: #333;
     line-height: 60px;
   }
   .title {
@@ -169,12 +160,9 @@
             jxList: [
                 {name:'/student/coursePlan',navItem:'个人教学计划'},
             ],
-            // kbList: [
-            //     {name:'/student/courseSchedule',navItem:'教学安排课表'},
-            //     {name:'/student/classSchedule',navItem:'班级课程课表'},
-            // ],
-            xkList: [
-                {name:'/student/selectCourse',navItem:'选课'}
+            kbList: [
+                {name:'/student/courseSchedule',navItem:'教学安排课表'},
+                {name:'/student/classSchedule',navItem:'班级课程课表'},
             ],
             //ksList: [
             //    {name:'/student/examPlan',navItem:'考试安排'},
@@ -205,9 +193,9 @@
       },
       loginout(){
         window.localStorage.removeItem("stuInfo");
-        this.$http.post('/api/loginout')
+        this.$http.post('/users/loginout')
           .then((res)=>{
-            console.log(res.list);
+            console.log(res.data);
             this.$router.push('/login')
 
           })

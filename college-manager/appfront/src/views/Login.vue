@@ -1,4 +1,4 @@
-<template>
+n<template>
   <div class="register">
     <LoginHeader></LoginHeader>
     <div class="from">

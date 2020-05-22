@@ -11,43 +11,30 @@
 	        <!--<input class="sc" type="text" placeholder="请输入课程号" style="width: 300px; margin-right: 20px; height: 32px; border-radius: 1px solid #302d1c; margin-bottom: -3px; position: relative; top: 3px;"/>-->
           <el-button type="warning" plain @click="show1 = !show1">展开</el-button>
           <el-button type="danger" plain @click="getAllData()">刷新</el-button>
+          <el-button type="danger" plain @click="add_test()">测试</el-button>
 	      </div>
 		  </el-row>
       <el-collapse-transition>
         <div v-if="show1">
           <br>
           <el-form :inline="true" :model="form" :rules="searchRules" ref="form" label-width="100px" class="demo-ruleForm">
-          <el-form-item label="课程号" prop="course_Id">
-            <el-input v-model="form.course_Id" autocomplete="off"></el-input>
+          <el-form-item label="开课号" prop="id">
+            <el-input v-model="form.id" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="课程名称" prop="course_name">
-            <el-input v-model="form.course_name" autocomplete="off"></el-input>
+          <el-form-item label="课程号" prop="course_id">
+            <el-input v-model="form.course_id" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="开课专业" prop="course_faculty">
-            <el-input v-model="form.course_faculty" autocomplete="off"></el-input>
+          <el-form-item label="老师工号" prop="teacher_id">
+            <el-input v-model="form.teacher_id" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="考核方式" prop="exam_type">
-            <el-input v-model="form.exam_type" autocomplete="off" placeholder="考试或当堂答辩"></el-input>
+          <el-form-item label="开课日期" prop="year">
+            <el-input v-model="form.year" autocomplete="off" placeholder="年"></el-input>
           </el-form-item>
-          <el-form-item label="授课老师" prop="teacher">
-            <el-input v-model="form.teacher" autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="开课日期" prop="course_date">
-            <el-input v-model="form.course_date" autocomplete="off" placeholder="年"></el-input>
-          </el-form-item>
-          <el-form-item label="开课学期" prop="course_season">
-            <el-select style='width: 100%; position: absolute; left: 138px' v-model="form.course_season" placeholder="请选择学期">
-              <el-option style='height: 80%' label="春" value="春" autocomplete="off"></el-option>
-              <el-option style='height: 80%' label="秋" value="秋" autocomplete="off"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="开课时间" prop="course_time">
-            <el-input v-model="form.course_time" autocomplete="off" placeholder="周一至周五的第一到第九节"></el-input>
-          </el-form-item>
-        </el-form>
-        <el-form-item>
-          <el-button type="warning" plain @click="mysearch">搜索</el-button>
+            <el-form-item>
+          <el-button type="primary" plain @click="mysearch">搜索</el-button>
         </el-form-item>
+        </el-form>
+
         </div>
       </el-collapse-transition>
 			<el-table
@@ -55,7 +42,7 @@
 	      stripe
 	      style="width: 100%">
 	      <el-table-column
-	        prop="course_Id"
+	        prop="course_id"
 	        label="课程号">
 	      </el-table-column>
 	      <el-table-column
@@ -63,27 +50,31 @@
 	        label="课程名称">
 	      </el-table-column>
           <el-table-column
-	        prop="course_faculty"
+	        prop="major_name"
 	        label="开课专业">
 	      </el-table-column>
-          <el-table-column
-	        prop="exam_type"
-	        label="考核方式">
+        <el-table-column label="考核方式">
+          <template slot-scope="scope">
+                <i v-if="scope.row.assessment===0">考试</i>
+                <i v-else>当堂答辩</i>
+            </template>
 	      </el-table-column>
 	      <el-table-column
-	        prop="teacher"
+	        prop="teacher_name"
 	        label="授课老师">
 	      </el-table-column>
 	      <el-table-column
-	        prop="course_date"
+	        prop="year"
 	        label="开课日期">
 	      </el-table-column>
-	      <el-table-column
-	        prop="course_season"
-	        label="开课学期">
+	      <el-table-column label="开课学期">
+          <template slot-scope="scope">
+                <i v-if="scope.row.term===0">春</i>
+                <i v-else>秋</i>
+            </template>
 	      </el-table-column>
 	      <el-table-column
-	        prop="course_time"
+	        prop="time"
 	        label="开课时间">
 	      </el-table-column>
 	       <el-table-column
@@ -98,32 +89,26 @@
     <div style="margin-top: -60px">
       <el-dialog title="请填写开课信息" :visible.sync="dialogFormVisible" style="height: 100%；">
         <el-form :model="form" :rules="rules" ref="form">
-          <el-form-item label="课程号" prop="course_Id">
-            <el-input v-model="form.course_Id" autocomplete="off"></el-input>
+          <el-form-item label="开课号" prop="id">
+            <el-input v-model="form.id" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="课程名称" prop="course_name">
-            <el-input v-model="form.course_name" autocomplete="off"></el-input>
+          <el-form-item label="课程号" prop="course_id">
+            <el-input v-model="form.course_id" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="开课专业" prop="course_faculty">
-            <el-input v-model="form.course_faculty" autocomplete="off"></el-input>
+          <el-form-item label="老师工号" prop="teacher_id">
+            <el-input v-model="form.teacher_id" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="考核方式" prop="exam_type">
-            <el-input v-model="form.exam_type" autocomplete="off" placeholder="考试或当堂答辩"></el-input>
+          <el-form-item label="开课日期" prop="year">
+            <el-input v-model="form.year" autocomplete="off" placeholder="年"></el-input>
           </el-form-item>
-          <el-form-item label="授课老师" prop="teacher">
-            <el-input v-model="form.teacher" autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="开课日期" prop="course_date">
-            <el-input v-model="form.course_date" autocomplete="off" placeholder="年"></el-input>
-          </el-form-item>
-          <el-form-item label="开课学期" prop="course_season">
-            <el-select style='width: 100%; position: absolute; left: 138px' v-model="form.course_season" placeholder="请选择学期">
-              <el-option style='height: 80%' label="春" value="春" autocomplete="off"></el-option>
-              <el-option style='height: 80%' label="秋" value="秋" autocomplete="off"></el-option>
+          <el-form-item label="开课学期" prop="term">
+            <el-select v-model="form.term" placeholder="请选择学期">
+              <el-option style="height: 80%" label="春" value="0" autocomplete="off"></el-option>
+              <el-option style="height: 80%" label="秋" value="1" autocomplete="off"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="开课时间" prop="course_time">
-            <el-input v-model="form.course_time" autocomplete="off" placeholder="周一至周五的第一到第九节"></el-input>
+          <el-form-item label="开课时间" prop="time">
+            <el-input v-model="form.time" autocomplete="off" placeholder="周一至周五的第一到第九节"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -176,35 +161,104 @@ export default {
       editId: '',
       delId: '',
       form: {
-      course_Id:'',
+      id:'',
+      course_id:'',
 	    course_name:'',
-	    course_faculty:'',
-	    exam_type:'',
-	    teacher:'',
-	    course_date:'',
-	    course_season:'',
-	    course_time:''
+	    major_name:'',
+      assessment:'',
+      teacher_id:'',
+	    teacher_name:'',
+	    year:'',
+	    term:'',
+	    time:''
       },
-      rules: {
-        course_date: [
-          { type: 'number', message: '日期必须是数字', trigger: 'blur'}
-        ]
+      rules:{
       },
       searchRules: {
 
       },
   }},
 methods: {
+    add_test(){
+      var _this=this
+      /*this.$http.post('http://127.0.0.1:8000/api/campus/add',{'id':'231','name':'111', 'address':'12'}).then(function (res) {
+          console.log(res)
+          _this.tableData.push(res.data)
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+      this.$http.post('http://127.0.0.1:8000/api/major/add',{'id':'23','name':'1111', 'address':'12',
+       'campus_id':'231', 'charge_person_id':null}).then(function (res) {
+          console.log(res)
+          _this.tableData.push(res.data)
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+      this.$http.post('http://127.0.0.1:8000/api/teacher/add',{'id':'23','enroll_date':'1111-11-11', 'email':'12',
+       'title':'23', 'major_id':'23', 'person_id':'1','major_name':'12', 'person_name':'33',
+       'person_id_type':'44', 'gender':'1', 'birth':'1333-11-11', 'country':'3',
+       'family_address':'3', 'family_zipcode':'3', 'family_tel':'1'}).then(function (res) {
+          console.log(res)
+          _this.tableData.push(res.data)
+        })
+        .catch(function (error) {
+          console.log(error)
+        })*/
+        /*this.$http.post('http://127.0.0.1:8000/api/course/add',{'id':'1', 'name':'c', 'assessment':'0', 'major_id':'23'}).then(function (res) {
+          console.log(res)
+          _this.tableData.push(res.data)
+        })
+        .catch(function (error) {
+          console.log(error)
+        })*/
+      this.$http.post('http://127.0.0.1:8000/api/lecture/add',{'id':'1','course_id':'12', 'teacher_id':'23', 'year':'1992',
+      'term':'1', 'time':'2'}).then(function (res) {
+          console.log(res)
+          _this.tableData.push(res.data)
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+
+        /*this.$http.post('http://127.0.0.1:8000/api/lecture/add',JSON.stringify(opt), { emulateJSON: true }).then(function (res) {
+          console.log(res)
+          _this.tableData.push(res.data)
+        })
+        .catch(function (error) {
+          console.log(error)
+        })*/
+
+    },
+
+    simplify(obj) {
+      let newobj = new Object();
+      for (let key in obj) {
+        if (
+          obj[key] &&
+          key !== "course_name" &&
+          key !== "assessment" &&
+          key !== "major_name" &&
+          key !== "teacher_name"
+        )
+          newobj[key] = obj[key];
+      }
+      return newobj;
+    },
+
+
+
 		// 获取所有的用户信息
     getAllData() {
       var _this = this
-      this.$http.get('http://127.0.0.1:8000/api/course/get').then(function (res) {
+      this.$http.get('http://127.0.0.1:8000/api/lecture/get').then(function (res) {
         console.log(res)
-        var resbody = JSON.parse(response.bodyText)
-        if(resbody["code"] == 1)
+        var resbody = JSON.parse(res.bodyText)
+        if(resbody["code"] == 0)
           _this.$message.error('查询学生失败')
         else
-          _this.tableData = res.data
+          _this.tableData = res.data["list"]
       })
       .catch(function (error) {
         console.log(error)
@@ -214,20 +268,38 @@ methods: {
     // 发送请求封装的一个函数
 	sendRequest(url, opt={}) {
       var _this = this
-      this.$http.get(url, opt).then(function (res) {
-        // console.log(res)
-         // 将数据存储起来
-        if(url === 'http://127.0.0.1:8000/api/course/add') {
-          // console.log("添加用户信息")
-          // console.log(res)
+      this.$http.post(url, JSON.stringify(opt),{emulateJSON:true}).then(function (res) {
+        if(url === 'http://127.0.0.1:8000/api/lecture/add') {
+          console.log("添加用户信息")
+          console.log(res)
           _this.tableData.push(res.data)
-        } else if(url === 'http://127.0.0.1:8000/api/course/mod') {
-          // console.log("编辑用户信息")
-          _this.tableData = res.data.data
+          _this.getAllData()
         }
-        else if(url === 'http://127.0.0.1:8000/api/course/get') {
-          // console.log("搜索用户信息")
-          _this.tableData = res.data.data
+        else if (url === "http://127.0.0.1:8000/api/lecture/mod") {
+          console.log("编辑用户信息")
+          for (let key in opt.update)
+            _this.tableData[_this.editIndex][key] = opt.update[key];
+          console.log(_this.tableData);
+          _this.getAllData()
+          }
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+    },
+
+    sendGETRequest(url, opt={}) {
+      var _this = this
+      this.$http.get(url, opt).then(function (res) {
+        if(url === 'http://127.0.0.1:8000/api/lecture/get') {
+          console.log("搜索用户信息")
+          console.log(res);
+          _this.tableData = res.data["list"];
+        }
+        else if(url === 'http://127.0.0.1:8000/api/lecture/del') {
+          console.log("删除用户信息")
+          console.log(_this.tableData);
+          _this.tableData.splice(_this.delIndex, 1);
         }
       })
       .catch(function (error) {
@@ -242,14 +314,23 @@ methods: {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           if(that.isEdit) {
-            let opt = that.form
-            opt._id = that.editId
+            let subForm = that.form
+            delete subForm.id
+            delete subForm.course_name
+            delete subForm.major_name
+            delete subForm.teacher_name
+            let opt = {
+              where: {
+                id: that.editId
+              },
+              update: subForm
+            };
             // 修改
-              that.sendRequest('http://127.0.0.1:8000/api/teacher/mod', {params: opt})
+              that.sendRequest('http://127.0.0.1:8000/api/lecture/mod', opt)
               // this.getAllData()
            } else{
               // 新增
-              that.sendRequest('http://127.0.0.1:8000/api/teacher/add', {params: that.form})
+              that.sendRequest('http://127.0.0.1:8000/api/lecture/add', that.simplify(that.form))
            }
               // this.getAllData()
           // that.getAllData()
@@ -262,32 +343,48 @@ methods: {
     },
 
 
-  openDialog(index) {
-    this.delId = this.tableData[index]._id
-    this.dialogVisible = true
 
+    delData() {
+      this.dialogVisible=false
+      this.sendGETRequest('http://127.0.0.1:8000/api/lecture/del',{params: { id: this.delId }})
+      this.getAllData()
+    },
+
+
+  openDialog(index) {
+    this.delId = this.tableData[index]["id"]
+    this.delIndex = index
+    this.dialogVisible = true
   },
 
 
   editData(index) {
       const selfData = this.tableData[index]
-      this.editId = selfData._id
+      this.editIndex = index
+      this.editId = selfData.id
       this.dialogFormVisible = true
       this.isEdit = true
-      this.course_Id=selfData.course_Id
-	    this.course_name=selfData.course_name
-	    this.course_faculty=selfData.course_faculty
-	    this.exam_type=selfData.exam_type
-	    this.teacher=selfData.teacher
-	    this.course_date=selfData.course_date
-	    this.course_season=selfData.course_season
-	    this.course_time=selfData.course_time
+      this.form.id = selfData.id;
+      this.form.course_id = selfData.course_id;
+      this.form.teacher_id = selfData.teacher_id;
+      this.form.year = selfData.year;
+      this.form.term = selfData.term;
+      this.form.time = selfData.time;
   },
 
   mysearch() {
-      console.log('http://127.0.0.1:8000/api/course/get', {params: this.form})
-      this.sendRequest('http://127.0.0.1:8000/api/course/get', {params: this.form})
-    },
+      console.log(this.simplify(this.form))
+      this.sendGETRequest('http://127.0.0.1:8000/api/lecture/get', {params: this.simplify(this.form)})
+  },
+
+
+  handleOpen(key, keyPath) {
+      console.log(key, keyPath);
+  },
+
+  handleClose(key, keyPath) {
+    console.log(key, keyPath);
+  }
 
 
 	},
@@ -302,7 +399,7 @@ methods: {
 	},
   mounted: function() {
     // 组件创建时候去获取所有的用户数据
-    this.getAllData();
+    this.getAllData()
 	},
 }
 </script>
