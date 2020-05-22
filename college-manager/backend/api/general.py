@@ -19,6 +19,36 @@ def response_error(msg: str, code=0, status=500) -> JsonResponse:
     }, status=status)
 
 
+def hold_exception(func):
+    def wrapper(*args, **kw):
+        try:
+            return func(*args, **kw)
+        except Exception as e:
+            return response_error(str(e))
+
+    return wrapper
+
+
+def check_login(func):
+    def wrapper(request: HttpRequest, *args, **kw):
+        if request.user.is_authenticated:
+            return func(request, *args, **kw)
+        else:
+            return response_error('login required', status=403)
+
+    return wrapper
+
+
+def check_admin(func):
+    def wrapper(request: HttpRequest, *args, **kw):
+        if request.user.is_staff:
+            return func(request, *args, **kw)
+        else:
+            return response_error('permission denied', status=403)
+
+    return wrapper
+
+
 def general_get(model, params: dict):
     try:
         result = model.objects.filter(**params).values()
@@ -57,33 +87,3 @@ def general_mod(model, where: dict, update: dict):
         return response_success()
     except Exception as e:
         return response_error(str(e))
-
-
-def hold_exception(func):
-    def wrapper(*args, **kw):
-        try:
-            return func(*args, **kw)
-        except Exception as e:
-            return response_error(str(e))
-
-    return wrapper
-
-
-def check_login(func):
-    def wrapper(request: HttpRequest, *args, **kw):
-        if request.user.is_authenticated:
-            return func(request, *args, **kw)
-        else:
-            return response_error('login required', status=403)
-
-    return wrapper
-
-
-def check_admin(func):
-    def wrapper(request: HttpRequest, *args, **kw):
-        if request.user.is_staff:
-            return func(request, *args, **kw)
-        else:
-            return response_error('permission denied', status=403)
-
-    return wrapper
