@@ -27,28 +27,10 @@ import courseManager from '@/views/Manager/courseManager.vue'
 
 import teaStart from '@/views/Teacher/start.vue'
 import teaMessage from '@/views/Teacher/teaMessage.vue'
-import teaCoursePlan from '@/views/Teacher/coursePlan.vue'
-import teaSchedule from '@/views/Teacher/courseSchedule.vue'
-import teaClassSchedule from '@/views/Teacher/classSchedule.vue'
-import teaClassMsgManager from '@/views/Teacher/classMsgManager.vue'
-import studentMsgManager from '@/views/Teacher/studentMsgManager.vue'
-import teaExamPlan from '@/views/Teacher/examPlan.vue'
-import classExamPlan from '@/views/Teacher/classExamPlan.vue'
-import teaScoreManager from '@/views/Teacher/scoreManager.vue'
-import teaNotice from '@/views/Teacher/notice.vue'
-import teaAttendanceManager from '@/views/Teacher/attendanceManager'
+import startCourse from '@/views/Teacher/startCourse.vue'
 
-import stuStart from '@/views/Student/start.vue'
-import stuMessage from '@/views/Student/stuMessage.vue'
-import stuCoursePlan from '@/views/Student/coursePlan.vue'
-import stuSchedule from '@/views/Student/courseSchedule.vue'
-import stuClassSchedule from '@/views/Student/classSchedule.vue'
-import stuExamPlan from '@/views/Student/examPlan.vue'
-import stuClassMessage from '@/views/Student/classMessage.vue'
-import stuScoreMsg from '@/views/Student/scoreMsg.vue'
-import stuEvaluate from '@/views/Student/evaluate.vue'
-import stuNotice from '@/views/Student/notice.vue'
-import stuSelectCourse from '@/views/Student/selectCourse.vue'
+
+
 
 
 
@@ -65,19 +47,19 @@ export default new Router({
     name: 'Manager',
     component: Manager,
     children: [
-      
+
       { path: 'userManage', component: userManage },
       { path: 'campusManager', component: campusManager },
       { path: 'majorManager', component: majorManager },
       { path: 'adjustmentManager', component: adjustmentManager },
-      
+
       { path: 'studentMsgMange', component: studentMsgMange },
-      
+
       { path: 'courseManager', component: courseManager },
       { path: 'lectureManager', component: lectureManager },
       { path: 'selectionManager', component: selectionManager },
       { path: 'classMsgManager', component: classMsgManager },
-     
+
       { path: 'teacherMsgManage', component: teacherMsgManage },
       { path: '*', component: start },
 
@@ -85,47 +67,17 @@ export default new Router({
   },
 
 
-  { path: 
-    '/teacher', 
-    name: 'Teacher', 
+  { path:
+    '/teacher',
+    name: 'Teacher',
     component: Teacher,
     children: [
       { path: 'teaMessage', component: teaMessage},
-      { path: 'coursePlan', component: teaCoursePlan},
-      { path: 'courseSchedule', component: teaSchedule},
-      { path: 'classSchedule', component: teaClassSchedule},
-      { path: 'classMsgManager', component: teaClassMsgManager},
-      { path: 'studentMsgManager', component: studentMsgManager},
-      { path: 'examPlan', component: teaExamPlan},
-      { path: 'classExamPlan', component: classExamPlan},
-      { path: 'scoreManager', component: teaScoreManager},
-      { path: 'notice', component: teaNotice},
-      { path: 'attendanceManager', component: teaAttendanceManager},
-      { path: '*', component: teaStart },
-
-      
+      { path: 'startCourse', component: startCourse },
+      { path: '*', component: teaStart }
     ]
   },
 
-  { path: 
-    '/student', 
-    name: 'Student', 
-    component: Student, 
-    children: [
-      { path: 'stuMessage', component: stuMessage},
-      { path: 'coursePlan', component: stuCoursePlan},
-      { path: 'courseSchedule', component: stuSchedule},
-      { path: 'classSchedule', component: stuClassSchedule},
-      { path: 'examPlan', component: stuExamPlan},
-      { path: 'evaluate', component: stuEvaluate},
-      { path: 'classMessage', component: stuClassMessage},
-      { path: 'scoreMsg', component: stuScoreMsg},
-      { path: 'notice', component: stuNotice},
-      { path: 'selectCourse', component: stuSelectCourse},
-      { path: '*', component: stuMessage },
-  
-    ]
-  },
   { path: '*', name: 'Login', component: Login }
 ]
 })
