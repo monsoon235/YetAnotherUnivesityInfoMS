@@ -13,7 +13,7 @@ import start from '@/views/Manager/start.vue'
 import userManage from '@/views/Manager/userManage.vue'
 import teacherMsgManage from '@/views/Manager/teacherMsgManage.vue'
 import classMsgManager from '@/views/Manager/classMsgManager.vue'
-import studentMsgMange from '@/views/Manager/studentMsgMange.vue'
+import studentMsgMange from '@/views/Manager/studentMsgManage.vue'
 
 import campusManager from '@/views/Manager/campusManager.vue'
 import majorManager from '@/views/Manager/majorManager.vue'
@@ -55,7 +55,7 @@ export default new Router({
       { path: 'majorManager', component: majorManager },
       { path: 'adjustmentManager', component: adjustmentManager },
 
-      { path: 'studentMsgMange', component: studentMsgMange },
+      { path: 'studentMsgMange', component: studentMsgManage },
 
       { path: 'courseManager', component: courseManager },
       { path: 'lectureManager', component: lectureManager },
