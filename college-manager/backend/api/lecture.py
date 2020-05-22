@@ -43,18 +43,24 @@ def add(request: HttpRequest):
     try:
         params = json.loads(request.body.decode())
         params = check_params(params)
-        if 'id' not in params:
-            return response_error('missing id')
-        if 'class_id' not in params:
-            return response_error('missing class_id')
-        if Lecture.objects.filter(
-                lecture_id=params['lecture_id'],
-                class_id=params['class_id']):
-            return response_error('id exists')
-        Lecture(**params).save()
-        return response_success()
+        return general_add(Lecture, params)
     except Exception as e:
         return response_error(str(e))
+    # try:
+    #     params = json.loads(request.body.decode())
+    #     params = check_params(params)
+    #     if 'id' not in params:
+    #         return response_error('missing id')
+    #     if 'class_id' not in params:
+    #         return response_error('missing class_id')
+    #     if Lecture.objects.filter(
+    #             lecture_id=params['lecture_id'],
+    #             class_id=params['class_id']):
+    #         return response_error('id exists')
+    #     Lecture(**params).save()
+    #     return response_success()
+    # except Exception as e:
+    #     return response_error(str(e))
 
 
 @django.views.decorators.csrf.csrf_exempt
