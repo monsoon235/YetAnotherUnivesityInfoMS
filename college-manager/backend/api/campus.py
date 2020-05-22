@@ -19,7 +19,7 @@ def check_params(params: dict) -> dict:
 
 
 # done
-@login_required
+# @login_required
 @require_http_methods(['GET'])
 @django.views.decorators.csrf.csrf_exempt
 def get(request: HttpRequest):
