@@ -30,7 +30,9 @@ import teaMessage from '@/views/Teacher/teaMessage.vue'
 import startCourse from '@/views/Teacher/startCourse.vue'
 
 
-
+import stuSelectCourse from '@/views/Student/selectCourse.vue'
+import stuMessage from '@/views/Student/stuMessage.vue'
+import stuClassMessage from '@/views/Student/stuClassMessage.vue'
 
 
 
@@ -77,7 +79,18 @@ export default new Router({
       { path: '*', component: teaStart }
     ]
   },
+  { path: 
+    '/student', 
+    name: 'Student', 
+    component: Student, 
+    children: [
+      { path: 'stuMessage', component: stuMessage},
+      { path: 'classMessage', component: stuClassMessage},
+      { path: 'selectCourse', component: stuSelectCourse},
+      { path: '*', component: stuMessage },
 
+    ]
+  },
   { path: '*', name: 'Login', component: Login }
 ]
 })
