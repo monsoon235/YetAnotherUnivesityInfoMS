@@ -32,7 +32,7 @@ import startCourse from '@/views/Teacher/startCourse.vue'
 
 import stuSelectCourse from '@/views/Student/selectCourse.vue'
 import stuMessage from '@/views/Student/stuMessage.vue'
-import stuClassMessage from '@/views/Student/stuClassMessage.vue'
+import stuClassMessage from '@/views/Student/classMessage.vue'
 
 
 
