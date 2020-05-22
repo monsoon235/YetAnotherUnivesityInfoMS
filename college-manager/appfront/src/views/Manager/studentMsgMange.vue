@@ -1,9 +1,5 @@
 <template>
-  <div class="index">
-    <!-- <div style='height: 60px'> 
-      <span class='font'>欢迎进入本校学生信息管理模块</span>
-      <p class='text'>学生是挚友，是学校引以为傲的资本，管理学生信息非常重要哦</p>
-    </div>-->
+  <div class="fillcontain">
     <el-row>
       <el-button
         type="primary"
@@ -19,7 +15,7 @@
         @click="getAllData()"
       >刷新</el-button>
       <el-collapse-transition>
-        <div v-if="show3">
+        <div class="search_container" v-if="show3">
           <br />
           <el-form
             :inline="true"
@@ -27,7 +23,7 @@
             :rules="searchRules"
             ref="form"
             label-width="100px"
-            class="demo-ruleForm"
+            class="demo-form-inline search-form"
           >
             <el-form-item
               label="姓名"
@@ -207,10 +203,7 @@
           <el-input v-model="form.name" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="性别" prop="gender">
-          <el-select
-            v-model="form.gender"
-            placeholder="请选择性别"
-          >
+          <el-select v-model="form.gender" placeholder="请选择性别">
             <el-option label="男" value="男" autocomplete="off"></el-option>
             <el-option label="女" value="女" autocomplete="off"></el-option>
           </el-select>
@@ -303,6 +296,19 @@
 }
 .el-form-item__label {
   width: 15%;
+}
+.search-form {
+  width: 100%;
+  min-width: 750px;
+  .el-form-item {
+    margin-bottom: 10px !important;
+    .el-date-editor {
+      width: 200px;
+      .el-input__inner {
+        height: 36px !important;
+      }
+    }
+  }
 }
 .transition-box {
   margin-bottom: 10px;
