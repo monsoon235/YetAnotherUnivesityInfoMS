@@ -53,11 +53,11 @@
     </el-row>
     <el-scrollbar>
       <el-table :data="tableData" stripe style="width: 100%">
-        <el-table-column prop="id" label="校区代码"></el-table-column>
-        <el-table-column prop="name" label="校区名称"></el-table-column>
-        <el-table-column prop="address" label="校区地址"></el-table-column>
+        <el-table-column prop="id" label="校区代码" align="center" sortable=""></el-table-column>
+        <el-table-column prop="name" label="校区名称" align="center"></el-table-column>
+        <el-table-column prop="address" label="校区地址" align="center"></el-table-column>
 
-        <el-table-column label="操作">
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button type="primary" @click="editData(scope.$index)">修改</el-button>
             <el-button type="danger" @click="openDialog(scope.$index)">删除</el-button>

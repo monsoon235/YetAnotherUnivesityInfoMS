@@ -72,15 +72,15 @@
     </el-row>
     <el-scrollbar>
       <el-table :data="tableData" stripe style="width: 100%">
-        <el-table-column prop="id" label="专业代码"></el-table-column>
-        <el-table-column prop="name" label="专业名称"></el-table-column>
-        <el-table-column prop="address" label="专业地址"></el-table-column>
-        <el-table-column prop="charge_person_id" label="专业负责人工号"></el-table-column>
-        <el-table-column prop="charge_person_name" label="专业负责人"></el-table-column>
-        <el-table-column prop="campus_id" label="所属校区代码"></el-table-column>
-        <el-table-column prop="campus_name" label="所属校区名称"></el-table-column>
+        <el-table-column prop="id" label="专业代码" align="center"></el-table-column>
+        <el-table-column prop="name" label="专业名称" align="center"></el-table-column>
+        <el-table-column prop="address" label="专业地址" align="center"></el-table-column>
+        <el-table-column prop="charge_person_id" label="专业负责人工号" align="center"></el-table-column>
+        <el-table-column prop="charge_person_name" label="专业负责人" align="center"></el-table-column>
+        <el-table-column prop="campus_id" label="所属校区代码" align="center"></el-table-column>
+        <el-table-column prop="campus_name" label="所属校区名称" align="center"></el-table-column>
 
-        <el-table-column label="操作">
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button type="primary" @click="editData(scope.$index)">修改</el-button>
             <el-button type="danger" @click="openDialog(scope.$index)">删除</el-button>

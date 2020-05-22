@@ -35,8 +35,15 @@
             <el-form-item label="学号" prop="id" style="width: 20%; position: relative;">
               <el-input v-model="form.id"></el-input>
             </el-form-item>
-            <el-form-item label="出生日期" prop="birth" style="width: 20%">
-              <el-input v-model="form.birth"></el-input>
+            <el-form-item label="出生日期" prop="birth">
+              <el-col :span="11">
+                <el-date-picker
+                  type="date"
+                  placeholder="选择日期"
+                  v-model="form.birth"
+                  style="width: 100%;"
+                ></el-date-picker>
+              </el-col>
             </el-form-item>
             <el-form-item label="性别" prop="gender" style="position: relative;">
               <el-radio-group v-model="form.gender">
@@ -197,7 +204,7 @@
     <el-dialog title="填写你的信息" :visible.sync="dialogFormVisible" style="height: 100%">
       <el-form :model="form" :rules="rules" ref="form">
         <el-form-item label="学号" prop="id" autocomplete="off">
-          <el-input v-model="form.id" autocomplete="off"></el-input>
+          <el-input v-model="form.id" :disabled="isEdit" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="姓名" prop="name">
           <el-input v-model="form.name" autocomplete="off"></el-input>
@@ -211,8 +218,15 @@
         <!-- <el-form-item label="性别">
           <el-input v-model="form.sex" autocomplete="off"></el-input>
         </el-form-item>-->
-        <el-form-item label="出生日期">
-          <el-input v-model="form.birth" autocomplete="off"></el-input>
+        <el-form-item label="出生日期" prop="birth">
+          <el-col :span="11">
+            <el-date-picker
+              type="date"
+              placeholder="选择日期"
+              v-model="form.birth"
+              style="width: 100%; margin-left: 92px;"
+            ></el-date-picker>
+          </el-col>
         </el-form-item>
         <el-form-item label="邮箱">
           <el-input v-model="form.email" autocomplete="off"></el-input>

@@ -34,7 +34,7 @@
               prop="id"
               style="width: 20%; left: 30px; position: absolute;"
             >
-              <el-input v-model="form.id"></el-input>
+              <el-input v-model="form.id" :disabled="isEdit"></el-input>
             </el-form-item>
             <el-form-item label="学号" prop="student_id" style="width: 20%">
               <el-input v-model="form.student_id"></el-input>
@@ -89,26 +89,26 @@
     </el-row>
     <el-scrollbar>
       <el-table :data="tableData" stripe style="width: 100%">
-        <el-table-column prop="id" label="异动编号"></el-table-column>
-        <el-table-column prop="student_id" label="学号"></el-table-column>
-        <el-table-column label="异动类型">
+        <el-table-column prop="id" label="异动编号" align="center"></el-table-column>
+        <el-table-column prop="student_id" label="学号" align="center"></el-table-column>
+        <el-table-column label="异动类型" align="center">
           <template slot-scope="scope">
             <i v-if="scope.row.type===0">转专业</i>
             <i v-else>降级</i>
           </template>
         </el-table-column>
-        <el-table-column label="是否转出团关系">
+        <el-table-column label="是否转出团关系" align="center">
           <template slot-scope="scope">
             <i v-if="scope.row.yycl_change===0">是</i>
             <i v-else>否</i>
           </template>
         </el-table-column>
-        <el-table-column prop="reason" label="降级原因"></el-table-column>
-        <el-table-column prop="from_class_id" label="原班级代码"></el-table-column>
-        <el-table-column prop="to_class_id" label="现班级代码"></el-table-column>
-        <el-table-column prop="date" label="异动日期"></el-table-column>
+        <el-table-column prop="reason" label="降级原因" align="center"></el-table-column>
+        <el-table-column prop="from_class_id" label="原班级代码" align="center"></el-table-column>
+        <el-table-column prop="to_class_id" label="现班级代码" align="center"></el-table-column>
+        <el-table-column prop="date" label="异动日期" align="center"></el-table-column>
 
-        <el-table-column label="操作">
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button type="primary" @click="editData(scope.$index)">修改</el-button>
             <el-button type="danger" @click="openDialog(scope.$index)">删除</el-button>
@@ -123,19 +123,13 @@
           <el-input v-model="form.id" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="异动类型" prop="type">
-          <el-select
-            v-model="form.type"
-            placeholder="请选择类型"
-          >
+          <el-select v-model="form.type" placeholder="请选择类型">
             <el-option label="转专业" value="0" autocomplete="off"></el-option>
             <el-option label="降级" value="1" autocomplete="off"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="转出团关系" v-if="form.type==0" prop="yycl_change">
-          <el-select
-            v-model="form.yycl_change"
-            placeholder="是否转出"
-          >
+          <el-select v-model="form.yycl_change" placeholder="是否转出">
             <el-option label="是" value="0" autocomplete="off"></el-option>
             <el-option label="否" value="1" autocomplete="off"></el-option>
           </el-select>

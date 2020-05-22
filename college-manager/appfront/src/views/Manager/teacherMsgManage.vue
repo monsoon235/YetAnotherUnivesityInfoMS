@@ -36,15 +36,16 @@
             >
               <el-input v-model="form.person_name"></el-input>
             </el-form-item>
-            <el-form-item label="工号" prop="id" style="width: 20%; left: 100px; position: relative;">
+            <el-form-item label="工号" prop="id" style="width: 20%; margin-left: 140px;">
               <el-input v-model="form.id"></el-input>
             </el-form-item>
-            <el-form-item
-              label="出生日期"
-              prop="birth"
-              style="width: 20%; left: 40px; position: relative;"
-            >
-              <el-input v-model="form.birth"></el-input>
+            <el-form-item label="出生日期" prop="birth" style="width: 20%; margin-left: -40px;">
+              <el-date-picker
+                type="date"
+                placeholder="选择日期"
+                v-model="form.birth"
+                style="width: 100%;"
+              ></el-date-picker>
             </el-form-item>
             <el-form-item label="性别" prop="gender" style="position: relative;">
               <el-radio-group v-model="form.gender">
@@ -80,21 +81,21 @@
             <el-form-item
               label="专业名称"
               prop="major_name"
-              style="width: 20%; left: 120px; position: relative;"
+              style="width: 20%; margin-left: 310px;"
             >
               <el-input v-model="form.major_name"></el-input>
             </el-form-item>
             <el-form-item
               label="身份证号"
               prop="person_id"
-              style="width: 20%; left: 70px; position: relative;"
+              style="width: 20%; margin-left: -40px;"
             >
               <el-input v-model="form.person_id"></el-input>
             </el-form-item>
             <el-form-item
               label="身份证类型"
               prop="person_id_type"
-              style="left: 30px; position: relative;"
+              style="margin-left: 30px;"
             >
               <el-radio-group v-model="form.person_id_type">
                 <el-radio label="身份证"></el-radio>
@@ -124,34 +125,17 @@
             <el-form-item
               label="家庭住址"
               prop="family_address"
-              style="width: 20%; position: relative;"
+              style="width: 20%; margin-left: 300px;"
             >
               <el-input v-model="form.family_address"></el-input>
             </el-form-item>
-            <el-form-item label="邮编" prop="family_zipcode" style="width: 20%; position: relative;">
+            <el-form-item label="邮编" prop="family_zipcode" style="width: 20%; margin-left: -60px;">
               <el-input v-model="form.family_zipcode"></el-input>
             </el-form-item>
-          </el-form>
-          <el-form
-            :inline="true"
-            :model="form"
-            :rules="searchRules"
-            ref="form"
-            label-width="100px"
-            class="demo-ruleForm"
-          >
-            <el-form-item
-              label="联系电话"
-              prop="family_tel"
-              style="width: 20%; left: 30px; position: absolute;"
-            >
+            <el-form-item label="联系电话" prop="family_tel" style="width: 20%;">
               <el-input v-model="form.family_tel"></el-input>
             </el-form-item>
-            <el-form-item
-              label="电子邮箱"
-              prop="email"
-              style="width: 20%; left: 400px; position: absolute;"
-            >
+            <el-form-item label="电子邮箱" prop="email" style="width: 20%;">
               <el-input v-model="form.email"></el-input>
             </el-form-item>
           </el-form>
@@ -162,37 +146,37 @@
     </el-row>
     <el-scrollbar>
       <el-table :data="tableData" stripe style="width: 100%">
-        <el-table-column prop="id" label="工号"></el-table-column>
-        <el-table-column prop="person_name" label="姓名"></el-table-column>
-        <el-table-column label="性别">
+        <el-table-column prop="id" label="工号" align="center"></el-table-column>
+        <el-table-column prop="person_name" label="姓名" align="center"></el-table-column>
+        <el-table-column label="性别" align="center">
           <template slot-scope="scope">
             <i v-if="scope.row.gender===0">男</i>
             <i v-else>女</i>
           </template>
         </el-table-column>
-        <el-table-column label="职称">
+        <el-table-column label="职称" align="center">
           <template slot-scope="scope">
             <i v-if="scope.row.title===0">教授</i>
             <i v-else>副教授</i>
           </template>
         </el-table-column>
-        <el-table-column prop="birth" label="出生日期"></el-table-column>
-        <el-table-column prop="major_id" label="专业代码"></el-table-column>
-        <el-table-column prop="major_name" label="专业名称"></el-table-column>
-        <el-table-column label="身份证类型">
+        <el-table-column prop="birth" label="出生日期" align="center"></el-table-column>
+        <el-table-column prop="major_id" label="专业代码" align="center"></el-table-column>
+        <el-table-column prop="major_name" label="专业名称" align="center"></el-table-column>
+        <el-table-column label="身份证类型" align="center">
           <template slot-scope="scope">
             <i v-if="scope.row.person_id_type===0">身份证</i>
             <i v-else>护照</i>
           </template>
         </el-table-column>
-        <el-table-column prop="person_id" label="身份证号"></el-table-column>
-        <el-table-column prop="country" label="国籍"></el-table-column>
-        <el-table-column prop="enroll_date" label="入职时间"></el-table-column>
-        <el-table-column prop="family_address" label="家庭住址"></el-table-column>
-        <el-table-column prop="family_zipcode" label="邮编"></el-table-column>
-        <el-table-column prop="family_tel" label="联系电话"></el-table-column>
-        <el-table-column prop="email" label="电子邮箱"></el-table-column>
-        <el-table-column label="操作">
+        <el-table-column prop="person_id" label="身份证号" width="220" align="center"></el-table-column>
+        <el-table-column prop="country" label="国籍" align="center"></el-table-column>
+        <el-table-column prop="enroll_date" label="入职时间" align="center"></el-table-column>
+        <el-table-column prop="family_address" label="家庭住址" width="220" align="center"></el-table-column>
+        <el-table-column prop="family_zipcode" label="邮编" align="center"></el-table-column>
+        <el-table-column prop="family_tel" label="联系电话" align="center"></el-table-column>
+        <el-table-column prop="email" label="电子邮箱" align="center"></el-table-column>
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button type="primary" @click="editData(scope.$index)">修改</el-button>
             <el-button type="danger" @click="openDialog(scope.$index)">删除</el-button>
@@ -202,7 +186,7 @@
     </el-scrollbar>
 
     <el-dialog title="填写你的信息" :visible.sync="dialogFormVisible" style="height: 100%">
-      <el-form :model="form" :rules="rules" ref="form">
+      <el-form :model="form" :rules="rules" ref="form" label-width="100px">
         <el-form-item label="工号" prop="id" autocomplete="off">
           <el-input v-model="form.id" autocomplete="off"></el-input>
         </el-form-item>
@@ -210,19 +194,13 @@
           <el-input v-model="form.person_name" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="性别" prop="gender">
-          <el-select
-            v-model="form.gender"
-            placeholder="请选择性别"
-          >
+          <el-select v-model="form.gender" placeholder="请选择性别" style="margin-left: -280px;">
             <el-option label="男" value="男" autocomplete="off"></el-option>
             <el-option label="女" value="女" autocomplete="off"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="职称" prop="title">
-          <el-select
-            v-model="form.title"
-            placeholder="请选择职称"
-          >
+          <el-select v-model="form.title" placeholder="请选择职称" style="margin-left: -280px;">
             <el-option label="教授" value="教授" autocomplete="off"></el-option>
             <el-option label="副教授" value="副教授" autocomplete="off"></el-option>
           </el-select>
@@ -230,8 +208,15 @@
         <!-- <el-form-item label="性别">
           <el-input v-model="form.sex" autocomplete="off"></el-input>
         </el-form-item>-->
-        <el-form-item label="出生日期">
-          <el-input v-model="form.birth" autocomplete="off"></el-input>
+        <el-form-item label="出生日期" prop="birth">
+          <el-col :span="11">
+            <el-date-picker
+              type="date"
+              placeholder="选择日期"
+              v-model="form.birth"
+              style="width: 100%; margin-left: 92px;"
+            ></el-date-picker>
+          </el-col>
         </el-form-item>
 
         <el-form-item label="专业代码" prop="major_id">
@@ -243,7 +228,7 @@
         </el-form-item>
 
         <el-form-item label="身份证类型" prop="person_id_type">
-          <el-radio-group v-model="form.person_id_type">
+          <el-radio-group v-model="form.person_id_type" style="margin-left: -280px;">
             <el-radio label="身份证"></el-radio>
             <el-radio label="护照"></el-radio>
           </el-radio-group>
@@ -299,12 +284,7 @@
 .text {
   @include fontThree();
 }
-.el-input {
-  width: 80%;
-}
-.el-form-item__label {
-  width: 15%;
-}
+
 .transition-box {
   margin-bottom: 10px;
   width: 200px;
