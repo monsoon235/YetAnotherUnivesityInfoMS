@@ -7,52 +7,37 @@ from django.http import HttpRequest
 from .general import *
 from .models import *
 
-where_params = [
-    'id', 'course_id', 'teacher_id', 'year', 'term', 'time'
-]
+where_params = ['student_id', 'type', 'date', 'from_class_id', 'to_class_id', 'extra']
 
 
 def check_params(params: dict) -> dict:
-    params = {
-        k: v
-        for k, v in params.items()
+    return {
+        k: v for k, v in params.items()
         if k in where_params
     }
-    return params
 
 
 @django.views.decorators.csrf.csrf_exempt
 def get(request: HttpRequest):
     try:
         params = check_params(request.GET.dict())
-        result = Lecture.objects.filter(**params).values(
+        result = Adjustment.objects.filter(**params).values(
             *where_params,
-            course_name=F('course__name'),
-            teacher_name=F('teacher__person__name'),
-            assessment=F('course__assessment'),
-            major_name=F('course__major__name')
+            student_name=F('student__name'),
+            from_class_name=F('from_class__name'),
+            to_class_name=F('to_class__name')
         )
         return response_success(list(result))
     except Exception as e:
         return response_error(str(e))
 
 
-# 没有 id 需要特殊处理
 @django.views.decorators.csrf.csrf_exempt
 def add(request: HttpRequest):
     try:
         params = json.loads(request.body.decode())
         params = check_params(params)
-        if 'lecture_id' not in params:
-            return response_error('missing lecture_id')
-        if 'class_id' not in params:
-            return response_error('missing class_id')
-        if Lecture.objects.filter(
-                lecture_id=params['lecture_id'],
-                class_id=params['class_id']):
-            return response_error('id exists')
-        Lecture(**params).save()
-        return response_success()
+        return general_add(Adjustment, params)
     except Exception as e:
         return response_error(str(e))
 
@@ -61,7 +46,7 @@ def add(request: HttpRequest):
 def delete(request: HttpRequest):
     try:
         params = check_params(request.GET.dict())
-        return general_del(Lecture, params)
+        return general_del(Adjustment, params)
     except Exception as e:
         return response_error(str(e))
 
@@ -72,6 +57,6 @@ def mod(request: HttpRequest):
         params = json.loads(request.body.decode())
         where = check_params(params.get('where', {}))
         update = check_params(params.get('update', {}))
-        return general_mod(Lecture, where, update)
+        return general_mod(Adjustment, where, update)
     except Exception as e:
         return response_error(str(e))

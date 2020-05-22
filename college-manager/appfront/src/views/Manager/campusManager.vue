@@ -30,23 +30,17 @@
             class="demo-ruleForm"
           >
             <el-form-item
-              label="课程编号"
+              label="校区代码"
               prop="id"
               style="width: 20%; left: 30px; position: absolute;"
             >
               <el-input v-model="form.id"></el-input>
             </el-form-item>
-            <el-form-item label="课程名称" prop="name" style="width: 20%">
+            <el-form-item label="校区名称" prop="name" style="width: 20%; position: relative;">
               <el-input v-model="form.name"></el-input>
             </el-form-item>
-            <el-form-item label="开课专业" prop="major_id" style="width: 20%">
-              <el-input v-model="form.major_id"></el-input>
-            </el-form-item>
-            <el-form-item label="考核方式" prop="assessment" style="width: 20%; position: relative;">
-              <el-radio-group v-model="form.assessment">
-                <el-radio label="考试"></el-radio>
-                <el-radio label="当堂答辩"></el-radio>
-              </el-radio-group>
+            <el-form-item label="校区地址" prop="address" style="width: 20%">
+              <el-input v-model="form.address"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="warning" plain @click="mysearchData">搜索</el-button>
@@ -59,11 +53,9 @@
     </el-row>
     <el-scrollbar>
       <el-table :data="tableData" stripe style="width: 100%">
-        <el-table-column prop="id" label="课程编号"></el-table-column>
-        <el-table-column prop="name" label="课程名称"></el-table-column>
-        <el-table-column prop="major_id" label="专业代码"></el-table-column>
-        <el-table-column prop="major_name" label="开课专业"></el-table-column>
-        <el-table-column prop="assessment" label="考核方式"></el-table-column>
+        <el-table-column prop="id" label="校区代码"></el-table-column>
+        <el-table-column prop="name" label="校区名称"></el-table-column>
+        <el-table-column prop="address" label="校区地址"></el-table-column>
 
         <el-table-column label="操作">
           <template slot-scope="scope">
@@ -76,17 +68,14 @@
 
     <el-dialog title="填写你的信息" :visible.sync="dialogFormVisible" style="height: 100%">
       <el-form :model="form" :rules="rules" ref="form">
-        <el-form-item label="课程编号" prop="id">
-          <el-input v-model="form.id" autocomplete="off"></el-input>
+        <el-form-item label="校区代码" prop="id" autocomplete="off">
+          <el-input v-model="form.id" :disabled="isEdit" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="课程名称" prop="name">
+        <el-form-item label="校区名称" prop="name">
           <el-input v-model="form.name" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="开课专业" prop="major_id">
-          <el-input v-model="form.major_id" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="考核方式" prop="assessment">
-          <el-input v-model="form.assessment" autocomplete="off"></el-input>
+        <el-form-item label="校区地址" prop="address">
+          <el-input v-model="form.address" autocomplete="off"></el-input>
         </el-form-item>
 
         <!-- <el-form-item label="地址">
@@ -151,24 +140,36 @@ export default {
       isEdit: false, //是否修改
       editId: "",
       delId: "",
+      delIndex: "",
+      editIndex: "",
       show3: false,
       //direction: 'rtl',
       form: {
         id: "",
         name: "",
-        major_id: "",
-        assessment: "",
-        major_name: ""
+        address: ""
       },
 
       //两套rule体系
-      searchRules: {},
+      searchRules: {
+        name: [
+          { min: 2, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" }
+        ]
+      },
 
       rules: {
+        name: [
+          { required: true, message: "必填", trigger: "blur" },
+          { min: 2, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" }
+        ],
         id: [{ required: true, message: "必填", trigger: "blur" }],
-        name: [{ required: true, message: "必填", trigger: "blur" }],
-        major_id: [{ required: true, message: "必填", trigger: "blur" }],
-        assessment: [{ required: true, message: "必填", trigger: "blur" }]
+        address: [{ required: true, message: "必填", trigger: "blur" }]
+        // age: [
+        //   { type: 'number', message: '年龄必须为数字值'}
+        // ],
+        // moblie: [
+        //   { type: 'number', message: '年龄必须为数字值'}
+        // ]
       }
     };
   },
@@ -182,7 +183,7 @@ export default {
     simplify(obj) {
       let newobj = new Object();
       for (let key in obj) {
-        if (obj[key] && key !== "major_name") newobj[key] = obj[key];
+        if (obj[key]) newobj[key] = obj[key];
       }
       return newobj;
     },
@@ -192,10 +193,10 @@ export default {
       this.$http
         .get(url, opt)
         .then(function(res) {
-          if (url === "http://127.0.0.1:8000/api/course/del") {
+          if (url === "http://127.0.0.1:8000/api/campus/del") {
             console.log(_this.tableData);
             _this.tableData.splice(_this.delIndex, 1);
-          } else if (url === "http://127.0.0.1:8000/api/course/get") {
+          } else if (url === "http://127.0.0.1:8000/api/campus/get") {
             console.log(res);
             _this.tableData = res.data["list"];
           }
@@ -213,9 +214,9 @@ export default {
         .then(function(res) {
           console.log(res);
           // 将数据存储起来
-          if (url === "http://127.0.0.1:8000/api/course/add") {
+          if (url === "http://127.0.0.1:8000/api/campus/add") {
             _this.getAllData();
-          } else if (url === "http://127.0.0.1:8000/api/course/mod") {
+          } else if (url === "http://127.0.0.1:8000/api/campus/mod") {
             for (let key in opt.update)
               _this.tableData[_this.editIndex][key] = opt.update[key];
             console.log(_this.tableData);
@@ -234,7 +235,6 @@ export default {
           if (that.isEdit) {
             let subForm = that.form;
             delete subForm.id;
-            delete subForm.major_name;
             let opt = {
               where: {
                 id: that.editId
@@ -242,12 +242,12 @@ export default {
               update: subForm
             };
             // 修改
-            that.sendPostRequest("http://127.0.0.1:8000/api/course/mod", opt);
+            that.sendPostRequest("http://127.0.0.1:8000/api/campus/mod", opt);
           } else {
             // 新增
             that.sendPostRequest(
-              "http://127.0.0.1:8000/api/course/add",
-              that.simplify(that.form)
+              "http://127.0.0.1:8000/api/campus/add",
+              that.form
             );
           }
 
@@ -263,11 +263,13 @@ export default {
     getAllData() {
       var _this = this;
       this.$http
-        .get("http://127.0.0.1:8000/api/course/get")
+        .get("http://127.0.0.1:8000/api/campus/get")
         .then(function(res) {
           var resbody = JSON.parse(res.bodyText);
+          console.log(resbody);
+          console.log(res.data["list"]);
           if (resbody["code"] == 0) {
-            _this.$message.error("查询专业失败");
+            _this.$message.error("查询校区失败");
           } else {
             _this.tableData = res.data["list"];
           }
@@ -285,8 +287,7 @@ export default {
       this.isEdit = true;
       this.form.id = selfData.id;
       this.form.name = selfData.name;
-      this.form.major_id = selfData.major_id;
-      this.form.assessment = selfData.assessment;
+      this.form.address = selfData.address;
     },
 
     openDialog(index) {
@@ -298,14 +299,14 @@ export default {
     delData() {
       var _this = this;
       _this.dialogVisible = false;
-      this.sendGetRequest("http://127.0.0.1:8000/api/course/del", {
+      this.sendGetRequest("http://127.0.0.1:8000/api/campus/del", {
         params: { id: this.delId }
       });
     },
 
     mysearchData() {
       console.log(this.simplify(this.form));
-      this.sendGetRequest("http://127.0.0.1:8000/api/course/get", {
+      this.sendGetRequest("http://127.0.0.1:8000/api/campus/get", {
         params: this.simplify(this.form)
       });
     },

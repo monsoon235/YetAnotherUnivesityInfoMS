@@ -1,91 +1,266 @@
 <template>
   <div class="index">
-    <!-- <div style="height: 60px">
-      <span class='font'>欢迎进入本校教师信息管理模块</span>
-      <p class='text'>教师是核心，是学校培养学生的人才，管理教师信息，了解教师需求很关键</p>
-    </div> -->
-    <el-row style="margin: 0 auto;">
-      <el-button type="primary" @click="dialogFormVisible = true" style=''>新增</el-button>
-      <div class="searchbox" style="display: inline-block; float: right;">
-        <input class="sc" type="text" placeholder="请输入教工号||教师姓名||性别||班级||专长" style="width: 400px; margin-right: 20px; height: 32px; border-radius: 1px solid #302d1c; margin-bottom: -3px; position: relative; top: 3px;"/>
-        <el-button type="warning" plain @click="searchData">搜索</el-button>
-        <el-button type="danger" plain @click="getAllData()">刷新</el-button>
-      </div>
+    <!-- <div style='height: 60px'> 
+      <span class='font'>欢迎进入本校学生信息管理模块</span>
+      <p class='text'>学生是挚友，是学校引以为傲的资本，管理学生信息非常重要哦</p>
+    </div>-->
+    <el-row>
+      <el-button
+        type="primary"
+        style="left: 10px; position: absolute;"
+        @click="dialogFormVisible = true"
+      >新增</el-button>
+      <!--div class="searchbox" style="display: inline-block; float: right;"-->
+      <el-button style="left: 700px; position: relative;" @click="show3 = !show3">展开搜索框</el-button>
+      <el-button
+        style="left: 700px; position: relative;"
+        type="danger"
+        plain
+        @click="getAllData()"
+      >刷新</el-button>
+      <el-collapse-transition>
+        <div v-if="show3">
+          <br />
+          <el-form
+            :inline="true"
+            :model="form"
+            :rules="searchRules"
+            ref="form"
+            label-width="100px"
+            class="demo-ruleForm"
+          >
+            <el-form-item
+              label="姓名"
+              prop="person_name"
+              style="width: 20%; left: 30px; position: absolute;"
+            >
+              <el-input v-model="form.person_name"></el-input>
+            </el-form-item>
+            <el-form-item label="工号" prop="id" style="width: 20%; left: 100px; position: relative;">
+              <el-input v-model="form.id"></el-input>
+            </el-form-item>
+            <el-form-item
+              label="出生日期"
+              prop="birth"
+              style="width: 20%; left: 40px; position: relative;"
+            >
+              <el-input v-model="form.birth"></el-input>
+            </el-form-item>
+            <el-form-item label="性别" prop="gender" style="position: relative;">
+              <el-radio-group v-model="form.gender">
+                <el-radio label="男"></el-radio>
+                <el-radio label="女"></el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label="职称" prop="gender" style="position: relative;">
+              <el-radio-group v-model="form.gender">
+                <el-radio label="教授"></el-radio>
+                <el-radio label="副教授"></el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="warning" plain @click="mysearchData">搜索</el-button>
+            </el-form-item>
+          </el-form>
+          <el-form
+            :inline="true"
+            :model="form"
+            :rules="searchRules"
+            ref="form"
+            label-width="100px"
+            class="demo-ruleForm"
+          >
+            <el-form-item
+              label="专业代码"
+              prop="major_id"
+              style="width: 20%; left: 30px; position: absolute;"
+            >
+              <el-input v-model="form.major_id"></el-input>
+            </el-form-item>
+            <el-form-item
+              label="专业名称"
+              prop="major_name"
+              style="width: 20%; left: 120px; position: relative;"
+            >
+              <el-input v-model="form.major_name"></el-input>
+            </el-form-item>
+            <el-form-item
+              label="身份证号"
+              prop="person_id"
+              style="width: 20%; left: 70px; position: relative;"
+            >
+              <el-input v-model="form.person_id"></el-input>
+            </el-form-item>
+            <el-form-item
+              label="身份证类型"
+              prop="person_id_type"
+              style="left: 30px; position: relative;"
+            >
+              <el-radio-group v-model="form.person_id_type">
+                <el-radio label="身份证"></el-radio>
+                <el-radio label="护照"></el-radio>
+              </el-radio-group>
+            </el-form-item>
+
+            <el-form-item label="国籍" prop="country" style="width: 20%;">
+              <el-input v-model="form.country"></el-input>
+            </el-form-item>
+          </el-form>
+          <el-form
+            :inline="true"
+            :model="form"
+            :rules="searchRules"
+            ref="form"
+            label-width="100px"
+            class="demo-ruleForm"
+          >
+            <el-form-item
+              label="入职时间"
+              prop="enroll_date"
+              style="width: 20%; left: 30px; position: absolute;"
+            >
+              <el-input v-model="form.enroll_date"></el-input>
+            </el-form-item>
+            <el-form-item
+              label="家庭住址"
+              prop="family_address"
+              style="width: 20%; position: relative;"
+            >
+              <el-input v-model="form.family_address"></el-input>
+            </el-form-item>
+            <el-form-item label="邮编" prop="family_zipcode" style="width: 20%; position: relative;">
+              <el-input v-model="form.family_zipcode"></el-input>
+            </el-form-item>
+          </el-form>
+          <el-form
+            :inline="true"
+            :model="form"
+            :rules="searchRules"
+            ref="form"
+            label-width="100px"
+            class="demo-ruleForm"
+          >
+            <el-form-item
+              label="联系电话"
+              prop="family_tel"
+              style="width: 20%; left: 30px; position: absolute;"
+            >
+              <el-input v-model="form.family_tel"></el-input>
+            </el-form-item>
+            <el-form-item
+              label="电子邮箱"
+              prop="email"
+              style="width: 20%; left: 400px; position: absolute;"
+            >
+              <el-input v-model="form.email"></el-input>
+            </el-form-item>
+          </el-form>
+        </div>
+      </el-collapse-transition>
+
+      <!--/div-->
     </el-row>
-    <el-table
-      :data="tableData"
-      stripe
-      style="width: 100%">
-        <el-table-column
-        prop="teaNum"
-        label="教师工号">
-      </el-table-column>
-      <el-table-column
-        prop="teacherName"
-        label="姓名">
-      </el-table-column>
-      <el-table-column
-        prop="sex"
-        label="性别">
-      </el-table-column>
-      <el-table-column
-        prop="age"
-        label="年龄">
-      </el-table-column>
-      <el-table-column
-        prop="moblie"
-        label="电话">
-      </el-table-column>
-      <el-table-column
-        prop="className"
-        label="班级">
-      </el-table-column>
-      <el-table-column
-        prop="speciality"
-        label="专长">
-      </el-table-column>
-       <el-table-column
-        label="操作">
-        <template slot-scope="scope">
-          <el-button type="primary" @click="editData(scope.$index)">修改</el-button>
-          <el-button type="danger" @click="openDialog(scope.$index)">删除</el-button>
-         </template>
-      </el-table-column>
-
-    </el-table>
-
-    
+    <el-scrollbar>
+      <el-table :data="tableData" stripe style="width: 100%">
+        <el-table-column prop="id" label="工号"></el-table-column>
+        <el-table-column prop="person_name" label="姓名"></el-table-column>
+        <el-table-column prop="gender" label="性别"></el-table-column>
+        <el-table-column prop="title" label="职称"></el-table-column>
+        <el-table-column prop="birth" label="出生日期"></el-table-column>
+        <el-table-column prop="major_id" label="专业代码"></el-table-column>
+        <el-table-column prop="major_name" label="专业名称"></el-table-column>
+        <el-table-column prop="person_id_type" label="身份证类型"></el-table-column>
+        <el-table-column prop="person_id" label="身份证号"></el-table-column>
+        <el-table-column prop="country" label="国籍"></el-table-column>
+        <el-table-column prop="enroll_date" label="入职时间"></el-table-column>
+        <el-table-column prop="family_address" label="家庭住址"></el-table-column>
+        <el-table-column prop="family_zipcode" label="邮编"></el-table-column>
+        <el-table-column prop="family_tel" label="联系电话"></el-table-column>
+        <el-table-column prop="email" label="电子邮箱"></el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button type="primary" @click="editData(scope.$index)">修改</el-button>
+            <el-button type="danger" @click="openDialog(scope.$index)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-scrollbar>
 
     <el-dialog title="填写你的信息" :visible.sync="dialogFormVisible" style="height: 100%">
       <el-form :model="form" :rules="rules" ref="form">
-        <el-form-item label="教师工号" prop="teaNum" autocomplete="off">
-          <el-input v-model="form.teaNum" autocomplete="off"></el-input>
+        <el-form-item label="工号" prop="id" autocomplete="off">
+          <el-input v-model="form.id" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="姓名" prop="teacherName">
-          <el-input v-model="form.teacherName" autocomplete="off"></el-input>
+        <el-form-item label="姓名" prop="person_name">
+          <el-input v-model="form.person_name" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="性别" prop="sex">
-            <el-select style='width: 100%; position: absolute; left: 138px' v-model="form.sex" placeholder="请选择性别">
-              <el-option style='height: 80%' label="男" value="男" autocomplete="off"></el-option>
-              <el-option style='height: 80%' label="女" value="女" autocomplete="off"></el-option>
-              <el-option style='height: 80%' label="保密" value="保密" autocomplete="off"></el-option>
-            </el-select>
+        <el-form-item label="性别" prop="gender">
+          <el-select
+            style="width: 50%; position: absolute; left: 138px"
+            v-model="form.gender"
+            placeholder="请选择性别"
+          >
+            <el-option label="男" value="男" autocomplete="off"></el-option>
+            <el-option label="女" value="女" autocomplete="off"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="职称" prop="title">
+          <el-select
+            style="width: 50%; position: absolute; left: 138px"
+            v-model="form.title"
+            placeholder="请选择职称"
+          >
+            <el-option label="教授" value="教授" autocomplete="off"></el-option>
+            <el-option label="副教授" value="副教授" autocomplete="off"></el-option>
+          </el-select>
         </el-form-item>
         <!-- <el-form-item label="性别">
           <el-input v-model="form.sex" autocomplete="off"></el-input>
-        </el-form-item> -->
-        <el-form-item label="年龄">
-          <el-input v-model="form.age" autocomplete="off"></el-input>
+        </el-form-item>-->
+        <el-form-item label="出生日期">
+          <el-input v-model="form.birth" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="手机号">
-          <el-input v-model="form.moblie" autocomplete="off"></el-input>
+
+        <el-form-item label="专业代码" prop="major_id">
+          <el-input v-model="form.major_id"></el-input>
         </el-form-item>
-        <el-form-item label="班级">
-          <el-input v-model="form.className" autocomplete="off"></el-input>
+
+        <el-form-item label="专业名称" prop="major_name">
+          <el-input v-model="form.major_name"></el-input>
         </el-form-item>
-        <el-form-item label="专长">
-          <el-input v-model="form.speciality" autocomplete="off"></el-input>
+
+        <el-form-item label="身份证类型" prop="person_id_type">
+          <el-radio-group v-model="form.person_id_type">
+            <el-radio label="身份证"></el-radio>
+            <el-radio label="护照"></el-radio>
+          </el-radio-group>
         </el-form-item>
+        <el-form-item label="身份证号" prop="person_id" autocomplete="off">
+          <el-input v-model="form.person_id" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="国籍" prop="country">
+          <el-input v-model="form.country"></el-input>
+        </el-form-item>
+
+        <el-form-item label="入职时间" prop="enroll_date">
+          <el-input v-model="form.enroll_date"></el-input>
+        </el-form-item>
+        <el-form-item label="家庭住址" prop="family_address">
+          <el-input v-model="form.family_address"></el-input>
+        </el-form-item>
+        <el-form-item label="邮编" prop="family_zipcode">
+          <el-input v-model="form.family_zipcode"></el-input>
+        </el-form-item>
+        <el-form-item label="联系电话" prop="family_tel">
+          <el-input v-model="form.family_tel"></el-input>
+        </el-form-item>
+        <el-form-item label="电子邮箱" prop="email">
+          <el-input v-model="form.email"></el-input>
+        </el-form-item>
+
+        <!-- <el-form-item label="地址">
+          <el-input v-model="form.adress" autocomplete="off"></el-input>
+        </el-form-item>-->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -93,10 +268,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog
-      title="提示"
-      :visible.sync="dialogVisible"
-      width="30%">
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
       <span>确定要删除信息</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -107,22 +279,34 @@
 </template>
 
 <style lang='scss'>
-  @import "../../static/css/base.scss";
-  .font {
-    @include fontTwo()
-  }
-  .text {
-    @include fontThree()
-  }
-  .el-dialog__body {
-    padding: 10px 20px;
-  }
-  .el-input {
-    width: 80%
-  }
-  .el-form-item__label {
-    width: 15%
-  }
+@import "../../static/css/base.scss";
+.font {
+  @include fontTwo();
+}
+.text {
+  @include fontThree();
+}
+.el-input {
+  width: 80%;
+}
+.el-form-item__label {
+  width: 15%;
+}
+.transition-box {
+  margin-bottom: 10px;
+  width: 200px;
+  height: 100px;
+  border-radius: 4px;
+  background-color: #409eff;
+  text-align: center;
+  color: #fff;
+  padding: 40px 20px;
+  box-sizing: border-box;
+  margin-right: 20px;
+}
+.el-scrollbar .el-scrollbar__wrap .el-scrollbar__view {
+  white-space: nowrap;
+}
 </style>
 
 <script>
@@ -130,152 +314,247 @@ export default {
   name: "index",
   data() {
     return {
-      dialogVisible:false,
-      tableData: [],
+      dialogVisible: false,
+      tableData: [], //以数组的形式存储所有信息，每条信息是一个form
       dialogFormVisible: false,
       isEdit: false, //是否修改
-      editId: '',
-      delId: '',
+      editId: "",
+      delId: "",
+      show3: false,
+      choiceMap: { 身份证: 0, 护照: 1, 男: 0, 女: 1, 教授: 0, 副教授: 1 },
+      //direction: 'rtl',
       form: {
-        teaNum: '',
-        teacherName: "",
-        sex: "",
-        age: null,
-        moblie: null,
-        className: '',
-        speciality: '',
+        id: "", //工号
+        person_name: "",
+        gender: "",
+        title: "",
+        person_id_type: "",
+        person_id: "", //身份证号
+        country: "",
+        birth: "",
+        major_id: "",
+        major_name: "",
+        family_address: "",
+        family_zipcode: "",
+        family_tel: "",
+        enroll_date: "",
+        email: ""
       },
-      rules: {
+
+      //两套rule体系
+      searchRules: {
         name: [
-          { required: true, message: '必填', trigger: 'blur' },
-          { min: 2, max: 5, message: '长度在 2 到 5 个字符', trigger: 'blur' }
-        ],
-        age: [
-          { type: 'number', message: '年龄必须为数字值', trigger: 'blur'}
-        ],
-        moblie: [
-          { type: 'number', message: '年龄必须为数字值', trigger: 'blur'       }
+          { min: 2, max: 5, message: "长度在 2 到 8 个字符", trigger: "blur" }
         ]
+      },
+
+      rules: {
+        person_name: [
+          { required: true, message: "必填", trigger: "blur" },
+          { min: 2, max: 5, message: "长度在 2 到 8 个字符", trigger: "blur" }
+        ],
+        person_id: [{ required: true, message: "必填", trigger: "blur" }],
+        id: [{ required: true, message: "必填", trigger: "blur" }]
+        // age: [
+        //   { type: 'number', message: '年龄必须为数字值'}
+        // ],
+        // moblie: [
+        //   { type: 'number', message: '年龄必须为数字值'}
+        // ]
       }
-    }
+    };
   },
 
   methods: {
-    sendRequest(url, opt={}) {
-      var _this = this
-      this.$http.post(url, opt).then(function (res) {
-        // console.log(res)
-         // 将数据存储起来
-        if(url === '/manager/addTeacher') {
-          // console.log("添加用户信息")
-          // console.log(res)
-          _this.tableData.push(res.data)
-        } else if(url === '/manager/editTeacher') {
-          // console.log("编辑用户信息")
-          _this.tableData = res.data.data
-        } else if(url === '/manager/delTeacher') {
-          // console.log("编辑用户信息")
-          _this.tableData = res.data.data
-        }
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
+    // 驼峰转换下划线
+    toLine(name) {
+      return name.replace(/([A-Z])/g, "_$1").toLowerCase();
     },
+
+    simplify(obj) {
+      let newobj = new Object();
+      for (let key in obj) {
+        if (obj[key]) newobj[key] = obj[key];
+      }
+      return newobj;
+    },
+
+    sendGetRequest(url, opt = {}) {
+      var _this = this;
+      if (opt["person_id_type"]) {
+        opt["person_id_type"] = this.choiceMap[opt["person_id_type"]];
+      }
+      if (opt["gender"]) {
+        opt["gender"] = this.choiceMap[opt["gender"]];
+      }
+      if (opt["title"]) {
+        opt["title"] = this.choiceMap[opt["title"]];
+      }
+      this.$http
+        .get(url, opt)
+        .then(function(res) {
+          if (url === "http://127.0.0.1:8000/api/teacher/del") {
+            console.log(_this.tableData);
+            _this.tableData.splice(_this.delIndex, 1);
+          } else if (url === "http://127.0.0.1:8000/api/teacher/get") {
+            console.log(res);
+            _this.tableData = res.data["list"];
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+
+    sendPostRequest(url, opt = {}) {
+      var _this = this;
+      if (opt["person_id_type"]) {
+        opt["person_id_type"] = this.choiceMap[opt["person_id_type"]];
+      }
+      if (opt["gender"]) {
+        opt["gender"] = this.choiceMap[opt["gender"]];
+      }
+      if (opt["title"]) {
+        opt["title"] = this.choiceMap[opt["title"]];
+      }
+      console.log(opt);
+      this.$http
+        .post(url, JSON.stringify(opt), { emulateJSON: true })
+        .then(function(res) {
+          console.log(res);
+          // 将数据存储起来
+          if (url === "http://127.0.0.1:8000/api/teacher/add") {
+            _this.getAllData();
+          } else if (url === "http://127.0.0.1:8000/api/teacher/mod") {
+            for (let key in opt.update)
+              _this.tableData[_this.editIndex][key] = opt.update[key];
+            console.log(_this.tableData);
+            this.reload();
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+
     submitFrom() {
-      const that = this
-      this.$refs['form'].validate((valid) => {
+      const that = this;
+      this.$refs["form"].validate(valid => {
         if (valid) {
-          if(that.isEdit) {
-            let opt = that.form
-            opt._id = that.editId
+          if (that.isEdit) {
+            let subForm = that.form;
+            delete subForm.id;
+            let opt = {
+              where: {
+                id: that.editId
+              },
+              update: subForm
+            };
             // 修改
-              that.sendRequest('/manager/editTeacher',opt)
-            }else {
-              // 新增
-              that.sendRequest('/manager/addTeacher',that.form)
-            }
-          
-          that.dialogFormVisible = false
-          // that.getAllData()
+            that.sendPostRequest("http://127.0.0.1:8000/api/teacher/mod", opt);
+          } else {
+            // 新增
+            that.sendPostRequest(
+              "http://127.0.0.1:8000/api/teacher/add",
+              that.simplify(that.form)
+            );
+          }
+
+          that.dialogFormVisible = false;
         } else {
-          console.log('error submit!!');
+          console.log("error submit!!");
           return false;
         }
       });
-
-      
     },
 
     // 请求所有数据
     getAllData() {
-      var _this = this
-      this.$http.get('/manager/teacherAll').then(function (res) {
-        console.log(res.data)
-        _this.tableData = res.data
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
-
+      var _this = this;
+      this.$http
+        .get("http://127.0.0.1:8000/api/teacher/get")
+        .then(function(res) {
+          var resbody = JSON.parse(res.bodyText);
+          if (resbody["code"] == 0) {
+            _this.$message.error("查询教师失败");
+          } else {
+            _this.tableData = res.data["list"];
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     },
-    
-    editData(index) {
-      const selfData = this.tableData[index]
-      this.editId = selfData._id
-      this.dialogFormVisible = true
-      this.isEdit = true
-      this.form.teaNum = selfData.teaNum
-      this.form.name = selfData.name
-      this.form.sex = selfData.sex
-      this.form.age = selfData.age
-      this.form.moblie = selfData.moblie
-      this.form.className = selfData.className
-      this.form.speciality = selfData.speciality
 
-      // this.$http.post('/api/editStudent', {_id: id}).then(function (res) {
-      //  console.log(res)
-      // })
+    editData(index) {
+      const selfData = this.tableData[index];
+      this.editIndex = index;
+      this.editId = selfData.id;
+      this.dialogFormVisible = true;
+      this.isEdit = true;
+      this.form.id = selfData.id;
+      this.form.person_name = selfData.person_name;
+      this.form.gender = selfData.gender;
+      this.form.title = selfData.title;
+      this.form.person_id_type = selfData.person_id_type;
+      this.form.person_id = selfData.person_id;
+      this.form.country = selfData.country;
+      this.form.birth = selfData.birth;
+      this.form.major_id = selfData.major_id;
+      this.form.major_name = selfData.major_name;
+      this.form.family_address = selfData.family_address;
+      this.form.family_zipcode = selfData.family_zipcode;
+      this.form.family_tel = selfData.family_tel;
+      this.form.enroll_date = selfData.enroll_date;
+      this.form.email = selfData.email;
     },
 
     openDialog(index) {
-      this.delId = this.tableData[index]._id
-      this.dialogVisible = true
-
+      this.delId = this.tableData[index]["id"];
+      this.delIndex = index;
+      this.dialogVisible = true;
     },
 
     delData() {
-      this.sendRequest('/manager/delTeacher',{id: this.delId})
-      this.dialogVisible=false
-      this.getAllData()
+      var _this = this;
+      _this.dialogVisible = false;
+      this.sendGetRequest("http://127.0.0.1:8000/api/teacher/del", {
+        params: { id: this.delId }
+      });
     },
-    searchData() {
-      var _this = this
-      console.log(_this.tableData)
-      var result = _this.tableData.filter(function(value, index, arr) {
-        // console.log(value)
-        // console.log(document.getElementsByClassName('sc')[0].value)
-        return document.getElementsByClassName('sc')[0].value == value.teaNum || document.getElementsByClassName('sc')[0].value == value.teacherName ||
-          document.getElementsByClassName('sc')[0].value == value.sex ||
-          document.getElementsByClassName('sc')[0].value == value.className ||
-          document.getElementsByClassName('sc')[0].value == value.speciality
-      })
-      // console.log(result)
-      _this.tableData = result
+
+    mysearchData() {
+      console.log(this.simplify(this.form));
+      this.sendGetRequest("http://127.0.0.1:8000/api/teacher/get", {
+        params: this.simplify(this.form)
+      });
     },
+
+    reload() {
+      this.isRouterAlive = false; //先关闭，
+      this.$nextTick(function() {
+        this.isRouterAlive = true; //再打开
+      });
+    },
+
+    handleOpen(key, keyPath) {
+      console.log(key, keyPath);
+    },
+
+    handleClose(key, keyPath) {
+      console.log(key, keyPath);
+    }
   },
 
   watch: {
     dialogFormVisible() {
-      if(!this.dialogFormVisible) this.isEdit=false
+      if (!this.dialogFormVisible) this.isEdit = false;
     }
   },
   mounted: function() {
     // 组件创建时候去获取所有的用户数据
     this.getAllData();
   }
-
-  
 };
 </script>
 

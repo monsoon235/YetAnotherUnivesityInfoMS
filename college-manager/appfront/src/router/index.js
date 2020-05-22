@@ -14,23 +14,13 @@ import userManage from '@/views/Manager/userManage.vue'
 import teacherMsgManage from '@/views/Manager/teacherMsgManage.vue'
 import classMsgManager from '@/views/Manager/classMsgManager.vue'
 import studentMsgMange from '@/views/Manager/studentMsgMange.vue'
-import teachPlan from '@/views/Manager/teachPlan.vue'
-import fileUpload from '@/views/Manager/fileUpload.vue'
-import teachTask from '@/views/Manager/teachTask.vue'
-import coursePlan from '@/views/Manager/coursePlan.vue'
-import courseSchedule from '@/views/Manager/courseSchedule.vue'
-import classSchedule from '@/views/Manager/classSchedule'
+
+import campusManager from '@/views/Manager/campusManager.vue'
+import majorManager from '@/views/Manager/majorManager.vue'
+import adjustmentManager from '@/views/Manager/adjustmentManager.vue'
+import lectureManager from '@/views/Manager/lectureManager.vue'
+import selectionManager from '@/views/Manager/selectionManager.vue'
 import courseManager from '@/views/Manager/courseManager.vue'
-import classPlan from '@/views/Manager/classPlan'
-import examPlan from '@/views/Manager/examPlan.vue'
-import examPaper from '@/views/Manager/examPaper.vue'
-import evaluatePlan from '@/views/Manager/evaluatePlan.vue'
-import evaluateResult from '@/views/Manager/evaluateManager.vue'
-import attendanceResult from '@/views/Manager/attendanceResult.vue'
-import infoAll from '@/views/Manager/infoAll.vue'
-import infoRecommend from '@/views/Manager/infoRecommend.vue'
-import notice from '@/views/Manager/notice.vue'
-import examScore from '@/views/Manager/examScore.vue'
 
 
 // import HelloWorld from '@/components/HelloWorld'
@@ -66,30 +56,19 @@ export default new Router({
     component: Manager,
     children: [
 
-      { path: 'userManage', component: userManage },
+     { path: 'userManage', component: userManage },
+      { path: 'campusManager', component: campusManager },
+      { path: 'majorManager', component: majorManager },
+      { path: 'adjustmentManager', component: adjustmentManager },
+      
       { path: 'studentMsgMange', component: studentMsgMange },
-      { path: 'teachPlan', component: teachPlan,
-        children: [
-        { path: '/manager/teachPlan/fileUplode', component: fileUpload },
-        ]
-      },
-      { path: 'teachTask', component: teachTask },
-      { path: 'coursePlan', component: coursePlan },
-      { path: 'classSchedule', component: classSchedule },
-      { path: 'courseSchedule', component: courseSchedule },
+      
       { path: 'courseManager', component: courseManager },
-      { path: 'classPlan', component: classPlan },
+      { path: 'lectureManager', component: lectureManager },
+      { path: 'selectionManager', component: selectionManager },
       { path: 'classMsgManager', component: classMsgManager },
-      { path: 'examPlan', component: examPlan },
-      { path: 'examPaper', component: examPaper },
-      { path: 'evaluatePlan', component: evaluatePlan },
-      { path: 'evaluateManager', component: evaluateResult },
-      { path: 'attendanceResult', component: attendanceResult },
-      { path: 'infoAll', component: infoAll },
-      { path: 'infoRecommend', component: infoRecommend },
-      { path: 'notice', component: notice },
+     
       { path: 'teacherMsgManage', component: teacherMsgManage },
-      { path: 'examScore', component: examScore },
       { path: '*', component: start },
 
     ]

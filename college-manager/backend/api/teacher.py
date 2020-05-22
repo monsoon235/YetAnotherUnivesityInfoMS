@@ -100,6 +100,10 @@ def add(request: HttpRequest):
         params = json.loads(request.body.decode())
         teacher_params = check_teacher_params(params)
         person_params = check_person_params(params)
+        if 'id' not in teacher_params:
+            return response_error('missing id')
+        if 'id' not in person_params:
+            return response_error('missing person_id')
         if Teacher.objects.filter(id=teacher_params['id']):
             return response_error('teacher id exists')
         if Person.objects.filter(id=person_params['id']):
@@ -118,7 +122,12 @@ def add(request: HttpRequest):
 def delete(request: HttpRequest):
     try:
         params = check_params(request.GET.dict())
-        return general_del(Teacher, params)
+        # 找出要删的 teacher 对应的所有 person id,直接删除 person 即可
+        person_id_dict_list = Teacher.objects.filter(**params).values('person_id')
+        person_id_list = [item['person_id'] for item in person_id_dict_list]
+        for id in person_id_list:
+            Person.objects.filter(id=id).delete()
+        return response_success()
     except Exception as e:
         return response_error(str(e))
 

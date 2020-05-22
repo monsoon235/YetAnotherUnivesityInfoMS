@@ -211,4 +211,8 @@ POST   api/campus/mod
 
 ## adjustment
 
-<!-- todo  待定 -->
+筛选字段 `student_id`, `type`, `date`, `from_class_id`, `to_class_id`, `extra`
+
+返回的字段除了以上，还有 `from_class_name`, `to_class_name`, `student_name`
+
+`extra` 的含义 见 model.py
