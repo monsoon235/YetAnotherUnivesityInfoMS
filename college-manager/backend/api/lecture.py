@@ -43,8 +43,8 @@ def add(request: HttpRequest):
     try:
         params = json.loads(request.body.decode())
         params = check_params(params)
-        if 'lecture_id' not in params:
-            return response_error('missing lecture_id')
+        if 'id' not in params:
+            return response_error('missing id')
         if 'class_id' not in params:
             return response_error('missing class_id')
         if Lecture.objects.filter(
