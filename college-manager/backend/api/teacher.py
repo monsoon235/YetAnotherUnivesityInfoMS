@@ -127,10 +127,10 @@ def add(request: HttpRequest):
         User.objects.create_user(username=person_params['id'], password=params['password'])
         return response_success()
     except Exception as e:
-        if added <= 1:
-            Person.objects.filter(id=person_params['id']).delete()
         if added <= 2:
-            User.objects.filter(username=person_params['id']).delete()
+            Teacher.objects.filter(**teacher_params).delete()
+        if added <= 1:
+            Person.objects.filter(**person_params).delete()
         return response_error(str(e))
 
 
