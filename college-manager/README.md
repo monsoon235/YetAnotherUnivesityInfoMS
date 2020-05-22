@@ -32,7 +32,7 @@ DATABASES = {
 
 ```bash
 
-python manage.py makemigrations myapp
+python manage.py makemigrations api
 
 python manage.py migrate
 
