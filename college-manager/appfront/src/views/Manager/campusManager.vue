@@ -213,14 +213,26 @@ export default {
         .post(url, JSON.stringify(opt), { emulateJSON: true })
         .then(function(res) {
           console.log(res);
-          // 将数据存储起来
+          var resbody = JSON.parse(res.bodyText);
           if (url === "http://127.0.0.1:8000/api/campus/add") {
-            _this.getAllData();
+            if (resbody["code"] == 0) {
+              _this.$message.error("添加校区失败: " + resbody["msg"]);
+            } else {
+              _this.getAllData();
+            }
           } else if (url === "http://127.0.0.1:8000/api/campus/mod") {
-            for (let key in opt.update)
-              _this.tableData[_this.editIndex][key] = opt.update[key];
-            console.log(_this.tableData);
-            this.reload();
+            if (resbody["code"] == 0) {
+              _this.$message.error("修改校区信息失败: " + resbody["msg"]);
+            } else {
+              _this.$http
+                .get("http://127.0.0.1:8000/api/campus/get", {
+                  params: { id: _this.editId }
+                })
+                .then(function(res) {
+                  console.log(res);
+                  _this.tableData[_this.editIndex] = res.data["list"][0];
+                });
+            }
           }
         })
         .catch(function(error) {

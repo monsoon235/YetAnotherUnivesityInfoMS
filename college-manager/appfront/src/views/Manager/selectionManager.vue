@@ -58,11 +58,14 @@
             >
               <el-input v-model="form.year"></el-input>
             </el-form-item>
-            <el-form-item label="选课学期" prop="term" style="width: 20%;">
-              <el-radio-group v-model="form.term">
-                <el-radio label="春"></el-radio>
-                <el-radio label="秋"></el-radio>
-              </el-radio-group>
+            <el-form-item label="选课学期" prop="term">
+              <el-select
+                v-model="form.term"
+                placeholder="请选择学期"
+              >
+                <el-option label="春" value="0" autocomplete="off"></el-option>
+                <el-option label="秋" value="1" autocomplete="off"></el-option>
+              </el-select>
             </el-form-item>
             <el-form-item label="考试成绩" prop="score" style="width: 20%">
               <el-input v-model="form.score"></el-input>
@@ -82,7 +85,12 @@
         <el-table-column prop="student_id" label="学号"></el-table-column>
         <el-table-column prop="student_name" label="学生姓名"></el-table-column>
         <el-table-column prop="year" label="选课日期"></el-table-column>
-        <el-table-column prop="term" label="选课学期"></el-table-column>
+        <el-table-column label="选课学期">
+          <template slot-scope="scope">
+            <i v-if="scope.row.term===0">春</i>
+            <i v-else>秋</i>
+          </template>
+        </el-table-column>
         <el-table-column prop="score" label="考试成绩"></el-table-column>
 
         <el-table-column label="操作">
@@ -106,18 +114,17 @@
           <el-input v-model="form.year" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="选课学期" prop="term">
-          <el-radio-group v-model="form.term">
-            <el-radio label="春"></el-radio>
-            <el-radio label="秋"></el-radio>
-          </el-radio-group>
+          <el-select
+            v-model="form.term"
+            placeholder="请选择学期"
+          >
+            <el-option label="春" value="0" autocomplete="off"></el-option>
+            <el-option label="秋" value="1" autocomplete="off"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="考试成绩" prop="score">
           <el-input v-model="form.score" autocomplete="off"></el-input>
         </el-form-item>
-
-        <!-- <el-form-item label="地址">
-          <el-input v-model="form.adress" autocomplete="off"></el-input>
-        </el-form-item>-->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -218,7 +225,13 @@ export default {
     simplify(obj) {
       let newobj = new Object();
       for (let key in obj) {
-        if (obj[key] && key !== "course_name" && key !== "teacher_name" && key !== "student_name") newobj[key] = obj[key];
+        if (
+          obj[key] &&
+          key !== "course_name" &&
+          key !== "teacher_name" &&
+          key !== "student_name"
+        )
+          newobj[key] = obj[key];
       }
       return newobj;
     },
@@ -248,14 +261,27 @@ export default {
         .post(url, JSON.stringify(opt), { emulateJSON: true })
         .then(function(res) {
           console.log(res);
-          // 将数据存储起来
+          var resbody = JSON.parse(res.bodyText);
+
           if (url === "http://127.0.0.1:8000/api/selection/add") {
-            _this.getAllData();
+            if (resbody["code"] == 0) {
+              _this.$message.error("添加选课失败：" + resbody["msg"]);
+            } else {
+              _this.getAllData();
+            }
           } else if (url === "http://127.0.0.1:8000/api/selection/mod") {
-            for (let key in opt.update)
-              _this.tableData[_this.editIndex][key] = opt.update[key];
-            console.log(_this.tableData);
-            this.reload();
+            if (resbody["code"] == 0) {
+              _this.$message.error("修改选课信息失败：" + resbody["msg"]);
+            } else {
+              _this.$http
+                .get("http://127.0.0.1:8000/api/selection/get", {
+                  params: { id: _this.editId }
+                })
+                .then(function(res) {
+                  console.log(res);
+                  _this.tableData[_this.editIndex] = res.data["list"][0];
+                });
+            }
           }
         })
         .catch(function(error) {

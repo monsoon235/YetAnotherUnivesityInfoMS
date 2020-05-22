@@ -109,7 +109,7 @@
             <el-form-item label="所属年级" prop="grade">
               <el-input v-model="form.grade" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item label="所属专业" prop="major_id">
+            <el-form-item label="所属专业代码" prop="major_id">
               <el-input v-model="form.major_id" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="班主任工号" prop="charge_teacher_id">
@@ -195,7 +195,8 @@ export default {
     simplify(obj) {
       let newobj = new Object();
       for (let key in obj) {
-        if (obj[key] && key !== "major_name" && key !== "charge_teacher_name") newobj[key] = obj[key];
+        if (obj[key] && key !== "major_name" && key !== "charge_teacher_name")
+          newobj[key] = obj[key];
       }
       return newobj;
     },
@@ -225,14 +226,26 @@ export default {
         .post(url, JSON.stringify(opt), { emulateJSON: true })
         .then(function(res) {
           console.log(res);
-          // 将数据存储起来
+          var resbody = JSON.parse(res.bodyText);
           if (url === "http://127.0.0.1:8000/api/class/add") {
+            if (resbody["code"] == 0) {
+              _this.$message.error("修改学生信息失败: " + resbody["msg"]);
+            }else{
             _this.getAllData();
+            }
           } else if (url === "http://127.0.0.1:8000/api/class/mod") {
-            for (let key in opt.update)
-              _this.tableData[_this.editIndex][key] = opt.update[key];
-            console.log(_this.tableData);
-            this.reload();
+            if (resbody["code"] == 0) {
+              _this.$message.error("修改学生信息失败: " + resbody["msg"]);
+            } else {
+              _this.$http
+                .get("http://127.0.0.1:8000/api/class/get", {
+                  params: { id: _this.editId }
+                })
+                .then(function(res) {
+                  console.log(res);
+                  _this.tableData[_this.editIndex] = res.data["list"][0];
+                });
+            }
           }
         })
         .catch(function(error) {

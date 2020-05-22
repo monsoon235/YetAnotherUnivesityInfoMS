@@ -164,12 +164,27 @@
       <el-table :data="tableData" stripe style="width: 100%">
         <el-table-column prop="id" label="工号"></el-table-column>
         <el-table-column prop="person_name" label="姓名"></el-table-column>
-        <el-table-column prop="gender" label="性别"></el-table-column>
-        <el-table-column prop="title" label="职称"></el-table-column>
+        <el-table-column label="性别">
+          <template slot-scope="scope">
+            <i v-if="scope.row.gender===0">男</i>
+            <i v-else>女</i>
+          </template>
+        </el-table-column>
+        <el-table-column label="职称">
+          <template slot-scope="scope">
+            <i v-if="scope.row.title===0">教授</i>
+            <i v-else>副教授</i>
+          </template>
+        </el-table-column>
         <el-table-column prop="birth" label="出生日期"></el-table-column>
         <el-table-column prop="major_id" label="专业代码"></el-table-column>
         <el-table-column prop="major_name" label="专业名称"></el-table-column>
-        <el-table-column prop="person_id_type" label="身份证类型"></el-table-column>
+        <el-table-column label="身份证类型">
+          <template slot-scope="scope">
+            <i v-if="scope.row.person_id_type===0">身份证</i>
+            <i v-else>护照</i>
+          </template>
+        </el-table-column>
         <el-table-column prop="person_id" label="身份证号"></el-table-column>
         <el-table-column prop="country" label="国籍"></el-table-column>
         <el-table-column prop="enroll_date" label="入职时间"></el-table-column>
@@ -196,7 +211,6 @@
         </el-form-item>
         <el-form-item label="性别" prop="gender">
           <el-select
-            style="width: 50%; position: absolute; left: 138px"
             v-model="form.gender"
             placeholder="请选择性别"
           >
@@ -206,7 +220,6 @@
         </el-form-item>
         <el-form-item label="职称" prop="title">
           <el-select
-            style="width: 50%; position: absolute; left: 138px"
             v-model="form.title"
             placeholder="请选择职称"
           >
@@ -422,14 +435,27 @@ export default {
         .post(url, JSON.stringify(opt), { emulateJSON: true })
         .then(function(res) {
           console.log(res);
+          var resbody = JSON.parse(res.bodyText);
           // 将数据存储起来
           if (url === "http://127.0.0.1:8000/api/teacher/add") {
-            _this.getAllData();
+            if (resbody["code"] == 0) {
+              _this.$message.error("添加教师失败：" + resbody["msg"]);
+            } else {
+              _this.getAllData();
+            }
           } else if (url === "http://127.0.0.1:8000/api/teacher/mod") {
-            for (let key in opt.update)
-              _this.tableData[_this.editIndex][key] = opt.update[key];
-            console.log(_this.tableData);
-            this.reload();
+            if (resbody["code"] == 0) {
+              _this.$message.error("修改教师信息失败：" + resbody["msg"]);
+            } else {
+              _this.$http
+                .get("http://127.0.0.1:8000/api/teacher/get", {
+                  params: { id: _this.editId }
+                })
+                .then(function(res) {
+                  console.log(res);
+                  _this.tableData[_this.editIndex] = res.data["list"][0];
+                });
+            }
           }
         })
         .catch(function(error) {

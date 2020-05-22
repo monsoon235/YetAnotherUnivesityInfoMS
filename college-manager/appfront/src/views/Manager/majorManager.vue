@@ -100,10 +100,10 @@
         <el-form-item label="专业地址" prop="address">
           <el-input v-model="form.address" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="专业负责人" prop="charge_person_id">
+        <el-form-item label="专业负责人工号" prop="charge_person_id">
           <el-input v-model="form.charge_person_id" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="所属校区" prop="campus_id">
+        <el-form-item label="所属校区代码" prop="campus_id">
           <el-input v-model="form.campus_id" autocomplete="off"></el-input>
         </el-form-item>
 
@@ -178,7 +178,7 @@ export default {
         charge_person_id: "",
         campus_id: "",
         campus_name: "",
-        charge_person_name: "",
+        charge_person_name: ""
       },
 
       //两套rule体系
@@ -188,7 +188,7 @@ export default {
         id: [{ required: true, message: "必填", trigger: "blur" }],
         name: [{ required: true, message: "必填", trigger: "blur" }],
         address: [{ required: true, message: "必填", trigger: "blur" }],
-        charge_person_id: [{ required: true, message: "必填", trigger: "blur" }],
+        charge_person_id: [{ message: "必填", trigger: "blur" }],
         campus_id: [{ required: true, message: "必填", trigger: "blur" }]
       }
     };
@@ -203,7 +203,8 @@ export default {
     simplify(obj) {
       let newobj = new Object();
       for (let key in obj) {
-        if (obj[key] && key !== "campus_name" && key !== "charge_person_name") newobj[key] = obj[key];
+        if (obj[key] && key !== "campus_name" && key !== "charge_person_name")
+          newobj[key] = obj[key];
       }
       return newobj;
     },
@@ -233,15 +234,31 @@ export default {
         .post(url, JSON.stringify(opt), { emulateJSON: true })
         .then(function(res) {
           console.log(res);
-          // 将数据存储起来
+          var resbody = JSON.parse(res.bodyText);
           if (url === "http://127.0.0.1:8000/api/major/add") {
-            _this.getAllData();
+            if (resbody["code"] == 0) {
+              _this.$message.error("添加专业失败：" + resbody["msg"]);
+            } else {
+              _this.getAllData();
+            }
           } else if (url === "http://127.0.0.1:8000/api/major/mod") {
-            console.log(res)
-            for (let key in opt.update)
-              _this.tableData[_this.editIndex][key] = opt.update[key];
-            console.log(_this.tableData);
-            this.reload();
+            console.log(res);
+            if (resbody["code"] == 0) {
+              _this.$message.error("修改专业失败：" + resbody["msg"]);
+            } else {
+              //考虑改为get请求
+              _this.$http
+                .get("http://127.0.0.1:8000/api/major/get", {
+                  params: { id: _this.editId }
+                })
+                .then(function(res) {
+                  console.log(res);
+                  _this.tableData[_this.editIndex] = res.data["list"][0];
+                });
+              // for (let key in opt.update)
+              //   _this.tableData[_this.editIndex][key] = opt.update[key];
+              // this.reload();
+            }
           }
         })
         .catch(function(error) {

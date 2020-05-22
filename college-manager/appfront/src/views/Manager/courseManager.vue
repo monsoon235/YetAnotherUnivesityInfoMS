@@ -42,11 +42,14 @@
             <el-form-item label="开课专业" prop="major_id" style="width: 20%">
               <el-input v-model="form.major_id"></el-input>
             </el-form-item>
-            <el-form-item label="考核方式" prop="assessment" style="width: 20%; position: relative;">
-              <el-radio-group v-model="form.assessment">
-                <el-radio label="考试"></el-radio>
-                <el-radio label="当堂答辩"></el-radio>
-              </el-radio-group>
+            <el-form-item label="考核方式" prop="assessment">
+              <el-select
+                v-model="form.assessment"
+                placeholder="请选择方式"
+              >
+                <el-option label="考试" value="0" autocomplete="off"></el-option>
+                <el-option label="当堂答辩" value="1" autocomplete="off"></el-option>
+              </el-select>
             </el-form-item>
             <el-form-item>
               <el-button type="warning" plain @click="mysearchData">搜索</el-button>
@@ -63,7 +66,12 @@
         <el-table-column prop="name" label="课程名称"></el-table-column>
         <el-table-column prop="major_id" label="专业代码"></el-table-column>
         <el-table-column prop="major_name" label="开课专业"></el-table-column>
-        <el-table-column prop="assessment" label="考核方式"></el-table-column>
+        <el-table-column label="考核方式">
+          <template slot-scope="scope">
+            <i v-if="scope.row.assessment===0">考试</i>
+            <i v-else>当堂答辩</i>
+          </template>
+        </el-table-column>
 
         <el-table-column label="操作">
           <template slot-scope="scope">
@@ -86,7 +94,13 @@
           <el-input v-model="form.major_id" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="考核方式" prop="assessment">
-          <el-input v-model="form.assessment" autocomplete="off"></el-input>
+          <el-select
+            v-model="form.assessment"
+            placeholder="请选择方式"
+          >
+            <el-option label="考试" value="0" autocomplete="off"></el-option>
+            <el-option label="当堂答辩" value="1" autocomplete="off"></el-option>
+          </el-select>
         </el-form-item>
 
         <!-- <el-form-item label="地址">
@@ -212,14 +226,26 @@ export default {
         .post(url, JSON.stringify(opt), { emulateJSON: true })
         .then(function(res) {
           console.log(res);
-          // 将数据存储起来
+          var resbody = JSON.parse(res.bodyText);
           if (url === "http://127.0.0.1:8000/api/course/add") {
-            _this.getAllData();
+            if (resbody["code"] == 0) {
+              _this.$message.error("添加课程失败：" + resbody["msg"]);
+            } else {
+              _this.getAllData();
+            }
           } else if (url === "http://127.0.0.1:8000/api/course/mod") {
-            for (let key in opt.update)
-              _this.tableData[_this.editIndex][key] = opt.update[key];
-            console.log(_this.tableData);
-            this.reload();
+            if (resbody["code"] == 0) {
+              _this.$message.error("修改课程信息失败：" + resbody["msg"]);
+            } else {
+              _this.$http
+                .get("http://127.0.0.1:8000/api/course/get", {
+                  params: { id: _this.editId }
+                })
+                .then(function(res) {
+                  console.log(res);
+                  _this.tableData[_this.editIndex] = res.data["list"][0];
+                });
+            }
           }
         })
         .catch(function(error) {

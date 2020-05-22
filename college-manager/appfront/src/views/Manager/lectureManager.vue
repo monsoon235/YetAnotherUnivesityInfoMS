@@ -39,7 +39,7 @@
             >
               <el-input v-model="form.course_id"></el-input>
             </el-form-item>
-            <el-form-item label="授课教师" prop="teacher_id" style="width: 20%">
+            <el-form-item label="授课教师工号" prop="teacher_id" style="width: 20%">
               <el-input v-model="form.teacher_id"></el-input>
             </el-form-item>
             <el-form-item label="开课日期" prop="year" style="width: 20%">
@@ -57,16 +57,16 @@
             label-width="100px"
             class="demo-ruleForm"
           >
-            <el-form-item
-              label="开课学期"
-              prop="term"
-              style="width: 20%; left: 30px; position: absolute;"
-            >
-              <el-radio-group v-model="form.term">
-                <el-radio label="春"></el-radio>
-                <el-radio label="秋"></el-radio>
-              </el-radio-group>
+            <el-form-item label="开课学期" prop="term">
+              <el-select
+                v-model="form.term"
+                placeholder="请选择学期"
+              >
+                <el-option label="春" value="0" autocomplete="off"></el-option>
+                <el-option label="秋" value="1" autocomplete="off"></el-option>
+              </el-select>
             </el-form-item>
+
             <el-form-item label="开课时间" prop="time" style="width: 20%;">
               <el-input v-model="form.time"></el-input>
             </el-form-item>
@@ -86,7 +86,12 @@
         <el-table-column prop="teacher_name" label="授课教师"></el-table-column>
         <el-table-column prop="assessment" label="考核方式"></el-table-column>
         <el-table-column prop="year" label="开课日期"></el-table-column>
-        <el-table-column prop="term" label="开课学期"></el-table-column>
+        <el-table-column label="开课学期">
+          <template slot-scope="scope">
+            <i v-if="scope.row.term===0">春</i>
+            <i v-else>秋</i>
+          </template>
+        </el-table-column>
         <el-table-column prop="time" label="开课时间"></el-table-column>
 
         <el-table-column label="操作">
@@ -113,10 +118,13 @@
           <el-input v-model="form.year" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="开课学期" prop="term">
-          <el-radio-group v-model="form.term">
-            <el-radio label="春"></el-radio>
-            <el-radio label="秋"></el-radio>
-          </el-radio-group>
+          <el-select
+            v-model="form.term"
+            placeholder="请选择学期"
+          >
+            <el-option label="春" value="0" autocomplete="off"></el-option>
+            <el-option label="秋" value="1" autocomplete="off"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="开课时间" prop="time">
           <el-input v-model="form.time" autocomplete="off"></el-input>
@@ -262,14 +270,26 @@ export default {
         .post(url, JSON.stringify(opt), { emulateJSON: true })
         .then(function(res) {
           console.log(res);
-          // 将数据存储起来
+          var resbody = JSON.parse(res.bodyText);
           if (url === "http://127.0.0.1:8000/api/lecture/add") {
-            _this.getAllData();
+            if (resbody["code"] == 0) {
+              _this.$message.error("添加开课信息失败：" + resbody["msg"]);
+            } else {
+              _this.getAllData();
+            }
           } else if (url === "http://127.0.0.1:8000/api/lecture/mod") {
-            for (let key in opt.update)
-              _this.tableData[_this.editIndex][key] = opt.update[key];
-            console.log(_this.tableData);
-            this.reload();
+            if (resbody["code"] == 0) {
+              _this.$message.error("修改开课信息失败：" + resbody["msg"]);
+            } else {
+              _this.$http
+                .get("http://127.0.0.1:8000/api/lecture/get", {
+                  params: { id: _this.editId }
+                })
+                .then(function(res) {
+                  console.log(res);
+                  _this.tableData[_this.editIndex] = res.data["list"][0];
+                });
+            }
           }
         })
         .catch(function(error) {

@@ -36,13 +36,16 @@
             >
               <el-input v-model="form.id"></el-input>
             </el-form-item>
-
+            <el-form-item label="学号" prop="student_id" style="width: 20%">
+              <el-input v-model="form.student_id"></el-input>
+            </el-form-item>
             <el-form-item label="原班级代码" prop="from_class_id" style="width: 20%">
               <el-input v-model="form.from_class_id"></el-input>
             </el-form-item>
             <el-form-item label="现班级代码" prop="to_class_id" style="width: 20%">
               <el-input v-model="form.to_class_id"></el-input>
             </el-form-item>
+
             <el-form-item>
               <el-button type="warning" plain @click="mysearchData">搜索</el-button>
             </el-form-item>
@@ -55,26 +58,21 @@
             label-width="100px"
             class="demo-ruleForm"
           >
-            <el-form-item label="异动类型" prop="type" style="left: 30px; position: absolute;">
-              <el-radio-group v-model="form.type">
-                <el-radio label="转专业"></el-radio>
-                <el-radio label="降级"></el-radio>
-              </el-radio-group>
+            <el-form-item label="异动类型" prop="type">
+              <el-select v-model="form.type" placeholder="请选择类型">
+                <el-option label="转专业" value="0" autocomplete="off"></el-option>
+                <el-option label="降级" value="1" autocomplete="off"></el-option>
+              </el-select>
             </el-form-item>
-            <el-form-item
-              label="转出团关系"
-              v-if="form.type=='转专业'"
-              prop="yycl_change"
-              style="position: relative;"
-            >
-              <el-radio-group v-model="form.yycl_change">
-                <el-radio label="是"></el-radio>
-                <el-radio label="否"></el-radio>
-              </el-radio-group>
+            <el-form-item label="转出团关系" v-if="form.type==0" prop="yycl_change">
+              <el-select v-model="form.yycl_change">
+                <el-option label="是" value="0" autocomplete="off"></el-option>
+                <el-option label="否" value="1" autocomplete="off"></el-option>
+              </el-select>
             </el-form-item>
             <el-form-item
               label="降级原因"
-              v-if="form.type=='降级'"
+              v-if="form.type==1"
               prop="reason"
               style="width: 20%; position: relative;"
             >
@@ -82,9 +80,6 @@
             </el-form-item>
             <el-form-item label="异动日期" prop="date" style="width: 20%; position: relative;">
               <el-input v-model="form.date"></el-input>
-            </el-form-item>
-            <el-form-item label="学号" prop="student_id" style="width: 20%">
-              <el-input v-model="form.student_id"></el-input>
             </el-form-item>
           </el-form>
         </div>
@@ -95,11 +90,23 @@
     <el-scrollbar>
       <el-table :data="tableData" stripe style="width: 100%">
         <el-table-column prop="id" label="异动编号"></el-table-column>
-        <el-table-column prop="type" label="异动类型"></el-table-column>
+        <el-table-column prop="student_id" label="学号"></el-table-column>
+        <el-table-column label="异动类型">
+          <template slot-scope="scope">
+            <i v-if="scope.row.type===0">转专业</i>
+            <i v-else>降级</i>
+          </template>
+        </el-table-column>
+        <el-table-column label="是否转出团关系">
+          <template slot-scope="scope">
+            <i v-if="scope.row.yycl_change===0">是</i>
+            <i v-else>否</i>
+          </template>
+        </el-table-column>
+        <el-table-column prop="reason" label="降级原因"></el-table-column>
         <el-table-column prop="from_class_id" label="原班级代码"></el-table-column>
         <el-table-column prop="to_class_id" label="现班级代码"></el-table-column>
         <el-table-column prop="date" label="异动日期"></el-table-column>
-        <el-table-column prop="student_id" label="学号"></el-table-column>
 
         <el-table-column label="操作">
           <template slot-scope="scope">
@@ -116,18 +123,24 @@
           <el-input v-model="form.id" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="异动类型" prop="type">
-          <el-radio-group v-model="form.type">
-            <el-radio label="转专业"></el-radio>
-            <el-radio label="降级"></el-radio>
-          </el-radio-group>
+          <el-select
+            v-model="form.type"
+            placeholder="请选择类型"
+          >
+            <el-option label="转专业" value="0" autocomplete="off"></el-option>
+            <el-option label="降级" value="1" autocomplete="off"></el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="转出团关系" v-if="form.type=='转专业'" prop="isMember">
-          <el-radio-group v-model="form.yycl_change">
-            <el-radio label="是"></el-radio>
-            <el-radio label="否"></el-radio>
-          </el-radio-group>
+        <el-form-item label="转出团关系" v-if="form.type==0" prop="yycl_change">
+          <el-select
+            v-model="form.yycl_change"
+            placeholder="是否转出"
+          >
+            <el-option label="是" value="0" autocomplete="off"></el-option>
+            <el-option label="否" value="1" autocomplete="off"></el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="降级原因" v-if="form.type=='降级'" prop="reason">
+        <el-form-item label="降级原因" v-if="form.type==1" prop="reason">
           <el-input v-model="form.reason"></el-input>
         </el-form-item>
         <el-form-item label="原班级代码" prop="from_class_id">
@@ -227,12 +240,6 @@ export default {
         id: [{ required: true, message: "必填", trigger: "blur" }],
         student_id: [{ required: true, message: "必填", trigger: "blur" }],
         type: [{ required: true, message: "必填", trigger: "blur" }]
-        // age: [
-        //   { type: 'number', message: '年龄必须为数字值'}
-        // ],
-        // moblie: [
-        //   { type: 'number', message: '年龄必须为数字值'}
-        // ]
       }
     };
   },
@@ -276,14 +283,26 @@ export default {
         .post(url, JSON.stringify(opt), { emulateJSON: true })
         .then(function(res) {
           console.log(res);
-          // 将数据存储起来
+          var resbody = JSON.parse(res.bodyText);
           if (url === "http://127.0.0.1:8000/api/adjustment/add") {
-            _this.getAllData();
+            if (resbody["code"] == 0) {
+              _this.$message.error("添加学籍异动失败: " + resbody["msg"]);
+            } else {
+              _this.getAllData();
+            }
           } else if (url === "http://127.0.0.1:8000/api/adjustment/mod") {
-            for (let key in opt.update)
-              _this.tableData[_this.editIndex][key] = opt.update[key];
-            console.log(_this.tableData);
-            this.reload();
+            if (resbody["code"] == 0) {
+              _this.$message.error("修改学籍异动信息失败: " + resbody["msg"]);
+            } else {
+              _this.$http
+                .get("http://127.0.0.1:8000/api/adjustment/get", {
+                  params: { id: _this.editId }
+                })
+                .then(function(res) {
+                  console.log(res);
+                  _this.tableData[_this.editIndex] = res.data["list"][0];
+                });
+            }
           }
         })
         .catch(function(error) {
@@ -332,6 +351,7 @@ export default {
         .get("http://127.0.0.1:8000/api/adjustment/get")
         .then(function(res) {
           var resbody = JSON.parse(res.bodyText);
+          console.log(res);
           if (resbody["code"] == 0) {
             _this.$message.error("查询学籍异动失败");
           } else {
