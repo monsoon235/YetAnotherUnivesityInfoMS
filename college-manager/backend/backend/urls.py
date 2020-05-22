@@ -21,4 +21,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     path('api/', include('api.urls')),
     url(r'^$', TemplateView.as_view(template_name="index.html")),
+    # path('accounts/login/', auth.login),
+    # path('accounts/logout/', auth.logout)
 ]

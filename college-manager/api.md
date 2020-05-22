@@ -216,3 +216,23 @@ POST   api/campus/mod
 返回的字段除了以上，还有 `from_class_name`, `to_class_name`, `student_name`
 
 `extra` 的含义 见 model.py
+
+## login & logout
+
+使用 `POST  api/login` 来登录，body 中需携带 `id` 和 `password`, `id` 可以是 admin, `student_id` 或 `teacher_id`
+
+登录失败则返回的 json 中 `code=0`, `msg` 中指明原因
+
+登陆成功则返回如下
+
+```json
+{
+  "code": 1,
+  "type": 0,// 0代表admin,1代表teacher，2代表student
+  // type=1/2 时才有下面两个字段
+  "id": "xxx",// student_id 或 teacher_id
+  "person_id": "xxxx"
+}
+```
+
+使用 `GET  api/logout` 退出登录

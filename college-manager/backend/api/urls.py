@@ -1,17 +1,18 @@
 from django.urls import path
 
-
-
-from . import campus, major, teacher, student, class_, course, lecture, selection,adjustment
+from . import campus, major, teacher, student, class_, course, lecture, selection, adjustment, auth
 from . import views
 
 urlpatterns = [
     path('', views.index),
+
+    path('login', auth.login),
+    path('logout', auth.logout),
+
     path('adjustment/get', adjustment.get),
     path('adjustment/add', adjustment.add),
     path('adjustment/del', adjustment.delete),
     path('adjustment/mod', adjustment.mod),
-
 
     path('campus/get', campus.get),
     path('campus/add', campus.add),

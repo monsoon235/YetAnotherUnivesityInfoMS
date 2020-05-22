@@ -1,6 +1,7 @@
 import json
 
 import django.views.decorators.csrf
+from django.contrib.auth.models import User
 from django.db.models import F
 from django.http import HttpRequest
 
@@ -69,6 +70,15 @@ def check_person_params(params: dict) -> dict:
     return ret
 
 
+def check_auth_params(params: dict) -> dict:
+    info = {}
+    if 'person_id' in params:
+        info['username'] = params['person_id']
+    if 'password' in params:
+        info['password'] = params['password']
+    return info
+
+
 @django.views.decorators.csrf.csrf_exempt
 def get(request: HttpRequest):
     try:
@@ -98,6 +108,8 @@ def add(request: HttpRequest):
     person_added = False
     try:
         params = json.loads(request.body.decode())
+        if 'password' not in params:
+            return response_error('missing password')
         teacher_params = check_teacher_params(params)
         person_params = check_person_params(params)
         if 'id' not in teacher_params:
@@ -108,13 +120,18 @@ def add(request: HttpRequest):
             return response_error('teacher id exists')
         if Person.objects.filter(id=person_params['id']):
             return response_error('person id exists')
+        added = 0
         Person(**person_params).save()
-        person_added = True
+        added = 1
         Teacher(**teacher_params).save()
+        added = 2
+        User.objects.create_user(username=person_params['id'], password=params['password'])
         return response_success()
     except Exception as e:
-        if person_added:
+        if added <= 1:
             Person.objects.filter(id=person_params['id']).delete()
+        if added <= 2:
+            User.objects.filter(username=person_params['id']).delete()
         return response_error(str(e))
 
 
@@ -127,6 +144,7 @@ def delete(request: HttpRequest):
         person_id_list = [item['person_id'] for item in person_id_dict_list]
         for id in person_id_list:
             Person.objects.filter(id=id).delete()
+            User.objects.filter(username=id).delete()
         return response_success()
     except Exception as e:
         return response_error(str(e))
@@ -143,6 +161,7 @@ def mod(request: HttpRequest):
         person_id_list = [item['person_id'] for item in person_id_dict_list]
         for id in person_id_list:
             Person.objects.filter(id=id).update(**check_person_params(update))
+            User.objects.filter(username=id).update(**check_auth_params(update))
         teacher_list.update(**check_teacher_params(update))
         return response_success()
     except Exception as e:

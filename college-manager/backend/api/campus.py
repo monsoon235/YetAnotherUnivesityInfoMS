@@ -1,7 +1,9 @@
 import json
 
 import django.views.decorators.csrf
+from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
+from django.views.decorators.http import require_http_methods
 
 from .general import *
 from .models import *
@@ -17,7 +19,8 @@ def check_params(params: dict) -> dict:
 
 
 # done
-
+@login_required
+@require_http_methods(['GET'])
 @django.views.decorators.csrf.csrf_exempt
 def get(request: HttpRequest):
     try:
@@ -27,6 +30,7 @@ def get(request: HttpRequest):
         return response_error(str(e))
 
 
+@require_http_methods(['POST'])
 @django.views.decorators.csrf.csrf_exempt
 def add(request: HttpRequest):
     try:
@@ -37,6 +41,7 @@ def add(request: HttpRequest):
         return response_error(str(e))
 
 
+@require_http_methods(['GET'])
 @django.views.decorators.csrf.csrf_exempt
 def delete(request: HttpRequest):
     try:
@@ -46,6 +51,7 @@ def delete(request: HttpRequest):
         return response_error(str(e))
 
 
+@require_http_methods(['POST'])
 @django.views.decorators.csrf.csrf_exempt
 def mod(request: HttpRequest):
     try:
