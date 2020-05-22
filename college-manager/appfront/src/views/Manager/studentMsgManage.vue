@@ -158,33 +158,33 @@
       <!--/div-->
     </el-row>
     <el-scrollbar>
-      <el-table :data="tableData" stripe style="width: 100%">
-        <el-table-column prop="id" label="学号"></el-table-column>
-        <el-table-column prop="name" label="姓名"></el-table-column>
-        <el-table-column label="性别">
+      <el-table :data="tableData" align="center">
+        <el-table-column prop="id" label="学号" align="center"></el-table-column>
+        <el-table-column prop="name" label="姓名" align="center"></el-table-column>
+        <el-table-column label="性别" align="center">
           <template slot-scope="scope">
             <i v-if="scope.row.gender===0">男</i>
             <i v-else>女</i>
           </template>
         </el-table-column>
-        <el-table-column prop="birth" label="出生日期"></el-table-column>
-        <el-table-column prop="class_id" label="班级代码"></el-table-column>
-        <el-table-column prop="class_name" label="班级名称"></el-table-column>
-        <el-table-column prop="major_id" label="专业代码"></el-table-column>
-        <el-table-column prop="major_name" label="专业名称"></el-table-column>
-        <el-table-column label="身份证类型">
+        <el-table-column prop="birth" label="出生日期" align="center"></el-table-column>
+        <el-table-column prop="class_id" label="班级代码" align="center"></el-table-column>
+        <el-table-column prop="class_name" label="班级名称" align="center"></el-table-column>
+        <el-table-column prop="major_id" label="专业代码" align="center"></el-table-column>
+        <el-table-column prop="major_name" label="专业名称" align="center"></el-table-column>
+        <el-table-column label="身份证类型" align="center">
           <template slot-scope="scope">
             <i v-if="scope.row.person_id_type===0">身份证</i>
             <i v-else>护照</i>
           </template>
         </el-table-column>
-        <el-table-column prop="person_id" label="身份证号"></el-table-column>
-        <el-table-column prop="country" label="国籍"></el-table-column>
-        <el-table-column prop="enroll_date" label="入学时间"></el-table-column>
-        <el-table-column prop="family_address" label="家庭住址"></el-table-column>
-        <el-table-column prop="family_zipcode" label="邮编"></el-table-column>
-        <el-table-column prop="family_tel" label="联系电话"></el-table-column>
-        <el-table-column prop="email" label="电子邮箱"></el-table-column>
+        <el-table-column prop="person_id" label="身份证号" width="220" align="center"></el-table-column>
+        <el-table-column prop="country" label="国籍" align="center"></el-table-column>
+        <el-table-column prop="enroll_date" label="入学时间" align="center"></el-table-column>
+        <el-table-column prop="family_address" label="家庭住址" align="center"></el-table-column>
+        <el-table-column prop="family_zipcode" label="邮编" align="center"></el-table-column>
+        <el-table-column prop="family_tel" label="联系电话" align="center"></el-table-column>
+        <el-table-column prop="email" label="电子邮箱" align="center"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="primary" @click="editData(scope.$index)">修改</el-button>
@@ -310,6 +310,7 @@
     }
   }
 }
+
 .transition-box {
   margin-bottom: 10px;
   width: 200px;
