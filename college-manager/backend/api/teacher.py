@@ -137,7 +137,13 @@ def mod(request: HttpRequest):
     try:
         params = json.loads(request.body.decode())
         where = check_params(params.get('where', {}))
-        update = check_params(params.get('update', {}))
-        return general_mod(Teacher, where, update)
+        update = params.get('update', {})
+        teacher_list = Teacher.objects.filter(**where)
+        person_id_dict_list = teacher_list.values('person_id')
+        person_id_list = [item['person_id'] for item in person_id_dict_list]
+        for id in person_id_list:
+            Person.objects.filter(id=id).update(**check_person_params(update))
+        teacher_list.update(**check_teacher_params(update))
+        return response_success()
     except Exception as e:
         return response_error(str(e))
