@@ -11,7 +11,6 @@
 	        <!--<input class="sc" type="text" placeholder="请输入课程号" style="width: 300px; margin-right: 20px; height: 32px; border-radius: 1px solid #302d1c; margin-bottom: -3px; position: relative; top: 3px;"/>-->
           <el-button type="warning" plain @click="show1 = !show1">展开</el-button>
           <el-button type="danger" plain @click="getAllData()">刷新</el-button>
-          <el-button type="danger" plain @click="add_test()">测试</el-button>
 	      </div>
 		  </el-row>
       <el-collapse-transition>
@@ -179,59 +178,6 @@ export default {
       },
   }},
 methods: {
-    add_test(){
-      var _this=this
-      /*this.$http.post('http://127.0.0.1:8000/api/campus/add',{'id':'231','name':'111', 'address':'12'}).then(function (res) {
-          console.log(res)
-          _this.tableData.push(res.data)
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
-      this.$http.post('http://127.0.0.1:8000/api/major/add',{'id':'23','name':'1111', 'address':'12',
-       'campus_id':'231', 'charge_person_id':null}).then(function (res) {
-          console.log(res)
-          _this.tableData.push(res.data)
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
-      this.$http.post('http://127.0.0.1:8000/api/teacher/add',{'id':'23','enroll_date':'1111-11-11', 'email':'12',
-       'title':'23', 'major_id':'23', 'person_id':'1','major_name':'12', 'person_name':'33',
-       'person_id_type':'44', 'gender':'1', 'birth':'1333-11-11', 'country':'3',
-       'family_address':'3', 'family_zipcode':'3', 'family_tel':'1'}).then(function (res) {
-          console.log(res)
-          _this.tableData.push(res.data)
-        })
-        .catch(function (error) {
-          console.log(error)
-        })*/
-        /*this.$http.post('http://127.0.0.1:8000/api/course/add',{'id':'1', 'name':'c', 'assessment':'0', 'major_id':'23'}).then(function (res) {
-          console.log(res)
-          _this.tableData.push(res.data)
-        })
-        .catch(function (error) {
-          console.log(error)
-        })*/
-      this.$http.post('http://127.0.0.1:8000/api/lecture/add',{'id':'1','course_id':'12', 'teacher_id':'23', 'year':'1992',
-      'term':'1', 'time':'2'}).then(function (res) {
-          console.log(res)
-          _this.tableData.push(res.data)
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
-
-        /*this.$http.post('http://127.0.0.1:8000/api/lecture/add',JSON.stringify(opt), { emulateJSON: true }).then(function (res) {
-          console.log(res)
-          _this.tableData.push(res.data)
-        })
-        .catch(function (error) {
-          console.log(error)
-        })*/
-
-    },
-
     simplify(obj) {
       let newobj = new Object();
       for (let key in obj) {
