@@ -13,7 +13,8 @@
       <el-table-column label="工号" prop="id"></el-table-column>
       <el-table-column label="入职年月" prop="enroll_date"></el-table-column>
       <el-table-column label="电子邮箱" prop="email"></el-table-column>
-      <el-table-column label="所属专业" prop="major_id"></el-table-column>
+      <el-table-column label="专业代码" prop="major_id"></el-table-column>
+      <el-table-column label="专业名称" prop="major_name"></el-table-column>
       <el-table-column label="职称">
           <template slot-scope="scope">
                 <i v-if="scope.row.title===0">教授</i>
@@ -28,7 +29,6 @@
             </template>
 	      </el-table-column>
       <el-table-column label="中文名称" prop="person_name"></el-table-column>
-      <el-table-column label="性别" prop="gender"></el-table-column>
       <el-table-column label="性别">
           <template slot-scope="scope">
                 <i v-if="scope.row.gender===0">男</i>
@@ -52,11 +52,11 @@
         <el-form-item label="电子邮箱" prop="email">
           <el-input v-model="form.email" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="身份证件号">
-          <el-input v-model="form.person_id" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="身份证件类型">
-          <el-input v-model="form.person_id_type" autocomplete="off"></el-input>
+        <el-form-item label="身份证件类型" prop="person_id_type">
+          <el-select v-model="form.person_id_type" placeholder="请选择身份证件类型">
+            <el-option style="height: 80%" label="身份证" value="0" autocomplete="off"></el-option>
+            <el-option style="height: 80%" label="护照" value="1" autocomplete="off"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="中文名称">
           <el-input autocomplete="off" v-model="form.person_name"></el-input>
@@ -126,16 +126,22 @@ export default {
       editId: "",
       delId: "",
       form: {
-        email: "",
-        person_id: "",
-        person_id_type: "",
+        id: "",
         person_name: "",
         gender: "",
-        birth: "",
+        title: "",
+        person_id: "",
+        person_id_type: "",
         country: "",
+        birth: "",
+        major_id: "",
+        major_name: "",
         family_address: "",
-        family_zipcode: null,
-        family_tel: null
+        family_zipcode: "",
+        family_tel: "",
+        enroll_date: "",
+        email: "",
+        password: ""
       },
       rules: {
 
@@ -144,15 +150,22 @@ export default {
   },
 
   methods: {
+
     sendRequest(url, opt = {}) {
       var _this = this;
-      this.$http.post(url, JSON.stringify(opt), { emulateJSON: true }).then(function(res) {
-          if (url === "http://127.0.0.1:8000/api/teacher/mod") {
-            console.log("编辑用户信息")
-            for (let key in opt.update)
-              _this.tableData[_this.editIndex][key] = opt.update[key];
-            console.log(_this.tableData);
-            this.reload();
+      _this.$http.post(url, JSON.stringify(opt), { emulateJSON: true }).then(function(res){
+          console.log(res)
+          var resbody = JSON.parse(res.bodyText)
+          if (url === "/api/teacher/mod") {
+            if (resbody["code"] == 0) {
+              _this.$message.error("修改教师信息失败：" + resbody["msg"]);
+            } else {
+              _this.$http.get("/api/teacher/get", {params: { id: _this.editId }}).then(function(res) {
+                  console.log(res);
+                  _this.tableData[_this.editIndex] = res.data["list"][0];
+                  _this.getAllData()
+                });
+            }
           }
         })
         .catch(function(error) {
@@ -166,16 +179,10 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (that.isEdit) {
-            let subForm = that.form;
-            delete subForm.id;
-            let opt = {
-              where: {
-                id: that.editId
-              },
-              update: subForm
-            };
+            let subForm = that.form
+            delete subForm.id
             // 修改
-            that.sendRequest("http://127.0.0.1:8000/api/teacher/mod", {"where":{"id":JSON.parse(window.localStorage.teaInfo).id},"update":opt});
+            that.sendRequest("/api/teacher/mod", {"where":{"id":localStorage.getItem('id')},"update":subForm});
           }
           that.dialogFormVisible = false;
           // that.getAllData()
@@ -188,28 +195,33 @@ export default {
 
     editData(index) {
       // console.log(this.tableData.teacherName)
-      const selfData = this.tableData[index];
-      this.editIndex = index;
-      this.editId = selfData._id
-      this.dialogFormVisible = true;
-      this.isEdit = true;
-      this.form.email = selfData.email;
-      this.form.person_id = selfData.person_id;
-      this.form.person_id_type = selfData.person_id_type;
-      this.form.person_name = selfData.person_name;
-      this.form.gender = selfData.gender;
-      this.form.birth = selfData.birth;
-      this.form.country = selfData.country;
-      this.form.family_address = selfData.family_address;
-      this.form.family_zipcode = selfData.family_zipcode;
-      this.form.family_tel = selfData.family_tel;
+      const selfData = this.tableData[index]
+      this.editIndex = index
+      this.editId = selfData.id
+      this.dialogFormVisible = true
+      this.isEdit = true
+      this.form.id = selfData.id
+      this.form.person_name = selfData.person_name
+      this.form.gender = selfData.gender
+      this.form.title = selfData.title
+      this.form.person_id_type = selfData.person_id_type
+      this.form.person_id = selfData.person_id
+      this.form.country = selfData.country
+      this.form.birth = selfData.birth
+      this.form.major_id = selfData.major_id
+      this.form.major_name = selfData.major_name
+      this.form.family_address = selfData.family_address
+      this.form.family_zipcode = selfData.family_zipcode
+      this.form.family_tel = selfData.family_tel
+      this.form.enroll_date = selfData.enroll_date
+      this.form.email = selfData.email
     },
 
     // 请求数据
     getAllData() {
       var _this = this;
       //console.log(JSON.parse(window.localStorage.teaInfo).username)
-      this.$http.get("http://127.0.0.1:8000/api/teacher/get",{"id":JSON.parse(window.localStorage.teaInfo).id}).then(function(res) {
+      this.$http.get("http://127.0.0.1:8000/api/teacher/get",{params:{"id":localStorage.getItem('id')}}).then(function(res) {
           console.log(res);
           if(res.data.list.length === 0||res.data.code ==0) {
             _this.$message.error("查询教师失败")

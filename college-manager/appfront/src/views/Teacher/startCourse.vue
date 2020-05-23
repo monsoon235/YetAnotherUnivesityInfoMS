@@ -23,9 +23,6 @@
           <el-form-item label="课程号" prop="course_id">
             <el-input v-model="form.course_id" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="老师工号" prop="teacher_id">
-            <el-input v-model="form.teacher_id" autocomplete="off"></el-input>
-          </el-form-item>
           <el-form-item label="开课日期" prop="year">
             <el-input v-model="form.year" autocomplete="off" placeholder="年"></el-input>
           </el-form-item>
@@ -86,16 +83,13 @@
 	    </el-table>
 
     <div style="margin-top: -60px">
-      <el-dialog title="请填写开课信息" :visible.sync="dialogFormVisible" style="height: 100%；">
+      <el-dialog title="请填写信息" :visible.sync="dialogFormVisible" style="height: 100%；">
         <el-form :model="form" :rules="rules" ref="form">
           <el-form-item label="开课号" prop="id">
             <el-input v-model="form.id" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="课程号" prop="course_id">
             <el-input v-model="form.course_id" autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="老师工号" prop="teacher_id">
-            <el-input v-model="form.teacher_id" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="开课日期" prop="year">
             <el-input v-model="form.year" autocomplete="off" placeholder="年"></el-input>
@@ -214,7 +208,7 @@ methods: {
 		// 获取所有的用户信息
     getAllData() {
       var _this = this
-      this.$http.get('http://127.0.0.1:8000/api/lecture/get',{'teacher_id':JSON.parse(window.localStorage.teaInfo).id}).then(function (res) {
+      this.$http.get('http://127.0.0.1:8000/api/lecture/get',{params:{'teacher_id':localStorage.getItem('id')}}).then(function (res) {
         console.log(res)
         var resbody = JSON.parse(res.bodyText)
         if(resbody["code"] == 0)
@@ -292,6 +286,7 @@ methods: {
               // this.getAllData()
            } else{
               // 新增
+              that.form.teacher_id=localStorage.getItem('id')
               that.sendRequest('http://127.0.0.1:8000/api/lecture/add', that.simplify(that.form))
            }
               // this.getAllData()
@@ -326,9 +321,9 @@ methods: {
       this.editId = selfData.id
       this.dialogFormVisible = true
       this.isEdit = true
-      this.form.id = selfData.id;
-      this.form.course_id = selfData.course_id;
-      this.form.teacher_id = selfData.teacher_id;
+      this.form.id = selfData.id
+      this.form.course_id = selfData.course_id
+      this.form.teacher_id = selfData.teacher_id
       this.form.year = selfData.year;
       this.form.term = selfData.term;
       this.form.time = selfData.time;

@@ -115,12 +115,9 @@ export default {
                 id: this.ruleForm.id,
                 password: this.ruleForm.pass,
               }
-              // console.log(params);
               this.$http.post('/api/login', params)
                 .then((res) => {
                   var _this = this
-                  // console.log(res)
-                  // console.log(res.data.data[0]);
                   if(res.data.code == 0) {
                     console.log(res.data)
                     return
@@ -140,8 +137,8 @@ export default {
                           case 0:
                             setTimeout(() => this.$router.push({ path:'/manager/start'}), 800)
                             break;
-                          localStorage.setItem("id", JSON.stringify(res.data.id));
                         }
+                      localStorage.setItem("id", res.data.id);
                       }
                       catch(err) {
                           console.log(err)
