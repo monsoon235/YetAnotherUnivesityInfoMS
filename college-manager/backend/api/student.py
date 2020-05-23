@@ -112,7 +112,7 @@ def check_permission(func):
     return wrapper
 
 
-@check_permission
+# @check_permission
 @hold_exception
 @require_http_methods(['GET'])
 @django.views.decorators.csrf.csrf_exempt
@@ -184,7 +184,7 @@ def delete(request: HttpRequest):
     return response_success()
 
 
-@check_permission
+# @check_permission
 @hold_exception
 @require_http_methods(['POST'])
 @django.views.decorators.csrf.csrf_exempt
