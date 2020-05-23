@@ -1,4 +1,4 @@
-n<template>
+<template>
   <div class="register">
     <LoginHeader></LoginHeader>
     <div class="from">
@@ -6,13 +6,6 @@ n<template>
         <el-form-item label="请输入用户名" prop="id">
           <el-input type="text" v-model="ruleForm.id" label="输入学号,教职工号或是admin"></el-input>
         </el-form-item>
-        <!-- <el-form-item label="请选择类型" prop="category">
-          <el-select v-model="ruleForm.region" placeholder="请选择注册类型">
-            <el-option label="学生" value="xuesheng"></el-option>
-            <el-option label="教师" value="jiaoshi"></el-option>
-            <el-option label="教学管理者" value="manager"></el-option>
-          </el-select>
-        </el-form-item> -->
         <el-form-item label="请输入密码" prop="pass">
           <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
         </el-form-item>
@@ -21,13 +14,11 @@ n<template>
             <el-button type="info" @click="submitForm('ruleForm')">登录</el-button>
             <el-button type="info" @click="resetForm('ruleForm')">重置</el-button>
           </el-form-item>
-          <el-form-item>
+          <!-- <el-form-item>
             <el-button type="info" @click="studentLogin()">学生直接登录</el-button>
             <el-button type="info" @click="teacherLogin()">教师直接登录</el-button>
             <el-button type="info" @click="managerLogin()">管理员直接登录</el-button>
-          </el-form-item>
-          <!-- 跳转到注册界面 -->
-          <!-- <router-link to="/register" tag="button" v-text="'去注册'"></router-link> -->
+          </el-form-item> -->
         </el-form-item>
       </el-form>
     </div>
@@ -35,7 +26,6 @@ n<template>
 </template>
 
 <style lang='scss'>
-// @import 'element-ui/lib/theme-chalk/index.css';
 .from {
   margin: 0px auto;
   width: 500px;
@@ -105,17 +95,14 @@ export default {
     },
     methods: {
     studentLogin() {
-        //localStorage.setItem("stuInfo", JSON.stringify(res.data.data[0]));
         setTimeout(() => this.$router.push({ path:'/student/start'}), 800)
     },
 
     teacherLogin() {
-      //localStorage.setItem("teaInfo", JSON.stringify(res.data.data[0]));
       setTimeout(() => this.$router.push({ path:'/teacher/start'}), 800)
     },
 
     managerLogin() {
-      //localStorage.setItem("teaInfo", JSON.stringify(res.data.data[0]));
       setTimeout(() => this.$router.push({ path:'/Manager/start'}), 800)
     },
 
