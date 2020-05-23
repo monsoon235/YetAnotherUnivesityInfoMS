@@ -2,7 +2,7 @@ import json
 
 import django.views.decorators.csrf
 from django.db.models import F
-from django.http import HttpRequest
+from django.views.decorators.http import require_http_methods
 
 from .general import *
 from .models import *
@@ -21,63 +21,70 @@ def check_params(params: dict) -> dict:
     return params
 
 
+def check_permission(func):
+    def wrapper(request: HttpRequest, *args, **kw):
+        if not request.user.is_authenticated:
+            return response_error('login required', status=403)
+        if request.user.is_staff:
+            return func(request, *args, **kw)
+        if request.method == 'GET':
+            params = check_params(request.GET.dict())
+        elif request.method == 'POST':
+            params = json.loads(request.body.decode())
+            params = check_params(params.get('where', {}))
+        else:
+            return response_error('method denied')
+        query = Lecture.objects.filter(**params).values(person_id=F('teacher__person_id'))
+        person_id_list = list({item['person_id'] for item in query})
+        if len(person_id_list) == 0 or \
+                (len(person_id_list) == 1 and person_id_list[0] == request.user.get_username):
+            return func(request, *args, **kw)
+        return response_error('permission denied', status=403)
+
+    return wrapper
+
+
+@check_permission
+@hold_exception
+@require_http_methods(['GET'])
 @django.views.decorators.csrf.csrf_exempt
 def get(request: HttpRequest):
-    try:
-        params = check_params(request.GET.dict())
-        result = Lecture.objects.filter(**params).values(
-            *where_params,
-            course_name=F('course__name'),
-            teacher_name=F('teacher__person__name'),
-            assessment=F('course__assessment'),
-            major_name=F('course__major__name')
-        )
-        return response_success(list(result))
-    except Exception as e:
-        return response_error(str(e))
+    params = check_params(request.GET.dict())
+    result = Lecture.objects.filter(**params).values(
+        *where_params,
+        course_name=F('course__name'),
+        teacher_name=F('teacher__person__name'),
+        assessment=F('course__assessment'),
+        major_name=F('course__major__name')
+    )
+    return response_success(list(result))
 
 
-# 没有 id 需要特殊处理
+@check_permission
+@hold_exception
+@require_http_methods(['POST'])
 @django.views.decorators.csrf.csrf_exempt
 def add(request: HttpRequest):
-    try:
-        params = json.loads(request.body.decode())
-        params = check_params(params)
-        return general_add(Lecture, params)
-    except Exception as e:
-        return response_error(str(e))
-    # try:
-    #     params = json.loads(request.body.decode())
-    #     params = check_params(params)
-    #     if 'id' not in params:
-    #         return response_error('missing id')
-    #     if 'class_id' not in params:
-    #         return response_error('missing class_id')
-    #     if Lecture.objects.filter(
-    #             lecture_id=params['lecture_id'],
-    #             class_id=params['class_id']):
-    #         return response_error('id exists')
-    #     Lecture(**params).save()
-    #     return response_success()
-    # except Exception as e:
-    #     return response_error(str(e))
+    params = json.loads(request.body.decode())
+    params = check_params(params)
+    return general_add(Lecture, params)
 
 
+@check_permission
+@hold_exception
+@require_http_methods(['GET'])
 @django.views.decorators.csrf.csrf_exempt
 def delete(request: HttpRequest):
-    try:
-        params = check_params(request.GET.dict())
-        return general_del(Lecture, params)
-    except Exception as e:
-        return response_error(str(e))
+    params = check_params(request.GET.dict())
+    return general_del(Lecture, params)
 
 
+@check_permission
+@hold_exception
+@require_http_methods(['POST'])
 @django.views.decorators.csrf.csrf_exempt
 def mod(request: HttpRequest):
-    try:
-        params = json.loads(request.body.decode())
-        where = check_params(params.get('where', {}))
-        update = check_params(params.get('update', {}))
-        return general_mod(Lecture, where, update)
-    except Exception as e:
-        return response_error(str(e))
+    params = json.loads(request.body.decode())
+    where = check_params(params.get('where', {}))
+    update = check_params(params.get('update', {}))
+    return general_mod(Lecture, where, update)

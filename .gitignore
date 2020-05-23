@@ -1526,3 +1526,6 @@ venv/Lib/site-packages/pip/_internal/cli/cmdoptions.py
 venv/Lib/site-packages/pip/_vendor/chardet/l
 atin1prober.py
 venv/Lib/site-packages/setuptools/_vendor/six.py
+
+college-manager/backend/api/migrations
+college-manager/backend/db.sqlite3

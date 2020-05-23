@@ -58,10 +58,7 @@
             class="demo-ruleForm"
           >
             <el-form-item label="开课学期" prop="term">
-              <el-select
-                v-model="form.term"
-                placeholder="请选择学期"
-              >
+              <el-select v-model="form.term" placeholder="请选择学期">
                 <el-option label="春" value="0" autocomplete="off"></el-option>
                 <el-option label="秋" value="1" autocomplete="off"></el-option>
               </el-select>
@@ -78,23 +75,23 @@
     </el-row>
     <el-scrollbar>
       <el-table :data="tableData" stripe style="width: 100%">
-        <el-table-column prop="id" label="课堂号"></el-table-column>
-        <el-table-column prop="course_id" label="课程号"></el-table-column>
-        <el-table-column prop="course_name" label="课程名称"></el-table-column>
-        <el-table-column prop="major_name" label="专业名称"></el-table-column>
-        <el-table-column prop="teacher_id" label="教师工号"></el-table-column>
-        <el-table-column prop="teacher_name" label="授课教师"></el-table-column>
-        <el-table-column prop="assessment" label="考核方式"></el-table-column>
-        <el-table-column prop="year" label="开课日期"></el-table-column>
-        <el-table-column label="开课学期">
+        <el-table-column prop="id" label="课堂号" align="center"></el-table-column>
+        <el-table-column prop="course_id" label="课程号" align="center"></el-table-column>
+        <el-table-column prop="course_name" label="课程名称" align="center"></el-table-column>
+        <el-table-column prop="major_name" label="专业名称" align="center"></el-table-column>
+        <el-table-column prop="teacher_id" label="教师工号" align="center"></el-table-column>
+        <el-table-column prop="teacher_name" label="授课教师" align="center"></el-table-column>
+        <el-table-column prop="assessment" label="考核方式" align="center"></el-table-column>
+        <el-table-column prop="year" label="开课日期" align="center"></el-table-column>
+        <el-table-column label="开课学期" align="center">
           <template slot-scope="scope">
             <i v-if="scope.row.term===0">春</i>
             <i v-else>秋</i>
           </template>
         </el-table-column>
-        <el-table-column prop="time" label="开课时间"></el-table-column>
+        <el-table-column prop="time" label="开课时间" align="center"></el-table-column>
 
-        <el-table-column label="操作">
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button type="primary" @click="editData(scope.$index)">修改</el-button>
             <el-button type="danger" @click="openDialog(scope.$index)">删除</el-button>
@@ -118,10 +115,7 @@
           <el-input v-model="form.year" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="开课学期" prop="term">
-          <el-select
-            v-model="form.term"
-            placeholder="请选择学期"
-          >
+          <el-select v-model="form.term" placeholder="请选择学期">
             <el-option label="春" value="0" autocomplete="off"></el-option>
             <el-option label="秋" value="1" autocomplete="off"></el-option>
           </el-select>

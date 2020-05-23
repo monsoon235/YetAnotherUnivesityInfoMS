@@ -78,14 +78,14 @@
 	        prop="stage"
 	        label="适应阶段">
         </el-table-column>-->
-        <el-table-column prop="id" label="班级编号"></el-table-column>
-        <el-table-column prop="name" label="班级名"></el-table-column>
-        <el-table-column prop="found_date" label="建班年月"></el-table-column>
-        <el-table-column prop="grade" label="所属年级"></el-table-column>
-        <el-table-column prop="major_id" label="所属专业代码"></el-table-column>
-        <el-table-column prop="major_name" label="所属专业"></el-table-column>
-        <el-table-column prop="charge_teacher_id" label="班主任工号"></el-table-column>
-        <el-table-column prop="charge_teacher_name" label="班主任"></el-table-column>
+        <el-table-column prop="id" label="班级编号" align="center"></el-table-column>
+        <el-table-column prop="name" label="班级名" align="center"></el-table-column>
+        <el-table-column prop="found_date" label="建班年月" align="center"></el-table-column>
+        <el-table-column prop="grade" label="所属年级" align="center"></el-table-column>
+        <el-table-column prop="major_id" label="所属专业代码" align="center"></el-table-column>
+        <el-table-column prop="major_name" label="所属专业" align="center"></el-table-column>
+        <el-table-column prop="charge_teacher_id" label="班主任工号" align="center"></el-table-column>
+        <el-table-column prop="charge_teacher_name" label="班主任" align="center"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="primary" @click="editData(scope.$index)">修改</el-button>
@@ -98,7 +98,7 @@
         <el-dialog title="请填写班级信息" :visible.sync="dialogFormVisible" style="height: 100%；">
           <el-form :model="form" :rules="rules" ref="form">
             <el-form-item label="班级编号" prop="id">
-              <el-input v-model="form.id" autocomplete="off"></el-input>
+              <el-input v-model="form.id" :disabled="isEdit" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="班级名" prop="name">
               <el-input v-model="form.name" autocomplete="off"></el-input>
@@ -230,8 +230,8 @@ export default {
           if (url === "http://127.0.0.1:8000/api/class/add") {
             if (resbody["code"] == 0) {
               _this.$message.error("修改学生信息失败: " + resbody["msg"]);
-            }else{
-            _this.getAllData();
+            } else {
+              _this.getAllData();
             }
           } else if (url === "http://127.0.0.1:8000/api/class/mod") {
             if (resbody["code"] == 0) {

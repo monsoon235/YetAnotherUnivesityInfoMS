@@ -229,9 +229,9 @@ export default {
       console.log(key, keyPath);
     },
     loginout() {
-      this.$router.push("/login");
-      window.localStorage.removeItem("manInfo");
-      this.$http.post("/users/loginout").then(res => {
+      // this.$router.push("/login");
+      // window.localStorage.removeItem("manInfo");
+      this.$http.get("/api/logout").then(res => {
         console.log(res.data);
         this.$router.push("/login");
       });

@@ -106,7 +106,7 @@ class Adjustment(models.Model):
 
     class ExtraChoice(models.IntegerChoices):
         YES_OR_SUSPEND = 0, 'yes or suspend'  # id=0 时代表 yes, id=1 时代表 suspend
-        NO_SUPPORT_TEACHING = 1, 'no or support_teching'  # id=0 时代表 no，id=1 时代表 suspend
+        NO_SUPPORT_TEACHING = 1, 'no or support_teaching'  # id=0 时代表 no，id=1 时代表 suspend
         NONE = 2, 'none'  # id=0 时禁止，id=1 时代表团员关系无变化
 
     id = models.AutoField(primary_key=True)

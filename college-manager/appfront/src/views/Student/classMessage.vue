@@ -81,13 +81,14 @@ methods: {
 		var _this = this
       this.$http.get('/api/student/get').then(function (res) {
       	// console.log(res);
-        _this.$http.post('/api/class/get', {class_id: res.list.class_id}).then(function (res) {
+        _this.$http.post('/api/class/get', {class_id: res.data.list.class_id}).then(function (res) {
           console.log(res)
-          if(res.list.length === 0) {
+          if(res.data.list.length === 0||res.data.code==0) {
+            console.log(res.data.msg)
             alert('Sorry, 还没有您的班级信息，请联系教学管理者');
             return
           }
-          _this.tableData = res.list
+          _this.tableData = res.data.list
         })
         .catch(function (error) {
           console.log(error)

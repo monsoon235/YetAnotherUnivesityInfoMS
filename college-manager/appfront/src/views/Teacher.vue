@@ -190,8 +190,8 @@
         console.log(key, keyPath);
       },
       loginout(){
-        window.localStorage.removeItem("teaInfo")
-        this.$http.post('/users/loginout')
+        // window.localStorage.removeItem("teaInfo")
+        this.$http.get('/api/logout')
           .then((res)=>{
             console.log(res.data);
             this.$router.push('/login')

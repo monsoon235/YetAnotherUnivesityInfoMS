@@ -43,10 +43,7 @@
               <el-input v-model="form.major_id"></el-input>
             </el-form-item>
             <el-form-item label="考核方式" prop="assessment">
-              <el-select
-                v-model="form.assessment"
-                placeholder="请选择方式"
-              >
+              <el-select v-model="form.assessment" placeholder="请选择方式">
                 <el-option label="考试" value="0" autocomplete="off"></el-option>
                 <el-option label="当堂答辩" value="1" autocomplete="off"></el-option>
               </el-select>
@@ -62,18 +59,18 @@
     </el-row>
     <el-scrollbar>
       <el-table :data="tableData" stripe style="width: 100%">
-        <el-table-column prop="id" label="课程编号"></el-table-column>
-        <el-table-column prop="name" label="课程名称"></el-table-column>
-        <el-table-column prop="major_id" label="专业代码"></el-table-column>
-        <el-table-column prop="major_name" label="开课专业"></el-table-column>
-        <el-table-column label="考核方式">
+        <el-table-column prop="id" label="课程编号" align="center"></el-table-column>
+        <el-table-column prop="name" label="课程名称" align="center"></el-table-column>
+        <el-table-column prop="major_id" label="专业代码" align="center"></el-table-column>
+        <el-table-column prop="major_name" label="开课专业" align="center"></el-table-column>
+        <el-table-column label="考核方式" align="center">
           <template slot-scope="scope">
             <i v-if="scope.row.assessment===0">考试</i>
             <i v-else>当堂答辩</i>
           </template>
         </el-table-column>
 
-        <el-table-column label="操作">
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button type="primary" @click="editData(scope.$index)">修改</el-button>
             <el-button type="danger" @click="openDialog(scope.$index)">删除</el-button>
@@ -85,7 +82,7 @@
     <el-dialog title="填写你的信息" :visible.sync="dialogFormVisible" style="height: 100%">
       <el-form :model="form" :rules="rules" ref="form">
         <el-form-item label="课程编号" prop="id">
-          <el-input v-model="form.id" autocomplete="off"></el-input>
+          <el-input v-model="form.id" :disabled="isEdit" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="课程名称" prop="name">
           <el-input v-model="form.name" autocomplete="off"></el-input>
@@ -94,10 +91,7 @@
           <el-input v-model="form.major_id" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="考核方式" prop="assessment">
-          <el-select
-            v-model="form.assessment"
-            placeholder="请选择方式"
-          >
+          <el-select v-model="form.assessment" placeholder="请选择方式">
             <el-option label="考试" value="0" autocomplete="off"></el-option>
             <el-option label="当堂答辩" value="1" autocomplete="off"></el-option>
           </el-select>

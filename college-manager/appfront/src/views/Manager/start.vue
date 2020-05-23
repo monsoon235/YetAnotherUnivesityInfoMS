@@ -1,16 +1,16 @@
 <template>
 	<div>
 		<div>
-			<div style='height: 80px'> 
-		      <h2 class='font' style="text-align: center;">欢迎进入您进入该教务管理系统, 祝您使用愉快</h2>
+			<div style='height: 100px'> 
+		      <h2 class='font' style="text-align: center; height: 80px">欢迎进入USTC高校管理系统, 祝您使用愉快</h2>
 		  </div>
 		   	
 		</div>
 		 	<div class='left'>
-		 		<p>培养企业需要的技术人员是存在之本</p>
-		 		<p>享受工作，专注做事，才能更高效率</p>
-		 		<p>技术不断革新的时段，万不可丝毫松懈</p>
-		 		<p>努力工作的人才会跟进时代的不符</p>
+		 		<p>数据库实验：真的很难</p>
+		 		<p>数据库实验：真的很难</p>
+		 		<p>数据库实验：真的很难</p>
+		 		<p>数据库实验：真的很难</p>
 		 		<!--img src="../../../public/img/start5.jpg" alt=""-->
 		 	</div>
 			<el-calendar v-model="value">
@@ -24,7 +24,7 @@
     @include fontTwo()
   }
   .text {
-    @include fontThree()
+    @include fontThree();
     float: left;
   }
   .left {
