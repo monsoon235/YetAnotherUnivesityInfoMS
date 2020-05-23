@@ -25,139 +25,149 @@
             label-width="100px"
             class="demo-form-inline search-form"
           >
-            <el-form-item
-              label="姓名"
-              prop="name"
-              style="width: 20%; left: 30px; position: absolute;"
-            >
-              <el-input v-model="form.name"></el-input>
-            </el-form-item>
-            <el-form-item label="学号" prop="id" style="width: 20%; position: relative;">
-              <el-input v-model="form.id"></el-input>
-            </el-form-item>
-            <el-form-item label="出生日期" prop="birth">
-              <el-col :span="11">
-                <el-date-picker
-                  type="date"
-                  placeholder="选择日期"
-                  v-model="form.birth"
-                  style="width: 100%;"
-                ></el-date-picker>
+            <el-row type="flex" class="row-bg">
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="姓名" prop="name">
+                    <el-input v-model="form.name"></el-input>
+                  </el-form-item>
+                </div>
               </el-col>
-            </el-form-item>
-            <el-form-item label="性别" prop="gender" style="position: relative;">
-              <el-radio-group v-model="form.gender">
-                <el-radio label="男"></el-radio>
-                <el-radio label="女"></el-radio>
-              </el-radio-group>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="warning" plain @click="mysearchData">搜索</el-button>
-            </el-form-item>
-          </el-form>
-          <el-form
-            :inline="true"
-            :model="form"
-            :rules="searchRules"
-            ref="form"
-            label-width="100px"
-            class="demo-ruleForm"
-          >
-            <el-form-item
-              label="班级代码"
-              prop="class_id"
-              style="width: 20%; left: 30px; position: absolute;"
-            >
-              <el-input v-model="form.class_id"></el-input>
-            </el-form-item>
-            <el-form-item
-              label="班级名称"
-              prop="class_name"
-              style="width: 20%; left: 13px; position: relative;"
-            >
-              <el-input v-model="form.class_name"></el-input>
-            </el-form-item>
-            <el-form-item label="专业代码" prop="major_id" style="width: 20%; left: 30px;">
-              <el-input v-model="form.major_id"></el-input>
-            </el-form-item>
-            <el-form-item label="专业名称" prop="major_name" style="width: 20%; left: 30px;">
-              <el-input v-model="form.major_name"></el-input>
-            </el-form-item>
-          </el-form>
-          <el-form
-            :inline="true"
-            :model="form"
-            :rules="searchRules"
-            ref="form"
-            label-width="100px"
-            class="demo-ruleForm"
-          >
-            <el-form-item
-              label="身份证号"
-              prop="person_id"
-              style="width: 20%; left: 30px; position: absolute;"
-            >
-              <el-input v-model="form.person_id"></el-input>
-            </el-form-item>
-            <el-form-item label="身份证类型" prop="person_id_type" style="position: relative;">
-              <el-radio-group v-model="form.person_id_type">
-                <el-radio label="身份证"></el-radio>
-                <el-radio label="护照"></el-radio>
-              </el-radio-group>
-            </el-form-item>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="学号" prop="id">
+                    <el-input v-model="form.id"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="出生日期" prop="birth">
+                    <el-col :span="11">
+                      <el-date-picker type="date" placeholder="选择日期" v-model="form.birth"></el-date-picker>
+                    </el-col>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="性别" prop="gender" style="position: relative;">
+                    <el-radio-group v-model="form.gender">
+                      <el-radio label="男"></el-radio>
+                      <el-radio label="女"></el-radio>
+                    </el-radio-group>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <el-button type="warning" plain @click="mysearchData">搜索</el-button>
+              </el-col>
+            </el-row>
 
-            <el-form-item label="国籍" prop="country" style="width: 20%;">
-              <el-input v-model="form.country"></el-input>
-            </el-form-item>
-          </el-form>
-          <el-form
-            :inline="true"
-            :model="form"
-            :rules="searchRules"
-            ref="form"
-            label-width="100px"
-            class="demo-ruleForm"
-          >
-            <el-form-item
-              label="入学时间"
-              prop="enroll_date"
-              style="width: 20%; left: 30px; position: absolute;"
-            >
-              <el-input v-model="form.enroll_date"></el-input>
-            </el-form-item>
-            <el-form-item
-              label="家庭住址"
-              prop="family_address"
-              style="width: 20%; left: 13px; position: relative;"
-            >
-              <el-input v-model="form.family_address"></el-input>
-            </el-form-item>
-            <el-form-item label="邮编" prop="family_zipcode" style="width: 20%; position: relative;">
-              <el-input v-model="form.family_zipcode"></el-input>
-            </el-form-item>
-          </el-form>
-          <el-form
-            :inline="true"
-            :model="form"
-            :rules="searchRules"
-            ref="form"
-            label-width="100px"
-            class="demo-ruleForm"
-          >
-            <el-form-item
-              label="联系电话"
-              prop="family_tel"
-              style="width: 20%; left: 30px; position: absolute;"
-            >
-              <el-input v-model="form.family_tel"></el-input>
-            </el-form-item>
-            <el-form-item
-              label="电子邮箱"
-              prop="email"
-              style="width: 20%; left: 400px; position: absolute;"
-            >
-              <el-input v-model="form.email"></el-input>
-            </el-form-item>
+            <el-row type="flex" class="row-bg">
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="班级代码" prop="class_id">
+                    <el-input v-model="form.class_id"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="班级名称" prop="class_name">
+                    <el-input v-model="form.class_name"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="专业代码" prop="major_id">
+                    <el-input v-model="form.major_id"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="专业名称" prop="major_name">
+                    <el-input v-model="form.major_name"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple"></div>
+              </el-col>
+            </el-row>
+
+            <el-row type="flex" class="row-bg">
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="身份证类型" prop="person_id_type">
+                    <el-radio-group v-model="form.person_id_type">
+                      <el-radio label="身份证"></el-radio>
+                      <el-radio label="护照"></el-radio>
+                    </el-radio-group>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="身份证号" prop="person_id">
+                    <el-input v-model="form.person_id"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="国籍" prop="country">
+                    <el-input v-model="form.country"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="入学时间" prop="enroll_date">
+                    <el-input v-model="form.enroll_date"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple"></div>
+              </el-col>
+            </el-row>
+
+            <el-row type="flex" class="row-bg">
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="家庭住址" prop="family_address">
+                    <el-input v-model="form.family_address"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="联系电话" prop="family_tel">
+                    <el-input v-model="form.family_tel"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="邮编" prop="family_zipcode">
+                    <el-input v-model="form.family_zipcode"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="电子邮箱" prop="email">
+                    <el-input v-model="form.email"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple"></div>
+              </el-col>
+            </el-row>
           </el-form>
         </div>
       </el-collapse-transition>
@@ -422,10 +432,10 @@ export default {
       this.$http
         .get(url, opt)
         .then(function(res) {
-          if (url === "http://127.0.0.1:8000/api/student/del") {
+          if (url === "/api/student/del") {
             console.log(_this.tableData);
             _this.tableData.splice(_this.delIndex, 1);
-          } else if (url === "http://127.0.0.1:8000/api/student/get") {
+          } else if (url === "/api/student/get") {
             console.log(res);
             _this.tableData = res.data["list"];
           }
@@ -450,18 +460,18 @@ export default {
           console.log(res);
           var resbody = JSON.parse(res.bodyText);
 
-          if (url === "http://127.0.0.1:8000/api/student/add") {
+          if (url === "/api/student/add") {
             if (resbody["code"] == 0) {
               _this.$message.error("添加学生失败：" + resbody["msg"]);
             } else {
               _this.getAllData();
             }
-          } else if (url === "http://127.0.0.1:8000/api/student/mod") {
+          } else if (url === "/api/student/mod") {
             if (resbody["code"] == 0) {
               _this.$message.error("修改学生信息失败：" + resbody["msg"]);
             } else {
               _this.$http
-                .get("http://127.0.0.1:8000/api/student/get", {
+                .get("/api/student/get", {
                   params: { id: _this.editId }
                 })
                 .then(function(res) {
@@ -490,13 +500,10 @@ export default {
               update: subForm
             };
             // 修改
-            that.sendPostRequest("http://127.0.0.1:8000/api/student/mod", opt);
+            that.sendPostRequest("/api/student/mod", opt);
           } else {
             // 新增
-            that.sendPostRequest(
-              "http://127.0.0.1:8000/api/student/add",
-              that.simplify(that.form)
-            );
+            that.sendPostRequest("/api/student/add", that.simplify(that.form));
           }
 
           that.dialogFormVisible = false;
@@ -511,7 +518,7 @@ export default {
     getAllData() {
       var _this = this;
       this.$http
-        .get("http://127.0.0.1:8000/api/student/get")
+        .get("/api/student/get")
         .then(function(res) {
           var resbody = JSON.parse(res.bodyText);
           if (resbody["code"] == 0) {
@@ -558,14 +565,14 @@ export default {
     delData() {
       var _this = this;
       _this.dialogVisible = false;
-      this.sendGetRequest("http://127.0.0.1:8000/api/student/del", {
+      this.sendGetRequest("/api/student/del", {
         params: { id: this.delId }
       });
     },
 
     mysearchData() {
       console.log(this.simplify(this.form));
-      this.sendGetRequest("http://127.0.0.1:8000/api/student/get", {
+      this.sendGetRequest("/api/student/get", {
         params: this.simplify(this.form)
       });
     },

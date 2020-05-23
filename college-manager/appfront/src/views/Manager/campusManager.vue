@@ -20,7 +20,6 @@
       >刷新</el-button>
       <el-collapse-transition>
         <div v-if="show3">
-          <br />
           <el-form
             :inline="true"
             :model="form"
@@ -29,22 +28,32 @@
             label-width="100px"
             class="demo-ruleForm"
           >
-            <el-form-item
-              label="校区代码"
-              prop="id"
-              style="width: 20%; left: 30px; position: absolute;"
-            >
-              <el-input v-model="form.id"></el-input>
-            </el-form-item>
-            <el-form-item label="校区名称" prop="name" style="width: 20%; position: relative;">
-              <el-input v-model="form.name"></el-input>
-            </el-form-item>
-            <el-form-item label="校区地址" prop="address" style="width: 20%">
-              <el-input v-model="form.address"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="warning" plain @click="mysearchData">搜索</el-button>
-            </el-form-item>
+            <el-row type="flex" class="row-bg">
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="校区代码" prop="id">
+                    <el-input v-model="form.id"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="校区名称" prop="name">
+                    <el-input v-model="form.name"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="校区地址" prop="address">
+                    <el-input v-model="form.address"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <el-button type="warning" plain @click="mysearchData">搜索</el-button>
+              </el-col>
+            </el-row>
           </el-form>
         </div>
       </el-collapse-transition>
@@ -53,7 +62,7 @@
     </el-row>
     <el-scrollbar>
       <el-table :data="tableData" stripe style="width: 100%">
-        <el-table-column prop="id" label="校区代码" align="center" sortable=""></el-table-column>
+        <el-table-column prop="id" label="校区代码" align="center" sortable></el-table-column>
         <el-table-column prop="name" label="校区名称" align="center"></el-table-column>
         <el-table-column prop="address" label="校区地址" align="center"></el-table-column>
 
@@ -127,6 +136,27 @@
 .el-scrollbar .el-scrollbar__wrap .el-scrollbar__view {
   white-space: nowrap;
 }
+
+.el-row {
+  margin-bottom: 20px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+.el-col {
+  border-radius: 4px;
+}
+.bg-purple-light {
+  background: #e5e9f2;
+}
+.grid-content {
+  border-radius: 4px;
+  min-height: 36px;
+}
+.row-bg {
+  padding: 10px 0;
+  background-color: #f9fafc;
+}
 </style>
 
 <script>
@@ -164,12 +194,6 @@ export default {
         ],
         id: [{ required: true, message: "必填", trigger: "blur" }],
         address: [{ required: true, message: "必填", trigger: "blur" }]
-        // age: [
-        //   { type: 'number', message: '年龄必须为数字值'}
-        // ],
-        // moblie: [
-        //   { type: 'number', message: '年龄必须为数字值'}
-        // ]
       }
     };
   },
@@ -193,10 +217,10 @@ export default {
       this.$http
         .get(url, opt)
         .then(function(res) {
-          if (url === "http://127.0.0.1:8000/api/campus/del") {
+          if (url === "/api/campus/del") {
             console.log(_this.tableData);
             _this.tableData.splice(_this.delIndex, 1);
-          } else if (url === "http://127.0.0.1:8000/api/campus/get") {
+          } else if (url === "/api/campus/get") {
             console.log(res);
             _this.tableData = res.data["list"];
           }
@@ -214,18 +238,18 @@ export default {
         .then(function(res) {
           console.log(res);
           var resbody = JSON.parse(res.bodyText);
-          if (url === "http://127.0.0.1:8000/api/campus/add") {
+          if (url === "/api/campus/add") {
             if (resbody["code"] == 0) {
               _this.$message.error("添加校区失败: " + resbody["msg"]);
             } else {
               _this.getAllData();
             }
-          } else if (url === "http://127.0.0.1:8000/api/campus/mod") {
+          } else if (url === "/api/campus/mod") {
             if (resbody["code"] == 0) {
               _this.$message.error("修改校区信息失败: " + resbody["msg"]);
             } else {
               _this.$http
-                .get("http://127.0.0.1:8000/api/campus/get", {
+                .get("/api/campus/get", {
                   params: { id: _this.editId }
                 })
                 .then(function(res) {
@@ -254,11 +278,11 @@ export default {
               update: subForm
             };
             // 修改
-            that.sendPostRequest("http://127.0.0.1:8000/api/campus/mod", opt);
+            that.sendPostRequest("/api/campus/mod", opt);
           } else {
             // 新增
             that.sendPostRequest(
-              "http://127.0.0.1:8000/api/campus/add",
+              "/api/campus/add",
               that.form
             );
           }
@@ -275,7 +299,7 @@ export default {
     getAllData() {
       var _this = this;
       this.$http
-        .get("http://127.0.0.1:8000/api/campus/get")
+        .get("/api/campus/get")
         .then(function(res) {
           var resbody = JSON.parse(res.bodyText);
           console.log(resbody);
@@ -311,14 +335,14 @@ export default {
     delData() {
       var _this = this;
       _this.dialogVisible = false;
-      this.sendGetRequest("http://127.0.0.1:8000/api/campus/del", {
+      this.sendGetRequest("/api/campus/del", {
         params: { id: this.delId }
       });
     },
 
     mysearchData() {
       console.log(this.simplify(this.form));
-      this.sendGetRequest("http://127.0.0.1:8000/api/campus/get", {
+      this.sendGetRequest("/api/campus/get", {
         params: this.simplify(this.form)
       });
     },

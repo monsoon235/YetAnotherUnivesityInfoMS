@@ -30,40 +30,59 @@
               label-width="100px"
               class="demo-ruleForm"
             >
-              <el-form-item
-                label="班级编号"
-                prop="id"
-                style="width: 20%; left: 30px; position: absolute;"
-              >
-                <el-input v-model="form.id"></el-input>
-              </el-form-item>
-              <el-form-item label="班级名称" prop="name" style="width: 20%">
-                <el-input v-model="form.name"></el-input>
-              </el-form-item>
-              <el-form-item label="建班年月" prop="date" style="width: 20%">
-                <el-input v-model="form.found_date"></el-input>
-              </el-form-item>
-              <el-form-item>
-                <el-button type="warning" plain @click="mysearchData">搜索</el-button>
-              </el-form-item>
-            </el-form>
-            <el-form
-              :inline="true"
-              :model="form"
-              :rules="searchRules"
-              ref="form"
-              label-width="100px"
-              class="demo-ruleForm"
-            >
-              <el-form-item label="所属年级" prop="grade" style="width: 20%">
-                <el-input v-model="form.grade"></el-input>
-              </el-form-item>
-              <el-form-item label="所属专业" prop="major_id" style="position: relative;">
-                <el-input v-model="form.major_id"></el-input>
-              </el-form-item>
-              <el-form-item label="班主任工号" prop="charge_teacher_id" style="width: 20%">
-                <el-input v-model="form.charge_teacher_id"></el-input>
-              </el-form-item>
+              <el-row type="flex" class="row-bg">
+                <el-col :span="6">
+                  <div class="grid-content bg-purple-light">
+                    <el-form-item label="班级编号" prop="id">
+                      <el-input v-model="form.id"></el-input>
+                    </el-form-item>
+                  </div>
+                </el-col>
+                <el-col :span="6">
+                  <div class="grid-content bg-purple-light">
+                    <el-form-item label="班级名称" prop="name">
+                      <el-input v-model="form.name"></el-input>
+                    </el-form-item>
+                  </div>
+                </el-col>
+                <el-col :span="6">
+                  <div class="grid-content bg-purple-light">
+                    <el-form-item label="建班年月" prop="date">
+                      <el-input v-model="form.found_date"></el-input>
+                    </el-form-item>
+                  </div>
+                </el-col>
+                <el-col :span="6">
+                  <el-button type="warning" plain @click="mysearchData">搜索</el-button>
+                </el-col>
+              </el-row>
+
+              <el-row type="flex" class="row-bg">
+                <el-col :span="6">
+                  <div class="grid-content bg-purple-light">
+                    <el-form-item label="所属年级" prop="grade">
+                      <el-input v-model="form.grade"></el-input>
+                    </el-form-item>
+                  </div>
+                </el-col>
+                <el-col :span="6">
+                  <div class="grid-content bg-purple-light">
+                    <el-form-item label="所属专业" prop="major_id">
+                      <el-input v-model="form.major_id"></el-input>
+                    </el-form-item>
+                  </div>
+                </el-col>
+                <el-col :span="6">
+                  <div class="grid-content bg-purple-light">
+                    <el-form-item label="班主任工号" prop="charge_teacher_id">
+                      <el-input v-model="form.charge_teacher_id"></el-input>
+                    </el-form-item>
+                  </div>
+                </el-col>
+                <el-col :span="6">
+                  <div class="grid-content"></div>
+                </el-col>
+              </el-row>
             </el-form>
           </div>
         </el-collapse-transition>
@@ -170,6 +189,7 @@ export default {
         major_name: "",
         charge_teacher_name: ""
       },
+      searchRules: {},
       rules: {
         id: [{ required: true, message: "请填写班级代码", trigger: "blur" }],
         name: [{ required: true, message: "请填写班级名称", trigger: "blur" }],
@@ -206,10 +226,10 @@ export default {
       this.$http
         .get(url, opt)
         .then(function(res) {
-          if (url === "http://127.0.0.1:8000/api/class/del") {
+          if (url === "/api/class/del") {
             console.log(_this.tableData);
             _this.tableData.splice(_this.delIndex, 1);
-          } else if (url === "http://127.0.0.1:8000/api/class/get") {
+          } else if (url === "/api/class/get") {
             console.log(res);
             _this.tableData = res.data["list"];
           }
@@ -227,18 +247,18 @@ export default {
         .then(function(res) {
           console.log(res);
           var resbody = JSON.parse(res.bodyText);
-          if (url === "http://127.0.0.1:8000/api/class/add") {
+          if (url === "/api/class/add") {
             if (resbody["code"] == 0) {
               _this.$message.error("修改学生信息失败: " + resbody["msg"]);
             } else {
               _this.getAllData();
             }
-          } else if (url === "http://127.0.0.1:8000/api/class/mod") {
+          } else if (url === "/api/class/mod") {
             if (resbody["code"] == 0) {
               _this.$message.error("修改学生信息失败: " + resbody["msg"]);
             } else {
               _this.$http
-                .get("http://127.0.0.1:8000/api/class/get", {
+                .get("/api/class/get", {
                   params: { id: _this.editId }
                 })
                 .then(function(res) {
@@ -270,13 +290,10 @@ export default {
               update: subForm
             };
             // 修改
-            that.sendPostRequest("http://127.0.0.1:8000/api/class/mod", opt);
+            that.sendPostRequest("/api/class/mod", opt);
           } else {
             // 新增
-            that.sendPostRequest(
-              "http://127.0.0.1:8000/api/class/add",
-              that.simplify(that.form)
-            );
+            that.sendPostRequest("/api/class/add", that.simplify(that.form));
           }
 
           that.dialogFormVisible = false;
@@ -291,7 +308,7 @@ export default {
     getAllData() {
       var _this = this;
       this.$http
-        .get("http://127.0.0.1:8000/api/class/get")
+        .get("/api/class/get")
         .then(function(res) {
           var resbody = JSON.parse(res.bodyText);
           if (resbody["code"] == 0) {
@@ -327,14 +344,14 @@ export default {
     delData() {
       var _this = this;
       _this.dialogVisible = false;
-      this.sendGetRequest("http://127.0.0.1:8000/api/class/del", {
+      this.sendGetRequest("/api/class/del", {
         params: { id: this.delId }
       });
     },
 
     mysearchData() {
       console.log(this.simplify(this.form));
-      this.sendGetRequest("http://127.0.0.1:8000/api/class/get", {
+      this.sendGetRequest("/api/class/get", {
         params: this.simplify(this.form)
       });
     },

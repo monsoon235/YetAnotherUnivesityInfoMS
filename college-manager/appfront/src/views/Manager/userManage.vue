@@ -1,56 +1,77 @@
 <template>
-	<div>
-		<!-- <div style='height:90px'>
+  <div>
+    <!-- <div style='height:90px'>
       <span class='font'>欢迎进入账号信息管理模块</span>
       <p class="text">小贴士：定期清理无效账户，能够提升系统效率哦</p>  
-    </div> -->
+    </div>-->
     <el-row>
-        <el-button type="primary" @click="dialogFormVisible = true">新增</el-button>
-        <div class="searchbox" style="display: inline-block; float: right;">
-          <input class="sc" type="text" placeholder="请输入用户名或用户类型" style="width: 300px; margin-right: 20px; height: 32px; border-radius: 1px solid #302d1c; margin-bottom: -3px; position: relative; top: 3px;"/>
-          <el-button type="warning" plain @click="searchData">搜索</el-button>
-          <el-button type="danger" plain @click="getAllData()">刷新</el-button>
-        </div>
+      <div>
+        <el-form
+          :inline="true"
+          :model="form"
+          :rules="searchRules"
+          ref="form"
+          label-width="100px"
+          class="demo-ruleForm"
+        >
+          <el-row type="flex" class="row-bg">
+            <el-col :span="6">
+              <div class="grid-content bg-purple-light">
+                <el-form-item label="学工号" prop="id">
+                  <el-input v-model="form.id"></el-input>
+                </el-form-item>
+              </div>
+            </el-col>
+            <el-col :span="6">
+              <div class="grid-content bg-purple-light">
+                <el-form-item label="类型" prop="category">
+                  <el-select v-model="form.category" placeholder="请选择">
+                    <el-option label="教师" value="教师" autocomplete="off"></el-option>
+                    <el-option label="学生" value="学生" autocomplete="off"></el-option>
+                  </el-select>
+                </el-form-item>
+              </div>
+            </el-col>
+            <el-col :span="6">
+              <div class="grid-content"></div>
+            </el-col>
+            <el-col :span="6">
+              <div class="grid-content"></div>
+            </el-col>
+            <el-col :span="3">
+              <el-button type="warning" plain @click="mysearchData()">搜索</el-button>
+            </el-col>
+            <el-col :span="3">
+              <el-button type="danger" plain @click="getAllData()">刷新</el-button>
+            </el-col>
+          </el-row>
+        </el-form>
+      </div>
     </el-row>
-		<el-table
-	      :data="tableData"
-	      stripe
-	      style="width: 100%">
-	   		<el-table-column
-	        prop="username"
-	        label="账户名">
-	      </el-table-column>
-	      <el-table-column
-	        prop="password"
-	        label="密码">
-	      </el-table-column>
-	      <el-table-column
-	        prop="category"
-	        label="类型">
-	      </el-table-column>
-	       <el-table-column
-	        label="操作">
-	        <template slot-scope="scope">
-	          <el-button type="primary" @click="editData(scope.$index)">修改</el-button>
-	          <el-button type="danger" @click="openDialog(scope.$index)">删除</el-button>
-	        </template>
-	      </el-table-column>
+    <el-table :data="tableData" stripe style="width: 100%">
+      <el-table-column prop="id" label="账户名"></el-table-column>
+      <el-table-column prop="password" label="密码"></el-table-column>
+      <el-table-column prop="category" label="类型"></el-table-column>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button type="primary" @click="editData(scope.$index)">修改</el-button>
+        </template>
+      </el-table-column>
     </el-table>
-    
 
-	<el-dialog title="填写你的信息" :visible.sync="dialogFormVisible" style="height: 100%">
+    <el-dialog title="填写你的信息" :visible.sync="dialogFormVisible" style="height: 100%">
       <el-form :model="form" :rules="rules" ref="form">
-      	<el-form-item label="账户名" prop="username" autocomplete="off">
-          <el-input v-model="form.username" autocomplete="off"></el-input>
+        <el-form-item label="账户名" prop="id" autocomplete="off">
+          <el-input v-model="form.id" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
           <el-input v-model="form.password" autocomplete="off"></el-input>
         </el-form-item>
-       <!--  <el-form-item label="类型" prop="category">
+        <!--  <el-form-item label="类型" prop="category">
           <el-input v-model="form.category" autocomplete="off"></el-input>
-        </el-form-item> -->
-        <el-form-item label="请选择类型" prop="category">
-          <el-select style='width: 100%' v-model="form.category" placeholder="请选择注册类型">
+        </el-form-item>-->
+        <el-form-item label="类型" prop="category">
+          <el-select style="width: 100%" v-model="form.category">
             <el-option label="学生" value="student" autocomplete="off"></el-option>
             <el-option label="教师" value="teacher" autocomplete="off"></el-option>
             <!-- <el-option label="教学管理者" value="manager" autocomplete="off"></el-option> -->
@@ -62,158 +83,288 @@
         <el-button type="primary" @click="submitFrom">确 定</el-button>
       </div>
     </el-dialog>
-    <el-dialog
-      title="提示"
-      :visible.sync="dialogVisible"
-      width="30%">
-      <span>确定要删除信息</span>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="delData">确 定</el-button>
-      </span>
-    </el-dialog>
-	</div>
+  </div>
 </template>
 <style lang='scss'>
-	 @import "../../static/css/base.scss";
-	.font {
-		@include fontTwo()
-	}
-  .text {
-    @include fontThree()
+@import "../../static/css/base.scss";
+.font {
+  @include fontTwo();
+}
+.text {
+  @include fontThree();
+}
+.el-row {
+  margin-bottom: 20px;
+  &:last-child {
+    margin-bottom: 0;
   }
+}
+.el-col {
+  border-radius: 4px;
+}
+.bg-purple-light {
+  background: #e5e9f2;
+}
+.grid-content {
+  border-radius: 4px;
+  min-height: 36px;
+}
+.row-bg {
+  padding: 10px 0;
+  background-color: #f9fafc;
+}
 </style>
 <script>
 export default {
-	name: "index",
-	data() {
+  name: "index",
+  data() {
     return {
       dialogVisible: false,
       tableData: [],
       dialogFormVisible: false,
       isEdit: false, //是否修改
-      editId: '',
-      delId: '',
+      editId: "",
+      delId: "",
       form: {
-      	username: '',
+        id: "",
         password: "",
-        category: "",
+        category: ""
       },
+      searchRules: {},
       rules: {
-        username: [
-          { required: true, message: '必填', trigger: 'blur' },
-          { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
-          // { min: 2, max: 6, message: '长度在 2 到 6 个字符', trigger: 'blur' }
+        id: [
+          { required: true, message: "必填", trigger: "blur" },
+          { min: 3, max: 20, message: "长度在 3 到 20 个字符", trigger: "blur" }
         ]
       }
-    }
+    };
   },
-	methods: {
-		// 获取所有的用户信息
-		getAllData() {
-			var _this = this
-	      this.$http.get('/users/all').then(function (res) {
-        console.log(res)
-        _this.tableData = res.data
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
+  methods: {
+    // 驼峰转换下划线
+    toLine(name) {
+      return name.replace(/([A-Z])/g, "_$1").toLowerCase();
     },
-    // 发送请求封装的一个函数
-		sendRequest(url, opt={}) {
-      var _this = this
-      this.$http.post(url, opt).then(function (res) {
-        console.log(res)
 
-        // 将数据存储起来
-        if(url === '/users/addUsers') {
-          console.log("添加用户信息")
-          _this.tableData.push(res.data)
-        } else if(url === '/users/editUsers') {
-          console.log("编辑用户信息")
-          _this.getAllData()
-        } 
-        
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
+    simplify(obj) {
+      let newobj = new Object();
+      for (let key in obj) {
+        if (obj[key]) newobj[key] = obj[key];
+      }
+      return newobj;
     },
-    submitFrom() {
-      const that = this
-      this.$refs['form'].validate((valid) => {
-        if (valid) {
-          if(that.isEdit) {
-            let opt = that.form;
-            opt._id = that.editId
-            // 修改
-              that.sendRequest('/users/editUsers', opt)
-              // this.getAllData()
-            } else {
-              // 新增
-              that.sendRequest('/users/addUsers', that.form)
-              // this.getAllData()
+
+    sendGetRequest(url, opt = {}) {
+      var _this = this;
+      this.$http
+        .get(url, opt)
+        .then(function(res) {
+          console.log(res);
+          if (url === "/api/teacher/get") {
+            _this.tableData = [];
+            for (let i = 0; i < res.data["list"].length; i++) {
+              let newform = { id: res.data["list"][i]["id"], category: "教师" };
+              _this.tableData.push(newform);
             }
-          // that.getAllData()
-          that.dialogFormVisible = false
+          } else if (url === "/api/student/get") {
+            _this.tableData = [];
+            for (let i = 0; i < res.data["list"].length; i++) {
+              let newform = { id: res.data["list"][i]["id"], category: "教师" };
+              _this.tableData.push(newform);
+            }
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+
+    sendPostRequest(url, opt = {}) {
+      var _this = this;
+      console.log(opt);
+      this.$http
+        .post(url, JSON.stringify(opt), { emulateJSON: true })
+        .then(function(res) {
+          console.log(res);
+          var resbody = JSON.parse(res.bodyText);
+
+          if (url === "/api/password/admin_mod") {
+            if (resbody["code"] == 0) {
+              _this.$message.error("修改账户信息失败：" + resbody["msg"]);
+            }
+          } else {
+            _this.$message.error("invalid request");
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+
+    submitFrom() {
+      const that = this;
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          if (that.isEdit) {
+            let subForm = that.form;
+            delete subForm.id;
+            let opt = {
+              where: {
+                id: that.editId
+              },
+              update: subForm
+            };
+            // 修改
+            that.sendPostRequest("/api/password/admin_mod", opt);
+          }
+          that.dialogFormVisible = false;
         } else {
-          console.log('error submit!!');
+          console.log("error submit!!");
           return false;
         }
-      });  
+      });
     },
+
+    // 请求所有数据
+    getAllData() {
+      var _this = this;
+      this.$http
+        .get("/api/teacher/get")
+        .then(function(res) {
+          var resbody = JSON.parse(res.bodyText);
+          if (resbody["code"] == 0) {
+            _this.$message.error("查询用户失败");
+          } else {
+            _this.tableData = [];
+            for (let i = 0; i < res.data["list"].length; i++) {
+              let newform = { id: res.data["list"][i]["id"], category: "教师" };
+              _this.tableData.push(newform);
+            }
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+      this.$http
+        .get("/api/student/get")
+        .then(function(res) {
+          var resbody = JSON.parse(res.bodyText);
+          if (resbody["code"] == 0) {
+            _this.$message.error("查询用户失败");
+          } else {
+            for (let i = 0; i < res.data["list"].length; i++) {
+              let newform = { id: res.data["list"][i]["id"], category: "学生" };
+              _this.tableData.push(newform);
+            }
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+
     editData(index) {
-      // const selfData = this.tableData[index]
-      // this.editId = selfData._id
-      this.editId = this.tableData[index]._id
-      this.dialogFormVisible = true
-      this.isEdit = true
-      this.form.username = this.tableData[index].username
-      this.form.password = this.tableData[index].password
-      this.form.category = this.tableData[index].category
-      // this.$http.post('/api/editStudent', {_id: id}).then(function (res) {
-      //  console.log(res.data)
-      // })
+      const selfData = this.tableData[index];
+      this.editIndex = index;
+      this.editId = selfData.id;
+      this.dialogFormVisible = true;
+      this.isEdit = true;
+      this.form.id = selfData.id;
+      this.form.password = selfData.password;
     },
-	  openDialog(index) {
-      this.delId = this.tableData[index]._id
-      this.dialogVisible = true
-      this.username = this.tableData[index].username
 
-	  },
-	  delData() {
-      var _this = this
-      this.$http.post('/users/delUsers', {username: this.username}).then(function (res) {
-       _this.tableData = res.data.data
-      })
-	    this.dialogVisible=false
-	  },
+    openDialog(index) {
+      this.delId = this.tableData[index]["id"];
+      this.delIndex = index;
+      this.dialogVisible = true;
+    },
 
-    // 模糊查询
-    searchData() {
-      var _this = this
-      console.log(_this.tableData)
-      var result = _this.tableData.filter(function(value, index, arr) {
-        // console.log(value)
-        // console.log(document.getElementsByClassName('sc')[0].value)
-        return document.getElementsByClassName('sc')[0].value == value.username 
-          || document.getElementsByClassName('sc')[0].value == value.category 
-      })
-      console.log(result)
-      _this.tableData = result
+    mysearchData() {
+      console.log(this.form);
+      switch (this.form.category) {
+        case "学生":
+          this.sendGetRequest("/api/student/get", {
+            params: this.simplify(this.form)
+          });
+          break;
+        case "教师":
+          this.sendGetRequest("/api/teacher/get", {
+            params: this.simplify(this.form)
+          });
+          break;
+        default:
+          var _this = this;
+          this.$http
+            .get("/api/teacher/get", {
+              params: this.simplify(this.form)
+            })
+            .then(function(res) {
+              var resbody = JSON.parse(res.bodyText);
+              if (resbody["code"] == 0) {
+                _this.$message.error("查询用户失败");
+              } else {
+                _this.tableData = [];
+                for (let i = 0; i < res.data["list"].length; i++) {
+                  let newform = {
+                    id: res.data["list"][i]["id"],
+                    category: "教师"
+                  };
+                  _this.tableData.push(newform);
+                }
+              }
+            })
+            .catch(function(error) {
+              console.log(error);
+            });
+          this.$http
+            .get("/api/student/get", {
+              params: this.simplify(this.form)
+            })
+            .then(function(res) {
+              var resbody = JSON.parse(res.bodyText);
+              if (resbody["code"] == 0) {
+                _this.$message.error("查询用户失败");
+              } else {
+                for (let i = 0; i < res.data["list"].length; i++) {
+                  let newform = {
+                    id: res.data["list"][i]["id"],
+                    category: "学生"
+                  };
+                  _this.tableData.push(newform);
+                }
+              }
+            })
+            .catch(function(error) {
+              console.log(error);
+            });
+          break;
+      }
+    },
+
+    reload() {
+      this.isRouterAlive = false; //先关闭，
+      this.$nextTick(function() {
+        this.isRouterAlive = true; //再打开
+      });
+    },
+
+    handleOpen(key, keyPath) {
+      console.log(key, keyPath);
+    },
+
+    handleClose(key, keyPath) {
+      console.log(key, keyPath);
     }
-	},	
+  },
 
   watch: {
-	  dialogFormVisible() {
-	    if(!this.dialogFormVisible) this.isEdit=false
-	  }
-	},
+    dialogFormVisible() {
+      if (!this.dialogFormVisible) this.isEdit = false;
+    }
+  },
 
   mounted: function() {
     // 组件创建时候去获取所有的用户数据
     this.getAllData();
-	}
-}
+  }
+};
 </script>
