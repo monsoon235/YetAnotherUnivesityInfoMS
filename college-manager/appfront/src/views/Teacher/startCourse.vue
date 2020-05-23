@@ -178,6 +178,22 @@ export default {
       },
   }},
 methods: {
+    addtest(){
+      var _this = this
+      this.$http.post(url, JSON.stringify(opt),{emulateJSON:true}).then(function (res) {
+        if(url === 'http://127.0.0.1:8000/api/lecture/add') {
+          console.log("添加用户信息")
+          console.log(res)
+          _this.tableData.push(res.data)
+          _this.getAllData()
+        }
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+
+    },
+
     simplify(obj) {
       let newobj = new Object();
       for (let key in obj) {
@@ -198,11 +214,11 @@ methods: {
 		// 获取所有的用户信息
     getAllData() {
       var _this = this
-      this.$http.get('http://127.0.0.1:8000/api/lecture/get').then(function (res) {
+      this.$http.get('http://127.0.0.1:8000/api/lecture/get',{'teacher_id':JSON.parse(window.localStorage.teaInfo).id}).then(function (res) {
         console.log(res)
         var resbody = JSON.parse(res.bodyText)
         if(resbody["code"] == 0)
-          _this.$message.error('查询学生失败')
+          _this.$message.error('开课信息失败')
         else
           _this.tableData = res.data["list"]
       })

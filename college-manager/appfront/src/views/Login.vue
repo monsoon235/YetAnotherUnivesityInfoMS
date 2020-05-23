@@ -94,6 +94,7 @@ export default {
       }
     },
     methods: {
+
     studentLogin() {
         setTimeout(() => this.$router.push({ path:'/student/start'}), 800)
     },
@@ -105,6 +106,7 @@ export default {
     managerLogin() {
       setTimeout(() => this.$router.push({ path:'/Manager/start'}), 800)
     },
+
 
     submitForm(formName) {
         this.$refs[formName].validate((valid) => {

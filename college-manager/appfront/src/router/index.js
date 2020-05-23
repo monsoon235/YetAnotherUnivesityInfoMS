@@ -79,10 +79,10 @@ export default new Router({
       { path: '*', component: teaStart }
     ]
   },
-  { path: 
-    '/student', 
-    name: 'Student', 
-    component: Student, 
+  { path:
+    '/student',
+    name: 'Student',
+    component: Student,
     children: [
       { path: 'stuMessage', component: stuMessage},
       { path: 'classMessage', component: stuClassMessage},
