@@ -48,7 +48,9 @@
                 <el-col :span="6">
                   <div class="grid-content bg-purple-light">
                     <el-form-item label="建班年月" prop="date">
-                      <el-input v-model="form.found_date"></el-input>
+                      <el-col :span="11">
+                        <el-date-picker type="date" placeholder="选择日期" v-model="form.found_date"></el-date-picker>
+                      </el-col>
                     </el-form-item>
                   </div>
                 </el-col>
@@ -123,7 +125,9 @@
               <el-input v-model="form.name" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="建班年月" prop="found_date">
-              <el-input v-model="form.found_date" autocomplete="off"></el-input>
+              <el-col :span="11">
+                <el-date-picker type="date" placeholder="选择日期" v-model="form.found_date"></el-date-picker>
+              </el-col>
             </el-form-item>
             <el-form-item label="所属年级" prop="grade">
               <el-input v-model="form.grade" autocomplete="off"></el-input>
@@ -279,6 +283,7 @@ export default {
         if (valid) {
           if (that.isEdit) {
             let subForm = that.form;
+            delete subForm.id;
             delete subForm.lecture;
             delete subForm.student;
             delete subForm.major_name;

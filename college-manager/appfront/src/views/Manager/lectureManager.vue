@@ -98,7 +98,12 @@
         <el-table-column prop="major_name" label="专业名称" align="center"></el-table-column>
         <el-table-column prop="teacher_id" label="教师工号" align="center"></el-table-column>
         <el-table-column prop="teacher_name" label="授课教师" align="center"></el-table-column>
-        <el-table-column prop="assessment" label="考核方式" align="center"></el-table-column>
+        <el-table-column label="考核方式" align="center">
+          <template slot-scope="scope">
+            <i v-if="scope.row.assessment===0">考试</i>
+            <i v-else>当堂答辩</i>
+          </template>
+        </el-table-column>
         <el-table-column prop="year" label="开课日期" align="center"></el-table-column>
         <el-table-column label="开课学期" align="center">
           <template slot-scope="scope">
