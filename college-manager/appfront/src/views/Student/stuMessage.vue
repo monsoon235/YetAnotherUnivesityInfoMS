@@ -13,8 +13,11 @@
         label="学号">
       </el-table-column>
       <el-table-column
-        prop="person_id_type"
         label="证件类型">
+        <template slot-scope="scope">
+          <i v-if="scope.row.person_id_type==0">身份证</i>
+          <i v-else>护照</i>
+        </template>
       </el-table-column>
       <el-table-column
         prop="person_id"
@@ -27,7 +30,8 @@
       <el-table-column
         label="性别">
         <template slot-scope="scope">
-          {{(scope.row.gender==1)?男:女}}
+          <i v-if="scope.row.gender==0">男</i>
+          <i v-else>女</i>
         </template>
       </el-table-column>
       <el-table-column
@@ -81,20 +85,19 @@
         <el-form-item label="姓名" prop="person_name">
           <el-input v-model="form.person_name" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="证件类型" prop="person_id_type">
+        <el-form-item label="证件类型">
           <el-select style="width:85%" v-model="form.person_id_type" placeholder="请选择证件类型">
-            <el-option label="身份证" value="身份证" autocomplete="off"></el-option>
-            <el-option label="护照" value="护照" autocomplete="off"></el-option>
+            <el-option label="身份证" value="0" autocomplete="off"></el-option>
+            <el-option label="护照" value="1" autocomplete="off"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="证件号" prop="person_id">
             <el-input v-model="form.person_id" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="性别" prop="gender">
+        <el-form-item label="性别">
             <el-select style="width:85%" v-model="form.gender" placeholder="请选择性别">
-              <el-option label="男" value="男" autocomplete="off"></el-option>
-              <el-option label="女" value="女" autocomplete="off"></el-option>
-              <el-option label="保密" value="保密" autocomplete="off"></el-option>
+              <el-option label="男" value="0" autocomplete="off"></el-option>
+              <el-option label="女" value="1" autocomplete="off"></el-option>
             </el-select>
         </el-form-item>
         <el-form-item label="出生日期">
@@ -151,7 +154,7 @@ export default {
       tableData: [],
       dialogFormVisible: false,
       isEdit: false, //是否修改
-      // editId: '',
+      editId: '',
       // delId: '',
       form: {
         person_id_type: '',
@@ -219,7 +222,7 @@ export default {
             let opt = that.form
             // opt._id = that.editId
             // 修改
-              that.sendRequest('/api/student/mod',{"where":{"id":JSON.parse(window.localStorage.stuInfo).id},"update":opt})
+              that.sendRequest('/api/student/mod',{"where":{"id":this.editId},"update":opt})
             }      
           that.dialogFormVisible = false
         } else {
@@ -236,24 +239,35 @@ export default {
       // console.log(this.form.className.age)
       var _this = this
       // console.log(JSON.parse(window.localStorage.stuInfo).username)
-      this.$http.get('/api/student/get').then(function (res) {
+      this.$http.get('/api/student/get',{params:{id:localStorage['id']}}).then(function (res) {
         if(res.data.list.length === 0||res.data.code ==0) {
             alert('该系统还没有您的个人信息，请联系教学管理员');
             return;
         }
-        _this.tableData.push(res.data.list)
+        _this.tableData=res.data.list
+        this.dataFit()
       })
       .catch(function (error) {
         console.log(error)
       })
     },
-    
+    dataFit(){
+      var mydate=new Date()
+      var year=mydate.getFullYear()
+      for(var i=0;i<this.tableData.length;i++){
+        this.tableData[i].birth=this.tableData[i].birth.slice(0,10)
+        this.tableData[i].age=(year-this.tableData[i].birth.slice(0,4))
+        this.tableData[i].enroll_date=this.tableData[i].enroll_date.slice(0,10)
+      }
+    },
     editData(index) {
       const selfData = this.tableData[index]
       // this.editId = selfData._id
       this.dialogFormVisible = true
       this.isEdit = true
+      this.editId = selfData.id
       this.form.person_id = selfData.person_id
+      this.form.person_id_type = selfData.person_id_type
       this.form.person_name = selfData.person_name
       this.form.gender = selfData.gender
       this.form.birth = selfData.birth
