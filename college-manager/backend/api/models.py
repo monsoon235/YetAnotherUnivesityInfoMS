@@ -106,8 +106,8 @@ class Adjustment(models.Model):
 
     class ExtraChoice(models.IntegerChoices):
         YES_OR_SUSPEND = 0, 'yes or suspend'  # id=0 时代表 yes, id=1 时代表 suspend
-        NO_SUPPORT_TEACHING = 1, 'no or support_teaching'  # id=0 时代表 no，id=1 时代表 suspend
-        NONE = 2, 'none'  # id=0 时禁止，id=1 时代表团员关系无变化
+        NO_OR_SUPPORT_TEACHING = 1, 'no or support_teaching'  # id=0 时代表 no，id=1 时代表 support_teaching
+        NONE = 2, 'none'  # id=0 时代表团员关系无变化
 
     id = models.AutoField(primary_key=True)
     from_class = models.ForeignKey(Class, on_delete=models.PROTECT, related_name='from_class_id')
