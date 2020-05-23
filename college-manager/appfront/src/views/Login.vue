@@ -151,6 +151,7 @@ export default {
                           case 0:
                             setTimeout(() => this.$router.push({ path:'/manager/start'}), 800)
                             break;
+                          localStorage.setItem("id", JSON.stringify(res.data.id));
                         }
                       }
                       catch(err) {
