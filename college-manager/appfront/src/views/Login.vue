@@ -14,6 +14,11 @@
             <el-button type="info" @click="submitForm('ruleForm')">登录</el-button>
             <el-button type="info" @click="resetForm('ruleForm')">重置</el-button>
           </el-form-item>
+          <!-- <el-form-item>
+            <el-button type="info" @click="studentLogin()">学生直接登录</el-button>
+            <el-button type="info" @click="teacherLogin()">教师直接登录</el-button>
+            <el-button type="info" @click="managerLogin()">管理员直接登录</el-button>
+          </el-form-item> -->
         </el-form-item>
       </el-form>
     </div>
@@ -21,7 +26,6 @@
 </template>
 
 <style lang='scss'>
-// @import 'element-ui/lib/theme-chalk/index.css';
 .from {
   margin: 0px auto;
   width: 500px;
@@ -90,6 +94,19 @@ export default {
       }
     },
     methods: {
+
+    studentLogin() {
+        setTimeout(() => this.$router.push({ path:'/student/start'}), 800)
+    },
+
+    teacherLogin() {
+      setTimeout(() => this.$router.push({ path:'/teacher/start'}), 800)
+    },
+
+    managerLogin() {
+      setTimeout(() => this.$router.push({ path:'/Manager/start'}), 800)
+    },
+
 
     submitForm(formName) {
         this.$refs[formName].validate((valid) => {
