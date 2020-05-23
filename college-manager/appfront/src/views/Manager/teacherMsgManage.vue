@@ -1,6 +1,6 @@
 <template>
   <div class="index">
-    <!-- <div style='height: 60px'> 
+    <!-- <div style='height: 60px'>
       <span class='font'>欢迎进入本校学生信息管理模块</span>
       <p class='text'>学生是挚友，是学校引以为傲的资本，管理学生信息非常重要哦</p>
     </div>-->
@@ -55,10 +55,10 @@
               <el-col :span="6">
                 <div class="grid-content bg-purple-light">
                   <el-form-item label="性别" prop="gender">
-                    <el-radio-group v-model="form.gender">
-                      <el-radio label="男"></el-radio>
-                      <el-radio label="女"></el-radio>
-                    </el-radio-group>
+                    <el-select v-model="form.gender" multiple placeholder="请选择性别">
+                      <el-option label="男" value="0" autocomplete="off"></el-option>
+                      <el-option label="女" value="1" autocomplete="off"></el-option>
+                    </el-select>
                   </el-form-item>
                 </div>
               </el-col>
@@ -72,8 +72,8 @@
                 <div class="grid-content bg-purple-light">
                   <el-form-item label="职称" prop="titles">
                     <el-select v-model="form.titles" multiple placeholder="请选择职称">
-                      <el-option label="教授" value="教授" autocomplete="off"></el-option>
-                      <el-option label="副教授" value="副教授" autocomplete="off"></el-option>
+                      <el-option label="教授" value="0" autocomplete="off"></el-option>
+                      <el-option label="副教授" value="1" autocomplete="off"></el-option>
                     </el-select>
                   </el-form-item>
                 </div>
@@ -109,10 +109,10 @@
               <el-col :span="6">
                 <div class="grid-content bg-purple-light">
                   <el-form-item label="身份证类型" prop="person_id_type">
-                    <el-radio-group v-model="form.person_id_type">
-                      <el-radio label="身份证"></el-radio>
-                      <el-radio label="护照"></el-radio>
-                    </el-radio-group>
+                    <el-select v-model="form.person_id_type" multiple placeholder="请选择类型">
+                      <el-option label="身份证" value="0" autocomplete="off"></el-option>
+                      <el-option label="护照" value="1" autocomplete="off"></el-option>
+                    </el-select>
                   </el-form-item>
                 </div>
               </el-col>
@@ -308,14 +308,14 @@
         </el-form-item>
         <el-form-item label="性别" prop="gender">
           <el-select v-model="form.gender" placeholder="请选择性别" style="margin-left: -280px;">
-            <el-option label="男" value="男" autocomplete="off"></el-option>
-            <el-option label="女" value="女" autocomplete="off"></el-option>
+            <el-option label="男" value="0" autocomplete="off"></el-option>
+            <el-option label="女" value="1" autocomplete="off"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="职称" prop="title">
           <el-select v-model="form.title" placeholder="请选择职称" style="margin-left: -280px;">
-            <el-option label="教授" value="教授" autocomplete="off"></el-option>
-            <el-option label="副教授" value="副教授" autocomplete="off"></el-option>
+            <el-option label="教授" value="0" autocomplete="off"></el-option>
+            <el-option label="副教授" value="1" autocomplete="off"></el-option>
           </el-select>
         </el-form-item>
         <!-- <el-form-item label="性别">
@@ -336,10 +336,10 @@
         </el-form-item>
 
         <el-form-item label="身份证类型" prop="person_id_type">
-          <el-radio-group v-model="form.person_id_type" style="margin-left: -280px;">
-            <el-radio label="身份证"></el-radio>
-            <el-radio label="护照"></el-radio>
-          </el-radio-group>
+          <el-select v-model="form.person_id_type" style="margin-left: -280px;">
+            <el-option label="身份证" value="0" autocomplete="off"></el-option>
+            <el-option label="护照" value="1" autocomplete="off"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="身份证号" prop="person_id" autocomplete="off">
           <el-input v-model="form.person_id" autocomplete="off"></el-input>
@@ -448,10 +448,10 @@ export default {
       form: {
         id: "", //工号
         person_name: "",
-        gender: "",
-        title: "",
+        gender: null,
+        title: null,
         titles: [],
-        person_id_type: "",
+        person_id_type: null,
         person_id: "", //身份证号
         country: "",
         birth: "",
@@ -467,7 +467,7 @@ export default {
 
       //两套rule体系
       searchRules: {
-        name: [
+        person_name: [
           { min: 2, max: 5, message: "长度在 2 到 8 个字符", trigger: "blur" }
         ]
       },
@@ -494,29 +494,12 @@ export default {
       for (let key in obj) {
         if (obj[key]) newobj[key] = obj[key];
       }
-      if (newobj["person_id_type"]) {
-        newobj["person_id_type"] = this.choiceMap[newobj["person_id_type"]];
-      }
-      if (newobj["gender"]) {
-        newobj["gender"] = this.choiceMap[newobj["gender"]];
-      }
-      if (newobj["title"]) {
-        newobj["title"] = this.choiceMap[newobj["title"]];
-      }
       return newobj;
     },
 
     sendGetRequest(url, opt = {}) {
       var _this = this;
-      if (opt["person_id_type"]) {
-        opt["person_id_type"] = this.choiceMap[opt["person_id_type"]];
-      }
-      if (opt["gender"]) {
-        opt["gender"] = this.choiceMap[opt["gender"]];
-      }
-      if (opt["title"]) {
-        opt["title"] = this.choiceMap[opt["title"]];
-      }
+
       this.$http
         .get(url, opt)
         .then(function(res) {
@@ -535,29 +518,7 @@ export default {
 
     sendPostRequest(url, opt = {}) {
       var _this = this;
-      if (opt.update) {
-        if (opt["update"]["person_id_type"]) {
-          opt["update"]["person_id_type"] = this.choiceMap[
-            opt["update"]["person_id_type"]
-          ];
-        }
-        if (opt["update"]["gender"]) {
-          opt["update"]["gender"] = this.choiceMap[opt["update"]["gender"]];
-        }
-        if (opt["update"]["title"]) {
-          opt["update"]["title"] = this.choiceMap[opt["update"]["title"]];
-        }
-      } else {
-        if (opt["person_id_type"]) {
-          opt["person_id_type"] = this.choiceMap[opt["person_id_type"]];
-        }
-        if (opt["gender"]) {
-          opt["gender"] = this.choiceMap[opt["gender"]];
-        }
-        if (opt["title"]) {
-          opt["title"] = this.choiceMap[opt["title"]];
-        }
-      }
+
       this.$http
         .post(url, JSON.stringify(opt), { emulateJSON: true })
         .then(function(res) {
@@ -582,13 +543,14 @@ export default {
                   console.log(res);
                   _this.tableData[_this.editIndex] = res.data["list"][0];
                 });
+              console.log("OK");
             }
           }
-          _this.reload();
         })
         .catch(function(error) {
           console.log(error);
         });
+      _this.reload();
     },
 
     submitFrom() {

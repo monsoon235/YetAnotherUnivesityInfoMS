@@ -28,8 +28,8 @@
             <el-row type="flex" class="row-bg">
               <el-col :span="6">
                 <div class="grid-content bg-purple-light">
-                  <el-form-item label="姓名" prop="name">
-                    <el-input v-model="form.name"></el-input>
+                  <el-form-item label="姓名" prop="person_name">
+                    <el-input v-model="form.person_name"></el-input>
                   </el-form-item>
                 </div>
               </el-col>
@@ -50,10 +50,10 @@
               <el-col :span="6">
                 <div class="grid-content bg-purple-light">
                   <el-form-item label="性别" prop="gender" style="position: relative;">
-                    <el-radio-group v-model="form.gender">
-                      <el-radio label="男"></el-radio>
-                      <el-radio label="女"></el-radio>
-                    </el-radio-group>
+                    <el-select v-model="form.gender" placeholder="请选择性别">
+                      <el-option label="男" value="0" autocomplete="off"></el-option>
+                      <el-option label="女" value="1" autocomplete="off"></el-option>
+                    </el-select>
                   </el-form-item>
                 </div>
               </el-col>
@@ -71,28 +71,16 @@
                 </div>
               </el-col>
               <el-col :span="6">
-                <div class="grid-content bg-purple-light">
-                  <el-form-item label="班级名称" prop="class_name">
-                    <el-input v-model="form.class_name"></el-input>
-                  </el-form-item>
-                </div>
+                <div class="grid-content"></div>
               </el-col>
               <el-col :span="6">
-                <div class="grid-content bg-purple-light">
-                  <el-form-item label="专业代码" prop="major_id">
-                    <el-input v-model="form.major_id"></el-input>
-                  </el-form-item>
-                </div>
+                <div class="grid-content"></div>
               </el-col>
               <el-col :span="6">
-                <div class="grid-content bg-purple-light">
-                  <el-form-item label="专业名称" prop="major_name">
-                    <el-input v-model="form.major_name"></el-input>
-                  </el-form-item>
-                </div>
+                <div class="grid-content"></div>
               </el-col>
               <el-col :span="6">
-                <div class="grid-content bg-purple"></div>
+                <div class="grid-content"></div>
               </el-col>
             </el-row>
 
@@ -100,10 +88,10 @@
               <el-col :span="6">
                 <div class="grid-content bg-purple-light">
                   <el-form-item label="身份证类型" prop="person_id_type">
-                    <el-radio-group v-model="form.person_id_type">
-                      <el-radio label="身份证"></el-radio>
-                      <el-radio label="护照"></el-radio>
-                    </el-radio-group>
+                    <el-select v-model="form.person_id_type">
+                      <el-option label="身份证" value="0" autocomplete="off"></el-option>
+                      <el-option label="护照" value="1" autocomplete="off"></el-option>
+                    </el-select>
                   </el-form-item>
                 </div>
               </el-col>
@@ -196,11 +184,16 @@
     <el-scrollbar>
       <el-table :data="tableData" align="center">
         <el-table-column prop="id" label="学号" align="center" v-if="checkList.includes('学号')"></el-table-column>
-        <el-table-column prop="name" label="姓名" align="center" v-if="checkList.includes('姓名')"></el-table-column>
+        <el-table-column
+          prop="person_name"
+          label="姓名"
+          align="center"
+          v-if="checkList.includes('姓名')"
+        ></el-table-column>
         <el-table-column label="性别" align="center" v-if="checkList.includes('性别')">
           <template slot-scope="scope">
-            <i v-if="scope.row.gender===0">男</i>
-            <i v-else>女</i>
+            <div class="cell" v-if="scope.row.gender===0">男</div>
+            <div class="cell" v-else>女</div>
           </template>
         </el-table-column>
         <el-table-column
@@ -241,8 +234,8 @@
           v-if="checkList.includes('身份证类型')"
         >
           <template slot-scope="scope">
-            <i v-if="scope.row.person_id_type===0">身份证</i>
-            <i v-else>护照</i>
+            <div class="cell" v-if="scope.row.person_id_type===0">身份证</div>
+            <div class="cell" v-else>护照</div>
           </template>
         </el-table-column>
         <el-table-column
@@ -299,13 +292,13 @@
         <el-form-item label="学号" prop="id" autocomplete="off">
           <el-input v-model="form.id" :disabled="isEdit" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="姓名" prop="name">
-          <el-input v-model="form.name" autocomplete="off"></el-input>
+        <el-form-item label="姓名" prop="person_name">
+          <el-input v-model="form.person_name" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="性别" prop="gender">
-          <el-select v-model="form.gender" placeholder="请选择性别">
-            <el-option label="男" value="男" autocomplete="off"></el-option>
-            <el-option label="女" value="女" autocomplete="off"></el-option>
+          <el-select v-model="form.gender">
+            <el-option label="男" value="0" autocomplete="off"></el-option>
+            <el-option label="女" value="1" autocomplete="off"></el-option>
           </el-select>
         </el-form-item>
         <!-- <el-form-item label="性别">
@@ -324,23 +317,11 @@
           <el-input v-model="form.class_id"></el-input>
         </el-form-item>
 
-        <el-form-item label="班级名称" prop="class_name">
-          <el-input v-model="form.class_name"></el-input>
-        </el-form-item>
-
-        <el-form-item label="专业代码" prop="major_id">
-          <el-input v-model="form.major_id"></el-input>
-        </el-form-item>
-
-        <el-form-item label="专业名称" prop="major_name">
-          <el-input v-model="form.major_name"></el-input>
-        </el-form-item>
-
         <el-form-item label="身份证类型" prop="person_id_type">
-          <el-radio-group v-model="form.person_id_type">
-            <el-radio label="身份证"></el-radio>
-            <el-radio label="护照"></el-radio>
-          </el-radio-group>
+          <el-select v-model="form.person_id_type">
+            <el-option label="身份证" value="0" autocomplete="off"></el-option>
+            <el-option label="护照" value="1" autocomplete="off"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="身份证号" prop="person_id" autocomplete="off">
           <el-input v-model="form.person_id" autocomplete="off"></el-input>
@@ -366,10 +347,9 @@
         <el-form-item label="电子邮箱" prop="email">
           <el-input v-model="form.email"></el-input>
         </el-form-item>
-
-        <!-- <el-form-item label="地址">
-          <el-input v-model="form.adress" autocomplete="off"></el-input>
-        </el-form-item>-->
+        <el-form-item label="登录密码" prop="password">
+          <el-input v-model="form.password" :disabled="isEdit"></el-input>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -479,7 +459,8 @@ export default {
         family_zipcode: "",
         family_tel: "",
         enroll_date: "",
-        email: ""
+        email: "",
+        password: ""
       },
 
       //两套rule体系
@@ -513,19 +494,20 @@ export default {
     simplify(obj) {
       let newobj = new Object();
       for (let key in obj) {
-        if (obj[key]) newobj[key] = obj[key];
+        if (
+          obj[key] &&
+          key !== "major_name" &&
+          key !== "major_id" &&
+          key !== "class_name"
+        )
+          newobj[key] = obj[key];
       }
       return newobj;
     },
 
     sendGetRequest(url, opt = {}) {
       var _this = this;
-      if (opt["person_id_type"]) {
-        opt["person_id_type"] = this.choiceMap[opt["person_id_type"]];
-      }
-      if (opt["gender"]) {
-        opt["gender"] = this.choiceMap[opt["gender"]];
-      }
+
       this.$http
         .get(url, opt)
         .then(function(res) {
@@ -544,23 +526,7 @@ export default {
 
     sendPostRequest(url, opt = {}) {
       var _this = this;
-      if (opt.update) {
-        if (opt["update"]["person_id_type"]) {
-          opt["update"]["person_id_type"] = this.choiceMap[
-            opt["update"]["person_id_type"]
-          ];
-        }
-        if (opt["update"]["gender"]) {
-          opt["update"]["gender"] = this.choiceMap[opt["update"]["gender"]];
-        }
-      } else {
-        if (opt["person_id_type"]) {
-          opt["person_id_type"] = this.choiceMap[opt["person_id_type"]];
-        }
-        if (opt["gender"]) {
-          opt["gender"] = this.choiceMap[opt["gender"]];
-        }
-      }
+
       console.log(opt);
       this.$http
         .post(url, JSON.stringify(opt), { emulateJSON: true })

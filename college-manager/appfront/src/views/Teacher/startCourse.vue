@@ -175,7 +175,7 @@ methods: {
     addtest(){
       var _this = this
       this.$http.post(url, JSON.stringify(opt),{emulateJSON:true}).then(function (res) {
-        if(url === 'http://127.0.0.1:8000/api/lecture/add') {
+        if(url === '/api/lecture/add') {
           console.log("添加用户信息")
           console.log(res)
           _this.tableData.push(res.data)
@@ -208,7 +208,7 @@ methods: {
 		// 获取所有的用户信息
     getAllData() {
       var _this = this
-      this.$http.get('http://127.0.0.1:8000/api/lecture/get',{params:{'teacher_id':localStorage.getItem('id')}}).then(function (res) {
+      this.$http.get('/api/lecture/get',{params:{'teacher_id':localStorage.getItem('id')}}).then(function (res) {
         console.log(res)
         var resbody = JSON.parse(res.bodyText)
         if(resbody["code"] == 0)
@@ -225,13 +225,13 @@ methods: {
 	sendRequest(url, opt={}) {
       var _this = this
       this.$http.post(url, JSON.stringify(opt),{emulateJSON:true}).then(function (res) {
-        if(url === 'http://127.0.0.1:8000/api/lecture/add') {
+        if(url === '/api/lecture/add') {
           console.log("添加用户信息")
           console.log(res)
           _this.tableData.push(res.data)
           _this.getAllData()
         }
-        else if (url === "http://127.0.0.1:8000/api/lecture/mod") {
+        else if (url === "/api/lecture/mod") {
           console.log("编辑用户信息")
           for (let key in opt.update)
             _this.tableData[_this.editIndex][key] = opt.update[key];
@@ -247,12 +247,12 @@ methods: {
     sendGETRequest(url, opt={}) {
       var _this = this
       this.$http.get(url, opt).then(function (res) {
-        if(url === 'http://127.0.0.1:8000/api/lecture/get') {
+        if(url === '/api/lecture/get') {
           console.log("搜索用户信息")
           console.log(res);
           _this.tableData = res.data["list"];
         }
-        else if(url === 'http://127.0.0.1:8000/api/lecture/del') {
+        else if(url === '/api/lecture/del') {
           console.log("删除用户信息")
           console.log(_this.tableData);
           _this.tableData.splice(_this.delIndex, 1);
@@ -282,12 +282,12 @@ methods: {
               update: subForm
             };
             // 修改
-              that.sendRequest('http://127.0.0.1:8000/api/lecture/mod', opt)
+              that.sendRequest('/api/lecture/mod', opt)
               // this.getAllData()
            } else{
               // 新增
               that.form.teacher_id=localStorage.getItem('id')
-              that.sendRequest('http://127.0.0.1:8000/api/lecture/add', that.simplify(that.form))
+              that.sendRequest('/api/lecture/add', that.simplify(that.form))
            }
               // this.getAllData()
           // that.getAllData()
@@ -303,7 +303,7 @@ methods: {
 
     delData() {
       this.dialogVisible=false
-      this.sendGETRequest('http://127.0.0.1:8000/api/lecture/del',{params: { id: this.delId }})
+      this.sendGETRequest('/api/lecture/del',{params: { id: this.delId }})
       this.getAllData()
     },
 
@@ -331,7 +331,7 @@ methods: {
 
   mysearch() {
       console.log(this.simplify(this.form))
-      this.sendGETRequest('http://127.0.0.1:8000/api/lecture/get', {params: this.simplify(this.form)})
+      this.sendGETRequest('/api/lecture/get', {params: this.simplify(this.form)})
   },
 
 

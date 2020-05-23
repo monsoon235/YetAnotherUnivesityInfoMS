@@ -2,7 +2,7 @@
   <div>
     <!-- <div style='height:90px'>
       <span class='font'>欢迎进入账号信息管理模块</span>
-      <p class="text">小贴士：定期清理无效账户，能够提升系统效率哦</p>  
+      <p class="text">小贴士：定期清理无效账户，能够提升系统效率哦</p>
     </div>-->
     <el-row>
       <div>
@@ -134,8 +134,7 @@ export default {
       searchRules: {},
       rules: {
         id: [
-          { required: true, message: "必填", trigger: "blur" },
-          { min: 3, max: 20, message: "长度在 3 到 20 个字符", trigger: "blur" }
+          { required: true, message: "必填", trigger: "blur" }
         ]
       }
     };

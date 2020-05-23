@@ -76,14 +76,18 @@
               </el-col>
               <el-col :span="6">
                 <div class="grid-content bg-purple-light">
-                  <el-form-item label="转出团关系" v-if="form.type==0" prop="yycl_change">
-                    <el-select v-model="form.yycl_change">
+                  <el-form-item label="转出团关系" v-if="form.type==0" prop="extra">
+                    <el-select v-model="form.extra">
                       <el-option label="是" value="0" autocomplete="off"></el-option>
                       <el-option label="否" value="1" autocomplete="off"></el-option>
+                      <el-option label="不是团员" value="2" autocomplete="off"></el-option>
                     </el-select>
                   </el-form-item>
-                  <el-form-item label="降级原因" v-if="form.type==1" prop="reason">
-                    <el-input v-model="form.reason"></el-input>
+                  <el-form-item label="降级原因" v-if="form.type==1" prop="extra">
+                    <el-select v-model="form.extra">
+                      <el-option label="休学" value="0" autocomplete="off"></el-option>
+                      <el-option label="支教" value="1" autocomplete="off"></el-option>
+                    </el-select>
                   </el-form-item>
                 </div>
               </el-col>
@@ -119,11 +123,19 @@
         </el-table-column>
         <el-table-column label="是否转出团关系" align="center">
           <template slot-scope="scope">
-            <i v-if="scope.row.yycl_change===0">是</i>
-            <i v-else>否</i>
+            <i v-if="scope.row.type===1">\</i>
+            <i v-else-if="scope.row.extra===0">是</i>
+            <i v-else-if="scope.row.extra===1">否</i>
+            <i v-else>不是团员</i>
           </template>
         </el-table-column>
-        <el-table-column prop="reason" label="降级原因" align="center"></el-table-column>
+        <el-table-column label="降级原因" align="center">
+          <template slot-scope="scope">
+            <i v-if="scope.row.type===0">\</i>
+            <i v-if="scope.row.extra===0">休学</i>
+            <i v-else>支教</i>
+          </template>
+        </el-table-column>
         <el-table-column prop="from_class_id" label="原班级代码" align="center"></el-table-column>
         <el-table-column prop="to_class_id" label="现班级代码" align="center"></el-table-column>
         <el-table-column prop="date" label="异动日期" align="center"></el-table-column>
@@ -148,14 +160,18 @@
             <el-option label="降级" value="1" autocomplete="off"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="转出团关系" v-if="form.type==0" prop="yycl_change">
-          <el-select v-model="form.yycl_change" placeholder="是否转出">
+        <el-form-item label="转出团关系" v-if="form.type==0" prop="extra">
+          <el-select v-model="form.extra" placeholder="是否转出">
             <el-option label="是" value="0" autocomplete="off"></el-option>
             <el-option label="否" value="1" autocomplete="off"></el-option>
+            <el-option label="不是团员" value="2" autocomplete="off"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="降级原因" v-if="form.type==1" prop="reason">
-          <el-input v-model="form.reason"></el-input>
+        <el-form-item label="降级原因" v-if="form.type==1" prop="extra">
+          <el-select v-model="form.extra" placeholder="请选择">
+            <el-option label="休学" value="0" autocomplete="off"></el-option>
+            <el-option label="支教" value="1" autocomplete="off"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="原班级代码" prop="from_class_id">
           <el-input v-model="form.from_class_id" autocomplete="off"></el-input>
@@ -241,8 +257,7 @@ export default {
         type: "",
         date: "",
         student_id: "",
-        yycl_change: "",
-        reason: ""
+        extra: null
       },
 
       //两套rule体系
@@ -383,8 +398,7 @@ export default {
       this.form.type = selfData.type;
       this.form.date = selfData.date;
       this.form.student_id = selfData.student_id;
-      this.form.yycl_change = selfData.yycl_change;
-      this.form.reason = selfData.reason;
+      this.form.extra = selfData.extra;
     },
 
     openDialog(index) {
