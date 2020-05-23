@@ -21,11 +21,7 @@ n<template>
             <el-button type="info" @click="submitForm('ruleForm')">登录</el-button>
             <el-button type="info" @click="resetForm('ruleForm')">重置</el-button>
           </el-form-item>
-          <el-form-item>
-            <el-button type="info" @click="studentLogin()">学生直接登录</el-button>
-            <el-button type="info" @click="teacherLogin()">教师直接登录</el-button>
-            <el-button type="info" @click="managerLogin()">管理员直接登录</el-button>
-          </el-form-item>
+
           <!-- 跳转到注册界面 -->
           <!-- <router-link to="/register" tag="button" v-text="'去注册'"></router-link> -->
         </el-form-item>
@@ -104,20 +100,6 @@ export default {
       }
     },
     methods: {
-    studentLogin() {
-        //localStorage.setItem("stuInfo", JSON.stringify(res.data.data[0]));
-        setTimeout(() => this.$router.push({ path:'/student/start'}), 800)
-    },
-
-    teacherLogin() {
-      //localStorage.setItem("teaInfo", JSON.stringify(res.data.data[0]));
-      setTimeout(() => this.$router.push({ path:'/teacher/start'}), 800)
-    },
-
-    managerLogin() {
-      //localStorage.setItem("teaInfo", JSON.stringify(res.data.data[0]));
-      setTimeout(() => this.$router.push({ path:'/Manager/start'}), 800)
-    },
 
     submitForm(formName) {
         this.$refs[formName].validate((valid) => {

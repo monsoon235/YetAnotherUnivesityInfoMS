@@ -9,10 +9,6 @@
         </el-container>
         <el-container>
             <el-aside width="260px" height='100%' style="background-color: #B3C0D1">
-               <!--  <el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">
-                    <el-radio-button :label="false">展开</el-radio-button>
-                    <el-radio-button :label="true">收起</el-radio-button>
-                </el-radio-group> -->
                 <el-menu :default-active="this.$route.path" :router="true" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse"  style="background-color: #B3C0D1">
                     <el-submenu index="0">
                         <template slot="title">
@@ -41,60 +37,6 @@
                             <el-menu-item v-for="(item,i) in kkList" :key="i" :index="item.name">{{ item.navItem }}</el-menu-item>
                         </el-menu-item-group>
                     </el-submenu>
-                    <!--<el-submenu index="3">
-                        <template slot="title">
-                            <i class="el-icon-location"></i>
-                            <span slot="title">任课班级管理</span>
-                        </template>
-                        <el-menu-item-group>
-                            <el-menu-item v-for="(item,i) in bjList" :key="i" :index="item.name">{{ item.navItem }}</el-menu-item>
-                        </el-menu-item-group>
-                    </el-submenu>-->
-                    <!--<el-submenu index="4">
-                        <template slot="title">
-                            <i class="el-icon-location"></i>
-                            <span slot="title">学生信息管理</span>
-                        </template>
-                        <el-menu-item-group>
-                            <el-menu-item v-for="(item,i) in xsxxList" :key="i" :index="item.name">{{ item.navItem }}</el-menu-item>
-                        </el-menu-item-group>
-                    </el-submenu>-->
-                    <!--<el-submenu index="5">
-                        <template slot="title">
-                            <i class="el-icon-location"></i>
-                            <span slot="title">学生考试管理</span>
-                        </template>
-                        <el-menu-item-group>
-                            <el-menu-item v-for="(item,i) in ksList" :key="i" :index="item.name">{{ item.navItem }}</el-menu-item>
-                        </el-menu-item-group>
-                    </el-submenu>-->
-                    <!--<el-submenu index="8">
-                        <template slot="title">
-                            <i class="el-icon-location"></i>
-                            <span slot="title">学生成绩管理</span>
-                        </template>
-                        <el-menu-item-group>
-                            <el-menu-item v-for="(item,i) in cjList" :key="i" :index="item.name">{{ item.navItem }}</el-menu-item>
-                        </el-menu-item-group>
-                    </el-submenu>-->
-                    <!--<el-submenu index="6">
-                        <template slot="title">
-                            <i class="el-icon-location"></i>
-                            <span slot="title">学生考勤管理</span>
-                        </template>
-                        <el-menu-item-group>
-                            <el-menu-item v-for="(item,i) in kqList" :key="i" :index="item.name">{{ item.navItem }}</el-menu-item>
-                        </el-menu-item-group>
-                    </el-submenu>-->
-                    <!--<el-submenu index="7">
-                        <template slot="title">
-                            <i class="el-icon-location"></i>
-                            <span slot="title">教学公告信息</span>
-                        </template>
-                        <el-menu-item-group>
-                            <el-menu-item v-for="(item,i) in ggList" :key="i" :index="item.name">{{ item.navItem }}</el-menu-item>
-                        </el-menu-item-group>
-                    </el-submenu>-->
                 </el-menu>
             </el-aside>
             <el-main><el-main><router-view></router-view></el-main></el-main>
@@ -155,31 +97,8 @@
                 {name:'/teacher/teaMessage',navItem:'个人信息管理'},
             ],
             kkList: [
-                // {name:'',navItem:'教学计划安排'},
-                {name:'/teacher/startCourse', navItem:'开课管理'},
-                //{name:'/teacher/courseSchedule', navItem:'教学课程表'},
-                //{name:'/teacher/classSchedule', navItem:'班级课程表'},
-            ],
-            //bjList: [
-            //    {name:'/teacher/classMsgManager',navItem:'班级信息管理'},
-            //],
-            //xsxxList: [
-            //    {name:'/teacher/studentMsgManager',navItem:'学生信息管理'},
-            //],
-            //ksList: [
-            //    {name:'/teacher/examPlan',navItem:'主责考试安排'},
-            //    {name:'/teacher/classExamPlan',navItem:'班级考试安排'},
-
-            //],
-            //cjList: [
-            //    {name:'/teacher/scoreManager',navItem:'学生成绩管理'},
-            //],
-            //kqList: [
-            //    {name:'/teacher/attendanceManager',navItem:'学生考勤管理'},
-            //],
-            //ggList: [
-            //    {name:'/teacher/notice',navItem:'教学公告查看'}
-            //]
+                {name:'/teacher/startCourse', navItem:'开课管理'}
+            ]
         }
     },
     methods: {
@@ -201,7 +120,7 @@
     },
     created: function() {
         console.log('页面加载')
-        var username = JSON.parse(window.localStorage.teaInfo).username;
+        var username = JSON.parse(window.localStorage['id']);
         this.username = username
     }
 };

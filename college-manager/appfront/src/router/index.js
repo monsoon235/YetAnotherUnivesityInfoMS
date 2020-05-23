@@ -55,7 +55,7 @@ export default new Router({
       { path: 'majorManager', component: majorManager },
       { path: 'adjustmentManager', component: adjustmentManager },
 
-      { path: 'studentMsgMange', component: studentMsgMange },
+      { path: 'studentMsgMange', component: studentMsgManage },
 
       { path: 'courseManager', component: courseManager },
       { path: 'lectureManager', component: lectureManager },

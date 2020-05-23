@@ -160,6 +160,7 @@ export default {
         });
     },
 
+
     submitFrom() {
       const that = this;
       this.$refs["form"].validate(valid => {
@@ -174,7 +175,7 @@ export default {
               update: subForm
             };
             // 修改
-            that.sendRequest("http://127.0.0.1:8000/api/teacher/mod", opt);
+            that.sendRequest("http://127.0.0.1:8000/api/teacher/mod", {"where":{"id":JSON.parse(window.localStorage.teaInfo).id},"update":opt});
           }
           that.dialogFormVisible = false;
           // that.getAllData()
@@ -184,6 +185,7 @@ export default {
         }
       });
     },
+
     editData(index) {
       // console.log(this.tableData.teacherName)
       const selfData = this.tableData[index];
@@ -207,10 +209,9 @@ export default {
     getAllData() {
       var _this = this;
       //console.log(JSON.parse(window.localStorage.teaInfo).username)
-      this.$http.get("http://127.0.0.1:8000/api/teacher/get",{id:'23'}).then(function(res) {
+      this.$http.get("http://127.0.0.1:8000/api/teacher/get",{"id":JSON.parse(window.localStorage.teaInfo).id}).then(function(res) {
           console.log(res);
-          var resbody = JSON.parse(res.bodyText)
-          if (resbody["code"] == 0){
+          if(res.data.list.length === 0||res.data.code ==0) {
             _this.$message.error("查询教师失败")
             alert('该系统还没有您的个人信息，请联系教学管理员')
           }
