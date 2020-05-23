@@ -26,7 +26,7 @@ def check_params(params: dict) -> dict:
 def get(request: HttpRequest):
     params = check_params(request.GET.dict())
     result = Adjustment.objects.filter(**params).values(
-        *where_params,
+        'id', *where_params,
         student_name=F('student__person__name'),
         from_class_name=F('from_class__name'),
         to_class_name=F('to_class__name')
