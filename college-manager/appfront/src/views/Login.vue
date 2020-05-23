@@ -139,6 +139,7 @@ export default {
                             break;
                         }
                         localStorage.setItem("id", res.data.id);
+                        localStorage.setItem("person_id", res.data.person_id);
                       }
                       catch(err) {
                           console.log(err)

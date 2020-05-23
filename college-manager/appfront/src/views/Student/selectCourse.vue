@@ -28,9 +28,6 @@
 	        prop="year"
             sortable
 	        label="开课学年">
-          <template slot-scope="scope">
-          {{(scope.row.year==1)?春:秋}}
-        </template>
 	      </el-table-column>
           <el-table-column
 	        prop="term"
@@ -43,18 +40,18 @@
 	        label="上课时间">
 	      </el-table-column>
 	      <el-table-column
-	        prop="course_assessment"
+	        prop="assessment"
             sortable
 	        label="考核方式">
 	      </el-table-column>
 	      <el-table-column
-	        prop="course_major_name"
+	        prop="major_name"
             sortable
 	        label="开课专业">
 	      </el-table-column>
           <el-table-column
             fixed="right">
-            <template slot="header" slot-scope="scope">
+            <template slot="header">
                 <el-input
                     prefix-icon="el-icon-search"
                     v-model="search"
@@ -70,19 +67,10 @@
           <el-dialog title="请填写搜索信息(可只填部分)" :visible.sync="dialogFormSearch" style="height: 100%；">
         <el-form :model="form" :rules="rules" ref="form">
           <el-form-item label="课程号" prop="course_id">
-            <el-input v-model="form.course_Id" autocomplete="off"></el-input>
+            <el-input v-model="form.course_id" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="课程名称" prop="course_name">
-            <el-input v-model="form.course_name" autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="开课专业" prop="course_major_name">
-            <el-input v-model="form.course_major_name" autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="考核方式" prop="course_assessment">
-            <el-input v-model="form.exam_type" autocomplete="off" placeholder="考试或当堂答辩"></el-input>
-          </el-form-item>
-          <el-form-item label="授课老师" prop="teacher_name">
-            <el-input v-model="form.teacher_name" autocomplete="off"></el-input>
+          <el-form-item label="授课老师工号" prop="teacher_id">
+            <el-input v-model="form.teacher_id" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="开课学年" prop="year">
             <el-input v-model="form.year" autocomplete="off" placeholder="年"></el-input>
@@ -94,7 +82,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="开课时间" prop="time">
-            <el-input v-model="form.time" autocomplete="off" placeholder="周一至周五的第一到第九节"></el-input>
+            <el-input v-model="form.time" autocomplete="off" placeholder="周一至周五的第一到第九节(周一第5节记作15)"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -137,33 +125,68 @@ export default {
 		getAllData() {
             var _this = this
             var ldata=[]
-	      _this.$http.get('/api/lecture/get').then(function (res) {
+	      _this.$http.get('/api/lecture/get',{params:{student_id:localStorage['id']}}).then(function (res) {
 	    //   console.log(res)
           ldata = res.data.list
-          this.addSelected(ldata)
+          _this.addSelected(ldata)
 	    })
 	    .catch(function (error) {
 	      console.log(error)
         })
         
       },
+      transData(){
+        var a={"一":1,"二":2,"三":3,"四":4,"五":5,"六":6,"七":7,"八":8,"九":9}
+        var b=["一","二","三","四","五","六","七","八","九"]
+        var c=["春","秋"]
+        var d={"春":0,"秋":1}
+        console.log(this.tableData)
+        for(var i = 0; i <this.tableData.length;i++){
+          if(isNaN(this.tableData[i].time)){
+            this.tableData[i].time = 10*a[this.tableData[i].time.charAt(2)]+a[this.tableData[i].time.charAt(4)]
+          }else{
+            this.tableData[i].time = "星期"+b[Math.floor(this.tableData[i].time/10)-1]+"第"+b[this.tableData[i].time%10-1]+"节课"
+          }
+          if(!isNaN(this.tableData[i].assessment)){
+            this.tableData[i].assessment = (this.tableData[i].assessment==0)?"考试":"论文";
+          }else{
+            this.tableData[i].assessment = (this.tableData[i].assessment=="考试")?0:1;
+          }
+          if(!isNaN(this.tableData[i].term)){
+            this.tableData[i].term = c[this.tableData[i].term]
+            console.log(this.tableData[i])
+          }else{
+            this.tableData[i].term = d[this.tableData[i].term]
+          }
+        }
+      },
       addSelected(ldata){
           var _this = this
-          this.$http.get('/api/selection/get').then(function(res){
+          this.$http.get('/api/selection/get',{params:{student_id:localStorage['id']}}).then(function(res){
+            if(res.data.list.length==0){
+              _this.tableData=ldata
+            _this.transData()
+              return
+            }
             var data = res.data.list
+            for(var i=0;i<ldata.length;i++){
+              ldata[i].is_selected=false
+            }
             for(var i=0;i<data.length;i++){
                 for(var j=0;j<ldata.length;j++){
-                    if(data[i].lecture_id==ldata[j].id){
+                    if(data[i].lecture_id==ldata[j].id &&(ldata[j].is_selected ||!ldata[j].is_selected)){
                         ldata[j].is_selected = true
                         _this.tableData.unshift(ldata[j])
-                    }else{
-                        ldata[j].is_selected = false
-                        _this.tableData.push(ldata[j])
                     }
                 }
-
             }
+            for(var i=0;i<ldata.length;i++){
+              if(!ldata[i].is_selected)
+                _this.tableData.push(ldata[i])
+            }
+          _this.transData()
         })
+
       },
 	  searchData() {
 	    var _this = this
@@ -176,31 +199,6 @@ export default {
       // console.log(result)
       _this.tableData = result
     },
-    sortUp() {
-    	var objectArraySort = function (keyName) {
-			 return function (objectN, objectM) {
-			  var valueN = objectN[keyName]
-			  var valueM = objectM[keyName]
-			  if (valueN > valueM) return 1
-			  else if (valueN < valueM) return -1
-			  else return 0
-			 }
-			}
-    	this.tableData.sort(objectArraySort('courseTime'))
-    },
-    sortDown() {
-    	var objectArraySort = function (keyName) {
-			 return function (objectN, objectM) {
-			  var valueN = objectN[keyName]
-			  var valueM = objectM[keyName]
-			  if (valueN < valueM) return 1
-			  else if (valueN > valueM) return -1
-			  else return 0
-			 }
-			}
-    	this.tableData.sort(objectArraySort('courseTime'))
-	 
-    },
     tableRowClassName({row,rowIndex}){
         if(this.tableData[rowIndex].is_selected){
             return 'selected-row'
@@ -208,12 +206,28 @@ export default {
             return ''
         }
     },
+    simplify(obj) {
+      let newobj = new Object();
+      for (let key in obj) {
+        if (
+          obj[key] &&
+          key !== "id" &&
+          key !== "course_id" &&
+          key !== "teacher_id" &&
+          key !== "term" &&
+          key !== "time" &&
+          key !== "year"
+        )
+          newobj[key] = obj[key];
+      }
+      return newobj;
+    },
     addSelection(index){
         var _this = this
         var row = this.tableData[index]
-        var data={"lecture_id":row.lecture_id}
+        this.tableData[index].is_selected=true;
+        var data={"lecture_id":row.id,"student_id":localStorage['id']}
         this.$http.post("/api/selection/add",data).then(function(res){
-            _this.tableData[index].is_selected=true;
         }).catch(function (error) {
 	      console.log(error)
         })
@@ -221,17 +235,30 @@ export default {
     delSelection(index){
         var _this = this
         var row = _this.tableData[index]
-        var data={"lecture_id":row.lecture_id}
-        this.$http.post("/api/selection/del",data).then(function (res){
-            _this.tableData[index].is_selected=false
+        _this.tableData[index].is_selected=false
+        var data={"lecture_id":row.id,"student_id":localStorage['id']}
+        this.$http.get("/api/selection/del",{params:data}).then(function (res){
         }).catch(function (error) {
             console.log(error)
         })
     },
     submitSearch(){
         var _this = this
-        thsi.$http.post("/api/search/get",{params:this.form}).then(function (res){
-            _this.tableData=res.data.list
+        if(this.form.term=="春")this.form.term=0
+        else if(this.form.term=="秋")this.form.term=1
+        else{}
+        var newform={}
+        for(let key in this.form){
+          if(this.form[key]||this.form[key]==0){
+            newform[key]=this.form[key]
+          }
+        }
+        var ldata;
+        this.$http.get("/api/lecture/get",{params:newform}).then(function (res){
+          ldata=res.data.list
+          this.tableData=[]
+          _this.addSelected(ldata)
+          _this.dialogFormSearch = false
         }).catch(function (error) {
             console.log(error)
         })
