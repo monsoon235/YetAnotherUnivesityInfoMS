@@ -124,6 +124,7 @@ def get(request: HttpRequest):
         class_name=F('class0__name'),
         major_id=F('class0__major_id'),
         major_name=F('class0__major__name'),
+        person_name=F('person__name'),
         person_id_type=F('person__id_type'),
         gender=F('person__gender'),
         birth=F('person__birth'),
