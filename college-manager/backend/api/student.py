@@ -18,7 +18,7 @@ where_params = [
 
 student_params = [
     'id', 'enroll_date', 'email',
-    'class_id', 'major_id', 'person_id'
+    'class_id', 'person_id'
 ]
 
 person_params = [
