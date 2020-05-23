@@ -215,7 +215,7 @@
     },
     created: function() {
         console.log('页面加载')
-        var username = JSON.parse(window.localStorage.stuInfo).username;
+        var username = window.localStorage['id'];
         this.username = username
     }
 };
