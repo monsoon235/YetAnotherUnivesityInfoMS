@@ -140,7 +140,7 @@ export default {
 	      _this.$http.get('/api/lecture/get').then(function (res) {
 	    //   console.log(res)
           ldata = res.data.list
-          addSelected(ldata)
+          this.addSelected(ldata)
 	    })
 	    .catch(function (error) {
 	      console.log(error)
@@ -149,7 +149,7 @@ export default {
       },
       addSelected(ldata){
           var _this = this
-          this.$http.post('/api/selection/get').then(function(res){
+          this.$http.get('/api/selection/get').then(function(res){
             var data = res.data.list
             for(var i=0;i<data.length;i++){
                 for(var j=0;j<ldata.length;j++){

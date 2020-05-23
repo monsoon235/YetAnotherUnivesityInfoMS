@@ -62,16 +62,16 @@
     <el-dialog title="填写你的信息" :visible.sync="dialogFormVisible" style="height: 100%">
       <el-form :model="form" :rules="rules" ref="form">
         <el-form-item label="账户名" prop="id" autocomplete="off">
-          <el-input v-model="form.id" autocomplete="off"></el-input>
+          <el-input v-model="form.id" autocomplete="off" :disabled="isEdit"></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="form.password" autocomplete="off"></el-input>
+        <el-form-item label="密码" prop="new">
+          <el-input v-model="form.new" autocomplete="off"></el-input>
         </el-form-item>
         <!--  <el-form-item label="类型" prop="category">
           <el-input v-model="form.category" autocomplete="off"></el-input>
         </el-form-item>-->
         <el-form-item label="类型" prop="category">
-          <el-select style="width: 100%" v-model="form.category">
+          <el-select style="width: 50%" v-model="form.category">
             <el-option label="学生" value="student" autocomplete="off"></el-option>
             <el-option label="教师" value="teacher" autocomplete="off"></el-option>
             <!-- <el-option label="教学管理者" value="manager" autocomplete="off"></el-option> -->
@@ -127,6 +127,7 @@ export default {
       delId: "",
       form: {
         id: "",
+        new: "",
         password: "",
         category: ""
       },
@@ -205,15 +206,9 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (that.isEdit) {
-            let subForm = that.form;
-            delete subForm.id;
-            let opt = {
-              where: {
-                id: that.editId
-              },
-              update: subForm
-            };
-            // 修改
+            let opt = that.form;
+            delete opt.category;
+            delete opt.password;
             that.sendPostRequest("/api/password/admin_mod", opt);
           }
           that.dialogFormVisible = false;

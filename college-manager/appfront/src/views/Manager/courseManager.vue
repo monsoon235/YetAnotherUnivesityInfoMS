@@ -41,7 +41,7 @@
               </el-col>
               <el-col :span="6">
                 <div class="grid-content bg-purple-light">
-                  <el-form-item label="开课专业" prop="major_id">
+                  <el-form-item label="开课专业代码" prop="major_id">
                     <el-input v-model="form.major_id"></el-input>
                   </el-form-item>
                 </div>
@@ -70,7 +70,7 @@
       <el-table :data="tableData" stripe style="width: 100%">
         <el-table-column prop="id" label="课程编号" align="center"></el-table-column>
         <el-table-column prop="name" label="课程名称" align="center"></el-table-column>
-        <el-table-column prop="major_id" label="专业代码" align="center"></el-table-column>
+        <el-table-column prop="major_id" label="专业代码代码" align="center"></el-table-column>
         <el-table-column prop="major_name" label="开课专业" align="center"></el-table-column>
         <el-table-column label="考核方式" align="center">
           <template slot-scope="scope">
@@ -96,7 +96,7 @@
         <el-form-item label="课程名称" prop="name">
           <el-input v-model="form.name" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="开课专业" prop="major_id">
+        <el-form-item label="开课专业代码" prop="major_id">
           <el-input v-model="form.major_id" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="考核方式" prop="assessment">

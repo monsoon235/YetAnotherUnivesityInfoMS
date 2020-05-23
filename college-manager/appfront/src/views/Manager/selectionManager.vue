@@ -53,8 +53,8 @@
               </el-col>
               <el-col :span="6">
                 <div class="grid-content bg-purple-light">
-                  <el-form-item label="选课学期" prop="term">
-                    <el-select v-model="form.term" placeholder="请选择学期">
+                  <el-form-item label="选课学期" prop="terms">
+                    <el-select v-model="form.terms" multiple placeholder="请选择学期">
                       <el-option label="春" value="0" autocomplete="off"></el-option>
                       <el-option label="秋" value="1" autocomplete="off"></el-option>
                     </el-select>
@@ -190,6 +190,7 @@ export default {
         student_id: "",
         year: "",
         term: "",
+        terms: [],
         score: null,
         course_name: "",
         teacher_name: "",
@@ -367,11 +368,46 @@ export default {
       });
     },
 
+    // mysearchData() {
+    //   console.log(this.simplify(this.form));
+    //   this.sendGetRequest("/api/selection/get", {
+    //     params: this.simplify(this.form)
+    //   });
+    // },
+
     mysearchData() {
-      console.log(this.simplify(this.form));
-      this.sendGetRequest("/api/selection/get", {
-        params: this.simplify(this.form)
-      });
+      var _this = this;
+      let newform = [_this.form];
+      let j = 1;
+      for (let key in _this.form) {
+        if (_this.form[key] instanceof Array) {
+          if (_this.form[key].length > 1) {
+            j = newform.length;
+            for (let i = 0; i < j; i++) {
+              //实现深拷贝
+              let _obj = JSON.stringify(newform[i]);
+              let subform = JSON.parse(_obj);
+              newform.push(subform);
+            }
+          }
+
+          for (let i = 0; i < _this.form[key].length; i++) {
+            newform[j + i - 1][key.substr(0, key.length - 1)] =
+              _this.form[key][i];
+          }
+        }
+      }
+      _this.tableData = [];
+      for (let i = 0; i < newform.length; i++) {
+        _this.$http
+          .get("/api/selection/get", { params: _this.simplify(newform[i]) })
+          .then(function(res) {
+            let k = _this.tableData.length;
+            if (res.data["list"].length !== 0)
+              _this.tableData.push.apply(_this.tableData, res.data["list"]);
+          });
+      }
+      this.reload();
     },
 
     reload() {

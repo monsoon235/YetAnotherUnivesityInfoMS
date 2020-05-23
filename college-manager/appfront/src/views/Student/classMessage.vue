@@ -81,7 +81,7 @@ methods: {
 		var _this = this
       this.$http.get('/api/student/get').then(function (res) {
       	// console.log(res);
-        _this.$http.post('/api/class/get', {class_id: res.data.list.class_id}).then(function (res) {
+        _this.$http.get('/api/class/get', {params:{id: res.data.list[0].class_id}}).then(function (res) {
           console.log(res)
           if(res.data.list.length === 0||res.data.code==0) {
             console.log(res.data.msg)
@@ -89,14 +89,20 @@ methods: {
             return
           }
           _this.tableData = res.data.list
+          this.dataFit()
         })
         .catch(function (error) {
           console.log(error)
         })
       })
-      this.$http.post("http://127.0.0.1:8000/api/test",{where:{"id":"1"}})
   
   },
+  dataFit(){
+      var mydate=new Date()
+      for(var i=0;i<this.tableData.length;i++){
+        this.tableData[i].found_date=this.tableData[i].found_date.slice(0,10)
+      }
+    },
   },	
   mounted: function() {
     // 组件创建时候去获取所有的用户数据

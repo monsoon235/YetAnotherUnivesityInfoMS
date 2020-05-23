@@ -43,9 +43,7 @@
               <el-col :span="6">
                 <div class="grid-content bg-purple-light">
                   <el-form-item label="出生日期" prop="birth">
-                    <el-col :span="11">
-                      <el-date-picker type="date" placeholder="选择日期" v-model="form.birth"></el-date-picker>
-                    </el-col>
+                    <el-date-picker type="date" placeholder="选择日期" v-model="form.birth"></el-date-picker>
                   </el-form-item>
                 </div>
               </el-col>
@@ -126,7 +124,7 @@
               <el-col :span="6">
                 <div class="grid-content bg-purple-light">
                   <el-form-item label="入学时间" prop="enroll_date">
-                    <el-input v-model="form.enroll_date"></el-input>
+                    <el-date-picker type="date" placeholder="选择日期" v-model="form.enroll_date"></el-date-picker>
                   </el-form-item>
                 </div>
               </el-col>
@@ -174,35 +172,120 @@
 
       <!--/div-->
     </el-row>
+    <el-row>
+      <el-checkbox-group v-model="checkList">
+        <el-checkbox label="学号"></el-checkbox>
+        <el-checkbox label="姓名"></el-checkbox>
+        <el-checkbox label="性别"></el-checkbox>
+        <el-checkbox label="身份证类型"></el-checkbox>
+        <el-checkbox label="身份证号"></el-checkbox>
+
+        <el-checkbox label="国籍"></el-checkbox>
+
+        <el-checkbox label="出生日期"></el-checkbox>
+        <el-checkbox label="班级代码"></el-checkbox>
+        <el-checkbox label="班级名称"></el-checkbox>
+        <el-checkbox label="专业代码"></el-checkbox>
+        <el-checkbox label="专业名称"></el-checkbox>
+        <el-checkbox label="家庭住址"></el-checkbox>
+        <el-checkbox label="联系电话"></el-checkbox>
+        <el-checkbox label="入学时间"></el-checkbox>
+        <el-checkbox label="电子邮箱"></el-checkbox>
+      </el-checkbox-group>
+    </el-row>
     <el-scrollbar>
       <el-table :data="tableData" align="center">
-        <el-table-column prop="id" label="学号" align="center"></el-table-column>
-        <el-table-column prop="name" label="姓名" align="center"></el-table-column>
-        <el-table-column label="性别" align="center">
+        <el-table-column prop="id" label="学号" align="center" v-if="checkList.includes('学号')"></el-table-column>
+        <el-table-column prop="name" label="姓名" align="center" v-if="checkList.includes('姓名')"></el-table-column>
+        <el-table-column label="性别" align="center" v-if="checkList.includes('性别')">
           <template slot-scope="scope">
             <i v-if="scope.row.gender===0">男</i>
             <i v-else>女</i>
           </template>
         </el-table-column>
-        <el-table-column prop="birth" label="出生日期" align="center"></el-table-column>
-        <el-table-column prop="class_id" label="班级代码" align="center"></el-table-column>
-        <el-table-column prop="class_name" label="班级名称" align="center"></el-table-column>
-        <el-table-column prop="major_id" label="专业代码" align="center"></el-table-column>
-        <el-table-column prop="major_name" label="专业名称" align="center"></el-table-column>
-        <el-table-column label="身份证类型" align="center">
+        <el-table-column
+          prop="birth"
+          label="出生日期"
+          width="220"
+          align="center"
+          v-if="checkList.includes('出生日期')"
+        ></el-table-column>
+        <el-table-column
+          prop="class_id"
+          label="班级代码"
+          align="center"
+          v-if="checkList.includes('班级代码')"
+        ></el-table-column>
+        <el-table-column
+          prop="class_name"
+          label="班级名称"
+          align="center"
+          v-if="checkList.includes('班级名称')"
+        ></el-table-column>
+        <el-table-column
+          prop="major_id"
+          label="专业代码"
+          align="center"
+          v-if="checkList.includes('专业代码')"
+        ></el-table-column>
+        <el-table-column
+          prop="major_name"
+          label="专业名称"
+          align="center"
+          v-if="checkList.includes('专业名称')"
+        ></el-table-column>
+        <el-table-column
+          label="身份证类型"
+          width="150"
+          align="center"
+          v-if="checkList.includes('身份证类型')"
+        >
           <template slot-scope="scope">
             <i v-if="scope.row.person_id_type===0">身份证</i>
             <i v-else>护照</i>
           </template>
         </el-table-column>
-        <el-table-column prop="person_id" label="身份证号" width="220" align="center"></el-table-column>
-        <el-table-column prop="country" label="国籍" align="center"></el-table-column>
-        <el-table-column prop="enroll_date" label="入学时间" align="center"></el-table-column>
-        <el-table-column prop="family_address" label="家庭住址" align="center"></el-table-column>
-        <el-table-column prop="family_zipcode" label="邮编" align="center"></el-table-column>
-        <el-table-column prop="family_tel" label="联系电话" align="center"></el-table-column>
-        <el-table-column prop="email" label="电子邮箱" align="center"></el-table-column>
-        <el-table-column label="操作">
+        <el-table-column
+          prop="person_id"
+          label="身份证号"
+          width="220"
+          align="center"
+          v-if="checkList.includes('身份证号')"
+        ></el-table-column>
+        <el-table-column prop="country" label="国籍" align="center" v-if="checkList.includes('国籍')"></el-table-column>
+        <el-table-column
+          prop="enroll_date"
+          label="入学时间"
+          width="220"
+          align="center"
+          v-if="checkList.includes('入学时间')"
+        ></el-table-column>
+        <el-table-column
+          prop="family_address"
+          label="家庭住址"
+          align="center"
+          v-if="checkList.includes('家庭住址')"
+        ></el-table-column>
+        <el-table-column
+          prop="family_zipcode"
+          label="邮编"
+          align="center"
+          v-if="checkList.includes('邮编')"
+        ></el-table-column>
+        <el-table-column
+          prop="family_tel"
+          label="联系电话"
+          align="center"
+          v-if="checkList.includes('联系电话')"
+        ></el-table-column>
+        <el-table-column
+          prop="email"
+          label="电子邮箱"
+          width="220"
+          align="center"
+          v-if="checkList.includes('电子邮箱')"
+        ></el-table-column>
+        <el-table-column label="操作" width="220" align="center">
           <template slot-scope="scope">
             <el-button type="primary" @click="editData(scope.$index)">修改</el-button>
             <el-button type="danger" @click="openDialog(scope.$index)">删除</el-button>
@@ -229,13 +312,8 @@
           <el-input v-model="form.sex" autocomplete="off"></el-input>
         </el-form-item>-->
         <el-form-item label="出生日期" prop="birth">
-          <el-col :span="11">
-            <el-date-picker
-              type="date"
-              placeholder="选择日期"
-              v-model="form.birth"
-              style="width: 100%; margin-left: 92px;"
-            ></el-date-picker>
+          <el-col :span="7">
+            <el-date-picker type="date" placeholder="选择日期" v-model="form.birth"></el-date-picker>
           </el-col>
         </el-form-item>
         <el-form-item label="邮箱">
@@ -272,7 +350,9 @@
         </el-form-item>
 
         <el-form-item label="入学时间" prop="enroll_date">
-          <el-input v-model="form.enroll_date"></el-input>
+          <el-col :span="7">
+            <el-date-picker type="date" placeholder="选择日期" v-model="form.enroll_date"></el-date-picker>
+          </el-col>
         </el-form-item>
         <el-form-item label="家庭住址" prop="family_address">
           <el-input v-model="form.family_address"></el-input>
@@ -365,6 +445,23 @@ export default {
       delId: "",
       show3: false,
       choiceMap: { 身份证: 0, 护照: 1, 男: 0, 女: 1 },
+      checkList: [
+        "学号",
+        "姓名",
+        "性别",
+        "身份证类型",
+        "身份证号",
+        "国籍",
+        "出生日期",
+        "专业代码",
+        "专业名称",
+        "班级代码",
+        "班级名称",
+        "家庭住址",
+        "联系电话",
+        "入学时间",
+        "电子邮箱"
+      ],
       //direction: 'rtl',
       form: {
         id: "", //学号
@@ -447,11 +544,22 @@ export default {
 
     sendPostRequest(url, opt = {}) {
       var _this = this;
-      if (opt["person_id_type"]) {
-        opt["person_id_type"] = this.choiceMap[opt["person_id_type"]];
-      }
-      if (opt["gender"]) {
-        opt["gender"] = this.choiceMap[opt["gender"]];
+      if (opt.update) {
+        if (opt["update"]["person_id_type"]) {
+          opt["update"]["person_id_type"] = this.choiceMap[
+            opt["update"]["person_id_type"]
+          ];
+        }
+        if (opt["update"]["gender"]) {
+          opt["update"]["gender"] = this.choiceMap[opt["update"]["gender"]];
+        }
+      } else {
+        if (opt["person_id_type"]) {
+          opt["person_id_type"] = this.choiceMap[opt["person_id_type"]];
+        }
+        if (opt["gender"]) {
+          opt["gender"] = this.choiceMap[opt["gender"]];
+        }
       }
       console.log(opt);
       this.$http
