@@ -204,10 +204,10 @@
           console.log('退出系统');
       },
       loginout(){
-        window.localStorage.removeItem("stuInfo");
-        this.$http.post('/api/loginout')
+        // window.localStorage.removeItem("stuInfo");
+        this.$http.get('/api/logout')
           .then((res)=>{
-            console.log(res.list);
+            console.log(res.data.list)
             this.$router.push('/login')
 
           })

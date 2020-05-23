@@ -204,7 +204,7 @@ export default {
       _this.$http.post(url, opt).then(function (res) {
         if(url === '/api/student/mod') {
           // console.log("编辑用户信息")
-          _this.tableData[0] = res.list
+          _this.tableData[0] = res.data.list
         } 
       })
       .catch(function (error) {
@@ -237,11 +237,11 @@ export default {
       var _this = this
       // console.log(JSON.parse(window.localStorage.stuInfo).username)
       this.$http.get('/api/student/get').then(function (res) {
-        if(res.list.length === 0) {
+        if(res.data.list.length === 0||res.data.code ==0) {
             alert('该系统还没有您的个人信息，请联系教学管理员');
             return;
         }
-        _this.tableData.push(res.list)
+        _this.tableData.push(res.data.list)
       })
       .catch(function (error) {
         console.log(error)

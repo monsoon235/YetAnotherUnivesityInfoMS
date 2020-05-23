@@ -139,7 +139,7 @@ export default {
             var ldata=[]
 	      _this.$http.get('/api/lecture/get').then(function (res) {
 	    //   console.log(res)
-          ldata = res.list
+          ldata = res.data.list
           addSelected(ldata)
 	    })
 	    .catch(function (error) {
@@ -150,7 +150,7 @@ export default {
       addSelected(ldata){
           var _this = this
           this.$http.post('/api/selection/get').then(function(res){
-            var data = res.list
+            var data = res.data.list
             for(var i=0;i<data.length;i++){
                 for(var j=0;j<ldata.length;j++){
                     if(data[i].lecture_id==ldata[j].id){
@@ -231,7 +231,7 @@ export default {
     submitSearch(){
         var _this = this
         thsi.$http.post("/api/search/get",{params:this.form}).then(function (res){
-            _this.tableData=res.list
+            _this.tableData=res.data.list
         }).catch(function (error) {
             console.log(error)
         })

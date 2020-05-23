@@ -3,8 +3,8 @@ n<template>
     <LoginHeader></LoginHeader>
     <div class="from">
       <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-        <el-form-item label="请输入用户名" prop="name">
-          <el-input type="text" v-model="ruleForm.name"></el-input>
+        <el-form-item label="请输入用户名" prop="id">
+          <el-input type="text" v-model="ruleForm.id" label="输入学号,教职工号或是admin"></el-input>
         </el-form-item>
         <!-- <el-form-item label="请选择类型" prop="category">
           <el-select v-model="ruleForm.region" placeholder="请选择注册类型">
@@ -17,13 +17,17 @@ n<template>
           <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="info" @click="submitForm('ruleForm')">登录</el-button>
-          <el-button type="info" @click="resetForm('ruleForm')">重置</el-button>
-          <el-button type="info" @click="studentLogin()">学生直接登录</el-button>
-          <el-button type="info" @click="teacherLogin()">教师直接登录</el-button>
-          <el-button type="info" @click="managerLogin()">管理员直接登录</el-button>
+          <el-form-item>
+            <el-button type="info" @click="submitForm('ruleForm')">登录</el-button>
+            <el-button type="info" @click="resetForm('ruleForm')">重置</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="info" @click="studentLogin()">学生直接登录</el-button>
+            <el-button type="info" @click="teacherLogin()">教师直接登录</el-button>
+            <el-button type="info" @click="managerLogin()">管理员直接登录</el-button>
+          </el-form-item>
           <!-- 跳转到注册界面 -->
-          <router-link to="/register" tag="button" v-text="'去注册'"></router-link>
+          <!-- <router-link to="/register" tag="button" v-text="'去注册'"></router-link> -->
         </el-form-item>
       </el-form>
     </div>
@@ -85,14 +89,13 @@ export default {
       return {
         ruleForm: {
           pass: '',
-          name: '',
-          category: ''
+          id: '',
         },
         rules: {
           pass: [
             { validator: validatePass, trigger: 'blur' }
           ],
-          name: [
+          id : [
             { validator: checkName, trigger: 'blur' },
             { message: '请输入用户名称', trigger: 'blur' },
             { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
@@ -120,40 +123,38 @@ export default {
         this.$refs[formName].validate((valid) => {
             if (valid) {
               let params = {
-                username: this.ruleForm.name,
+                id: this.ruleForm.id,
                 password: this.ruleForm.pass,
               }
               // console.log(params);
-              this.$http.post('/users/login', params)
+              this.$http.post('/api/login', params)
                 .then((res) => {
                   var _this = this
-                  console.log(res)
+                  // console.log(res)
                   // console.log(res.data.data[0]);
-                  if(res.data.status == 1001) {
-                    alert('用户不存在或密码错误，您无法登陆！')
-                    _this.resetForm('ruleForm')
+                  if(res.data.code == 0) {
+                    console.log(res.data)
                     return
                   }
 
-                  else if (res.data.status == 1000) {
+                  else if (res.data.code == 1) {
                       alert('登录成功');
+                      // console.log(res.data.type)
                       try {
-                        switch(res.data.data[0].category) {
-                          case "student":
-                            localStorage.setItem("stuInfo", JSON.stringify(res.data.data[0]));
+                        switch(res.data.type) {
+                          case 2:
                             setTimeout(() => this.$router.push({ path:'/student/start'}), 800)
                             break;
-                          case "teacher":
-                            localStorage.setItem("teaInfo", JSON.stringify(res.data.data[0]));
+                          case 1:
                             setTimeout(() => this.$router.push({ path:'/teacher/start'}), 800)
                             break;
-                          case "manager":
-                            localStorage.setItem("manInfo", JSON.stringify(res.data.data[0]));
+                          case 0:
                             setTimeout(() => this.$router.push({ path:'/manager/start'}), 800)
                             break;
                         }
                       }
                       catch(err) {
+                          console.log(err)
                           alert('对不起，登录失败，请重新尝试');
                       }
                   }else{
