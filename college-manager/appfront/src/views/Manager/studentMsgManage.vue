@@ -296,7 +296,8 @@
           <el-input v-model="form.person_name" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="性别" prop="gender">
-          <el-select v-model="form.gender" multiple placeholder="请选择性别">
+
+          <el-select v-model="form.gender">
             <el-option label="男" value="0" autocomplete="off"></el-option>
             <el-option label="女" value="1" autocomplete="off"></el-option>
           </el-select>

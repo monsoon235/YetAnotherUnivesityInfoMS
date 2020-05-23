@@ -1,6 +1,6 @@
 <template>
   <div class="index">
-    <!-- <div style='height: 60px'> 
+    <!-- <div style='height: 60px'>
       <span class='font'>欢迎进入本校学生信息管理模块</span>
       <p class='text'>学生是挚友，是学校引以为傲的资本，管理学生信息非常重要哦</p>
     </div>-->

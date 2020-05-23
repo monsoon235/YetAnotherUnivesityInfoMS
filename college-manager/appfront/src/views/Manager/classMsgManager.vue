@@ -287,6 +287,7 @@ export default {
             delete subForm.lecture;
             delete subForm.student;
             delete subForm.major_name;
+            delete subForm.id;
             delete subForm.charge_teacher_name;
             let opt = {
               where: {

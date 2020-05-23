@@ -221,7 +221,7 @@ export default {
     getAllData() {
       var _this = this;
       //console.log(JSON.parse(window.localStorage.teaInfo).username)
-      this.$http.get("http://127.0.0.1:8000/api/teacher/get",{params:{"id":localStorage.getItem('id')}}).then(function(res) {
+      this.$http.get("/api/teacher/get",{params:{"id":localStorage.getItem('id')}}).then(function(res) {
           console.log(res);
           if(res.data.list.length === 0||res.data.code ==0) {
             _this.$message.error("查询教师失败")
