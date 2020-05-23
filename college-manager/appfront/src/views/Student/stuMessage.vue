@@ -113,7 +113,7 @@
           <el-input v-model="form.family_zipcode" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="家庭电话">
-          <el-input v-model="form.family_tel" autocomplete="off"></el-input>
+          <el-input v-model="form.family_tel" autocomplete="on"></el-input>
         </el-form-item>
         <el-form-item label="邮箱">
           <el-input v-model="form.email" autocomplete="off"></el-input>
@@ -193,10 +193,6 @@ export default {
         family_zipcode:  [
           {required: true, message: '必填', trigger: 'blur' },
         ],
-        family_tel:  [
-          {required: true, message: '必填', trigger: 'blur' },
-          { type: 'number', message: '电话必须为数字值'}
-        ]
       }
     }
   },

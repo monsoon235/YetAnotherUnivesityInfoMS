@@ -145,3 +145,9 @@ s.post(url+"/api/course/add",json={"id":"0","name":"大物一","major_id":"0","a
 s.post(url+"/api/course/add",json={"id":"1","name":"大物二","major_id":"1","assessment":1})
 s.post(url+"/api/course/add",json={"id":"2","name":"大物三","major_id":"2","assessment":0})
 s.post(url+"/api/course/add",json={"id":"3","name":"大物四","major_id":"3","assessment":1})
+#加授课
+s.post(url+"/api/lecture/add",json={"id":"0","course_id":"0","teacher_id":"T1","year":2015,"term":0,"time":33})
+s.post(url+"/api/lecture/add",json={"id":"1","course_id":"1","teacher_id":"T2","year":2015,"term":0,"time":33})
+s.post(url+"/api/lecture/add",json={"id":"2","course_id":"2","teacher_id":"T3","year":2015,"term":0,"time":33})
+s.post(url+"/api/lecture/add",json={"id":"3","course_id":"3","teacher_id":"T4","year":2015,"term":0,"time":33})
+
