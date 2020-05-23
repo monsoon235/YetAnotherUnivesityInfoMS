@@ -39,7 +39,7 @@
               </el-col>
               <el-col :span="6">
                 <div class="grid-content bg-purple-light">
-                  <el-form-item label="课程名称" prop="course_id">
+                  <el-form-item label="课程代号" prop="course_id">
                     <el-input v-model="form.course_id"></el-input>
                   </el-form-item>
                 </div>
@@ -65,8 +65,8 @@
               </el-col>
               <el-col :span="6">
                 <div class="grid-content bg-purple-light">
-                  <el-form-item label="开课学期" prop="term">
-                    <el-select v-model="form.term" placeholder="请选择学期">
+                  <el-form-item label="开课学期" prop="terms">
+                    <el-select v-model="form.terms" multiple placeholder="请选择学期">
                       <el-option label="春" value="0" autocomplete="off"></el-option>
                       <el-option label="秋" value="1" autocomplete="off"></el-option>
                     </el-select>
@@ -108,7 +108,7 @@
         </el-table-column>
         <el-table-column prop="time" label="开课时间" align="center"></el-table-column>
 
-        <el-table-column label="操作" align="center">
+        <el-table-column label="操作" width="220" align="center">
           <template slot-scope="scope">
             <el-button type="primary" @click="editData(scope.$index)">修改</el-button>
             <el-button type="danger" @click="openDialog(scope.$index)">删除</el-button>
@@ -122,10 +122,10 @@
         <el-form-item label="课堂号" prop="id">
           <el-input v-model="form.id" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="课程名称" prop="course_id">
+        <el-form-item label="课程代号" prop="course_id">
           <el-input v-model="form.course_id" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="授课教师" prop="teacher_id">
+        <el-form-item label="授课教师工号" prop="teacher_id">
           <el-input v-model="form.teacher_id" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="开课日期" prop="year">
@@ -211,6 +211,7 @@ export default {
         teacher_id: "",
         year: "",
         term: "",
+        terms: [],
         time: "",
         course_name: "",
         assessment: "",
@@ -249,7 +250,8 @@ export default {
           key !== "course_name" &&
           key !== "assessment" &&
           key !== "major_name" &&
-          key !== "teacher_name"
+          key !== "teacher_name" &&
+          key !== "terms"
         )
           newobj[key] = obj[key];
       }
@@ -319,6 +321,7 @@ export default {
             delete subForm.assessment;
             delete subForm.major_name;
             delete subForm.teacher_name;
+            delete subForm.terms;
             let opt = {
               where: {
                 id: that.editId
@@ -387,10 +390,38 @@ export default {
     },
 
     mysearchData() {
-      console.log(this.simplify(this.form));
-      this.sendGetRequest("/api/lecture/get", {
-        params: this.simplify(this.form)
-      });
+      var _this = this;
+      let newform = [_this.form];
+      let j = 1;
+      for (let key in _this.form) {
+        if (_this.form[key] instanceof Array) {
+          if (_this.form[key].length > 1) {
+            j = newform.length;
+            for (let i = 0; i < j; i++) {
+              //实现深拷贝
+              let _obj = JSON.stringify(newform[i]);
+              let subform = JSON.parse(_obj);
+              newform.push(subform);
+            }
+          }
+
+          for (let i = 0; i < _this.form[key].length; i++) {
+            newform[j + i - 1][key.substr(0, key.length - 1)] =
+              _this.form[key][i];
+          }
+        }
+      }
+      _this.tableData = [];
+      for (let i = 0; i < newform.length; i++) {
+        _this.$http
+          .get("/api/lecture/get", { params: _this.simplify(newform[i]) })
+          .then(function(res) {
+            let k = _this.tableData.length;
+            if (res.data["list"].length !== 0)
+              _this.tableData.push.apply(_this.tableData, res.data["list"]);
+          });
+      }
+      this.reload();
     },
 
     reload() {
