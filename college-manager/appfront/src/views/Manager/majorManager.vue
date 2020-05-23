@@ -29,41 +29,55 @@
             label-width="100px"
             class="demo-ruleForm"
           >
-            <el-form-item
-              label="专业代码"
-              prop="id"
-              style="width: 20%; left: 30px; position: absolute;"
-            >
-              <el-input v-model="form.id"></el-input>
-            </el-form-item>
-            <el-form-item label="专业名称" prop="name" style="width: 20%">
-              <el-input v-model="form.name"></el-input>
-            </el-form-item>
-            <el-form-item label="专业地址" prop="address" style="width: 20%">
-              <el-input v-model="form.address"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="warning" plain @click="mysearchData">搜索</el-button>
-            </el-form-item>
-          </el-form>
-          <el-form
-            :inline="true"
-            :model="form"
-            :rules="searchRules"
-            ref="form"
-            label-width="100px"
-            class="demo-ruleForm"
-          >
-            <el-form-item
-              label="专业负责人"
-              prop="charge_person_id"
-              style="width: 20%; position: relative;"
-            >
-              <el-input v-model="form.charge_person"></el-input>
-            </el-form-item>
-            <el-form-item label="所属校区" prop="campus_id" style="width: 20%">
-              <el-input v-model="form.campus_id"></el-input>
-            </el-form-item>
+            <el-row type="flex" class="row-bg">
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="专业代码" prop="id">
+                    <el-input v-model="form.id"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="专业名称" prop="name">
+                    <el-input v-model="form.name"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="专业地址" prop="address">
+                    <el-input v-model="form.address"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <el-button type="warning" plain @click="mysearchData">搜索</el-button>
+              </el-col>
+            </el-row>
+            <el-row type="flex" class="row-bg" justify="center">
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="专业负责人" prop="charge_person_id">
+                    <el-input v-model="form.charge_person"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="所属校区" prop="campus_id">
+                    <el-input v-model="form.campus_id"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content"></div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content"></div>
+              </el-col>
+            </el-row>
           </el-form>
         </div>
       </el-collapse-transition>
@@ -214,10 +228,10 @@ export default {
       this.$http
         .get(url, opt)
         .then(function(res) {
-          if (url === "http://127.0.0.1:8000/api/major/del") {
+          if (url === "/api/major/del") {
             console.log(_this.tableData);
             _this.tableData.splice(_this.delIndex, 1);
-          } else if (url === "http://127.0.0.1:8000/api/major/get") {
+          } else if (url === "/api/major/get") {
             console.log(res);
             _this.tableData = res.data["list"];
           }
@@ -235,20 +249,20 @@ export default {
         .then(function(res) {
           console.log(res);
           var resbody = JSON.parse(res.bodyText);
-          if (url === "http://127.0.0.1:8000/api/major/add") {
+          if (url === "/api/major/add") {
             if (resbody["code"] == 0) {
               _this.$message.error("添加专业失败：" + resbody["msg"]);
             } else {
               _this.getAllData();
             }
-          } else if (url === "http://127.0.0.1:8000/api/major/mod") {
+          } else if (url === "/api/major/mod") {
             console.log(res);
             if (resbody["code"] == 0) {
               _this.$message.error("修改专业失败：" + resbody["msg"]);
             } else {
               //考虑改为get请求
               _this.$http
-                .get("http://127.0.0.1:8000/api/major/get", {
+                .get("/api/major/get", {
                   params: { id: _this.editId }
                 })
                 .then(function(res) {
@@ -282,13 +296,10 @@ export default {
               update: subForm
             };
             // 修改
-            that.sendPostRequest("http://127.0.0.1:8000/api/major/mod", opt);
+            that.sendPostRequest("/api/major/mod", opt);
           } else {
             // 新增
-            that.sendPostRequest(
-              "http://127.0.0.1:8000/api/major/add",
-              this.simplify(that.form)
-            );
+            that.sendPostRequest("/api/major/add", this.simplify(that.form));
           }
 
           that.dialogFormVisible = false;
@@ -303,7 +314,7 @@ export default {
     getAllData() {
       var _this = this;
       this.$http
-        .get("http://127.0.0.1:8000/api/major/get")
+        .get("/api/major/get")
         .then(function(res) {
           var resbody = JSON.parse(res.bodyText);
           if (resbody["code"] == 0) {
@@ -339,14 +350,14 @@ export default {
     delData() {
       var _this = this;
       _this.dialogVisible = false;
-      this.sendGetRequest("http://127.0.0.1:8000/api/major/del", {
+      this.sendGetRequest("/api/major/del", {
         params: { id: this.delId }
       });
     },
 
     mysearchData() {
       console.log(this.simplify(this.form));
-      this.sendGetRequest("http://127.0.0.1:8000/api/major/get", {
+      this.sendGetRequest("/api/major/get", {
         params: this.simplify(this.form)
       });
     },

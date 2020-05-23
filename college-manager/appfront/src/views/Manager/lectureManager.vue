@@ -29,44 +29,61 @@
             label-width="100px"
             class="demo-ruleForm"
           >
-            <el-form-item label="课堂号" prop="id" style="width: 20%">
-              <el-input v-model="form.id"></el-input>
-            </el-form-item>
-            <el-form-item
-              label="课程名称"
-              prop="course_id"
-              style="width: 20%; left: 30px; position: absolute;"
-            >
-              <el-input v-model="form.course_id"></el-input>
-            </el-form-item>
-            <el-form-item label="授课教师工号" prop="teacher_id" style="width: 20%">
-              <el-input v-model="form.teacher_id"></el-input>
-            </el-form-item>
-            <el-form-item label="开课日期" prop="year" style="width: 20%">
-              <el-input v-model="form.year"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="warning" plain @click="mysearchData">搜索</el-button>
-            </el-form-item>
-          </el-form>
-          <el-form
-            :inline="true"
-            :model="form"
-            :rules="searchRules"
-            ref="form"
-            label-width="100px"
-            class="demo-ruleForm"
-          >
-            <el-form-item label="开课学期" prop="term">
-              <el-select v-model="form.term" placeholder="请选择学期">
-                <el-option label="春" value="0" autocomplete="off"></el-option>
-                <el-option label="秋" value="1" autocomplete="off"></el-option>
-              </el-select>
-            </el-form-item>
-
-            <el-form-item label="开课时间" prop="time" style="width: 20%;">
-              <el-input v-model="form.time"></el-input>
-            </el-form-item>
+            <el-row type="flex" class="row-bg">
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="课堂号" prop="id">
+                    <el-input v-model="form.id"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="课程名称" prop="course_id">
+                    <el-input v-model="form.course_id"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="授课教师工号" prop="teacher_id">
+                    <el-input v-model="form.teacher_id"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <el-button type="warning" plain @click="mysearchData">搜索</el-button>
+              </el-col>
+            </el-row>
+            <el-row type="flex" class="row-bg">
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="开课日期" prop="year">
+                    <el-input v-model="form.year"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="开课学期" prop="term">
+                    <el-select v-model="form.term" placeholder="请选择学期">
+                      <el-option label="春" value="0" autocomplete="off"></el-option>
+                      <el-option label="秋" value="1" autocomplete="off"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="开课时间" prop="time">
+                    <el-input v-model="form.time"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content"></div>
+              </el-col>
+            </el-row>
           </el-form>
         </div>
       </el-collapse-transition>
@@ -244,10 +261,10 @@ export default {
       this.$http
         .get(url, opt)
         .then(function(res) {
-          if (url === "http://127.0.0.1:8000/api/lecture/del") {
+          if (url === "/api/lecture/del") {
             console.log(_this.tableData);
             _this.tableData.splice(_this.delIndex, 1);
-          } else if (url === "http://127.0.0.1:8000/api/lecture/get") {
+          } else if (url === "/api/lecture/get") {
             console.log(res);
             _this.tableData = res.data["list"];
           }
@@ -265,18 +282,18 @@ export default {
         .then(function(res) {
           console.log(res);
           var resbody = JSON.parse(res.bodyText);
-          if (url === "http://127.0.0.1:8000/api/lecture/add") {
+          if (url === "/api/lecture/add") {
             if (resbody["code"] == 0) {
               _this.$message.error("添加开课信息失败：" + resbody["msg"]);
             } else {
               _this.getAllData();
             }
-          } else if (url === "http://127.0.0.1:8000/api/lecture/mod") {
+          } else if (url === "/api/lecture/mod") {
             if (resbody["code"] == 0) {
               _this.$message.error("修改开课信息失败：" + resbody["msg"]);
             } else {
               _this.$http
-                .get("http://127.0.0.1:8000/api/lecture/get", {
+                .get("/api/lecture/get", {
                   params: { id: _this.editId }
                 })
                 .then(function(res) {
@@ -309,13 +326,10 @@ export default {
               update: subForm
             };
             // 修改
-            that.sendPostRequest("http://127.0.0.1:8000/api/lecture/mod", opt);
+            that.sendPostRequest("/api/lecture/mod", opt);
           } else {
             // 新增
-            that.sendPostRequest(
-              "http://127.0.0.1:8000/api/lecture/add",
-              that.simplify(that.form)
-            );
+            that.sendPostRequest("/api/lecture/add", that.simplify(that.form));
           }
 
           that.dialogFormVisible = false;
@@ -330,7 +344,7 @@ export default {
     getAllData() {
       var _this = this;
       this.$http
-        .get("http://127.0.0.1:8000/api/lecture/get")
+        .get("/api/lecture/get")
         .then(function(res) {
           var resbody = JSON.parse(res.bodyText);
           if (resbody["code"] == 0) {
@@ -367,14 +381,14 @@ export default {
     delData() {
       var _this = this;
       _this.dialogVisible = false;
-      this.sendGetRequest("http://127.0.0.1:8000/api/lecture/del", {
+      this.sendGetRequest("/api/lecture/del", {
         params: { id: this.delId }
       });
     },
 
     mysearchData() {
       console.log(this.simplify(this.form));
-      this.sendGetRequest("http://127.0.0.1:8000/api/lecture/get", {
+      this.sendGetRequest("/api/lecture/get", {
         params: this.simplify(this.form)
       });
     },

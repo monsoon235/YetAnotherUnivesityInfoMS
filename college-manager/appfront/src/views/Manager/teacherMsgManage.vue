@@ -29,115 +29,149 @@
             label-width="100px"
             class="demo-ruleForm"
           >
-            <el-form-item
-              label="姓名"
-              prop="person_name"
-              style="width: 20%; left: 30px; position: absolute;"
-            >
-              <el-input v-model="form.person_name"></el-input>
-            </el-form-item>
-            <el-form-item label="工号" prop="id" style="width: 20%; margin-left: 140px;">
-              <el-input v-model="form.id"></el-input>
-            </el-form-item>
-            <el-form-item label="出生日期" prop="birth" style="width: 20%; margin-left: -40px;">
-              <el-date-picker
-                type="date"
-                placeholder="选择日期"
-                v-model="form.birth"
-                style="width: 100%;"
-              ></el-date-picker>
-            </el-form-item>
-            <el-form-item label="性别" prop="gender" style="position: relative;">
-              <el-radio-group v-model="form.gender">
-                <el-radio label="男"></el-radio>
-                <el-radio label="女"></el-radio>
-              </el-radio-group>
-            </el-form-item>
-            <el-form-item label="职称" prop="gender" style="position: relative;">
-              <el-radio-group v-model="form.gender">
-                <el-radio label="教授"></el-radio>
-                <el-radio label="副教授"></el-radio>
-              </el-radio-group>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="warning" plain @click="mysearchData">搜索</el-button>
-            </el-form-item>
-          </el-form>
-          <el-form
-            :inline="true"
-            :model="form"
-            :rules="searchRules"
-            ref="form"
-            label-width="100px"
-            class="demo-ruleForm"
-          >
-            <el-form-item
-              label="专业代码"
-              prop="major_id"
-              style="width: 20%; left: 30px; position: absolute;"
-            >
-              <el-input v-model="form.major_id"></el-input>
-            </el-form-item>
-            <el-form-item
-              label="专业名称"
-              prop="major_name"
-              style="width: 20%; margin-left: 310px;"
-            >
-              <el-input v-model="form.major_name"></el-input>
-            </el-form-item>
-            <el-form-item
-              label="身份证号"
-              prop="person_id"
-              style="width: 20%; margin-left: -40px;"
-            >
-              <el-input v-model="form.person_id"></el-input>
-            </el-form-item>
-            <el-form-item
-              label="身份证类型"
-              prop="person_id_type"
-              style="margin-left: 30px;"
-            >
-              <el-radio-group v-model="form.person_id_type">
-                <el-radio label="身份证"></el-radio>
-                <el-radio label="护照"></el-radio>
-              </el-radio-group>
-            </el-form-item>
+            <el-row type="flex" class="row-bg">
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="姓名" prop="name">
+                    <el-input v-model="form.name"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="工号" prop="id">
+                    <el-input v-model="form.id"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="出生日期" prop="birth">
+                    <el-col :span="11">
+                      <el-date-picker type="date" placeholder="选择日期" v-model="form.birth"></el-date-picker>
+                    </el-col>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="性别" prop="gender" style="position: relative;">
+                    <el-radio-group v-model="form.gender">
+                      <el-radio label="男"></el-radio>
+                      <el-radio label="女"></el-radio>
+                    </el-radio-group>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <el-button type="warning" plain @click="mysearchData">搜索</el-button>
+              </el-col>
+            </el-row>
 
-            <el-form-item label="国籍" prop="country" style="width: 20%;">
-              <el-input v-model="form.country"></el-input>
-            </el-form-item>
-          </el-form>
-          <el-form
-            :inline="true"
-            :model="form"
-            :rules="searchRules"
-            ref="form"
-            label-width="100px"
-            class="demo-ruleForm"
-          >
-            <el-form-item
-              label="入职时间"
-              prop="enroll_date"
-              style="width: 20%; left: 30px; position: absolute;"
-            >
-              <el-input v-model="form.enroll_date"></el-input>
-            </el-form-item>
-            <el-form-item
-              label="家庭住址"
-              prop="family_address"
-              style="width: 20%; margin-left: 300px;"
-            >
-              <el-input v-model="form.family_address"></el-input>
-            </el-form-item>
-            <el-form-item label="邮编" prop="family_zipcode" style="width: 20%; margin-left: -60px;">
-              <el-input v-model="form.family_zipcode"></el-input>
-            </el-form-item>
-            <el-form-item label="联系电话" prop="family_tel" style="width: 20%;">
-              <el-input v-model="form.family_tel"></el-input>
-            </el-form-item>
-            <el-form-item label="电子邮箱" prop="email" style="width: 20%;">
-              <el-input v-model="form.email"></el-input>
-            </el-form-item>
+            <el-row type="flex" class="row-bg">
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="职称" prop="gender" style="position: relative;">
+                    <el-radio-group v-model="form.gender">
+                      <el-radio label="教授"></el-radio>
+                      <el-radio label="副教授"></el-radio>
+                    </el-radio-group>
+                  </el-form-item>
+                </div>
+              </el-col>
+
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="专业代码" prop="major_id">
+                    <el-input v-model="form.major_id"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="专业名称" prop="major_name">
+                    <el-input v-model="form.major_name"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="入职时间" prop="enroll_date">
+                    <el-input v-model="form.enroll_date"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple"></div>
+              </el-col>
+            </el-row>
+
+            <el-row type="flex" class="row-bg">
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="身份证类型" prop="person_id_type">
+                    <el-radio-group v-model="form.person_id_type">
+                      <el-radio label="身份证"></el-radio>
+                      <el-radio label="护照"></el-radio>
+                    </el-radio-group>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="身份证号" prop="person_id">
+                    <el-input v-model="form.person_id"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="国籍" prop="country">
+                    <el-input v-model="form.country"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content"></div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content"></div>
+              </el-col>
+            </el-row>
+
+            <el-row type="flex" class="row-bg">
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="家庭住址" prop="family_address">
+                    <el-input v-model="form.family_address"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="联系电话" prop="family_tel">
+                    <el-input v-model="form.family_tel"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="邮编" prop="family_zipcode">
+                    <el-input v-model="form.family_zipcode"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="电子邮箱" prop="email">
+                    <el-input v-model="form.email"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple"></div>
+              </el-col>
+            </el-row>
           </el-form>
         </div>
       </el-collapse-transition>
@@ -255,6 +289,9 @@
         <el-form-item label="电子邮箱" prop="email">
           <el-input v-model="form.email"></el-input>
         </el-form-item>
+        <el-form-item label="登录密码" prop="password">
+          <el-input v-model="form.password" :disabled="isEdit"></el-input>
+        </el-form-item>
 
         <!-- <el-form-item label="地址">
           <el-input v-model="form.adress" autocomplete="off"></el-input>
@@ -331,7 +368,8 @@ export default {
         family_zipcode: "",
         family_tel: "",
         enroll_date: "",
-        email: ""
+        email: "",
+        password: ""
       },
 
       //两套rule体系
@@ -348,12 +386,6 @@ export default {
         ],
         person_id: [{ required: true, message: "必填", trigger: "blur" }],
         id: [{ required: true, message: "必填", trigger: "blur" }]
-        // age: [
-        //   { type: 'number', message: '年龄必须为数字值'}
-        // ],
-        // moblie: [
-        //   { type: 'number', message: '年龄必须为数字值'}
-        // ]
       }
     };
   },
@@ -386,10 +418,10 @@ export default {
       this.$http
         .get(url, opt)
         .then(function(res) {
-          if (url === "http://127.0.0.1:8000/api/teacher/del") {
+          if (url === "/api/teacher/del") {
             console.log(_this.tableData);
             _this.tableData.splice(_this.delIndex, 1);
-          } else if (url === "http://127.0.0.1:8000/api/teacher/get") {
+          } else if (url === "/api/teacher/get") {
             console.log(res);
             _this.tableData = res.data["list"];
           }
@@ -417,18 +449,18 @@ export default {
           console.log(res);
           var resbody = JSON.parse(res.bodyText);
           // 将数据存储起来
-          if (url === "http://127.0.0.1:8000/api/teacher/add") {
+          if (url === "/api/teacher/add") {
             if (resbody["code"] == 0) {
               _this.$message.error("添加教师失败：" + resbody["msg"]);
             } else {
               _this.getAllData();
             }
-          } else if (url === "http://127.0.0.1:8000/api/teacher/mod") {
+          } else if (url === "/api/teacher/mod") {
             if (resbody["code"] == 0) {
               _this.$message.error("修改教师信息失败：" + resbody["msg"]);
             } else {
               _this.$http
-                .get("http://127.0.0.1:8000/api/teacher/get", {
+                .get("/api/teacher/get", {
                   params: { id: _this.editId }
                 })
                 .then(function(res) {
@@ -457,13 +489,10 @@ export default {
               update: subForm
             };
             // 修改
-            that.sendPostRequest("http://127.0.0.1:8000/api/teacher/mod", opt);
+            that.sendPostRequest("/api/teacher/mod", opt);
           } else {
             // 新增
-            that.sendPostRequest(
-              "http://127.0.0.1:8000/api/teacher/add",
-              that.simplify(that.form)
-            );
+            that.sendPostRequest("/api/teacher/add", that.simplify(that.form));
           }
 
           that.dialogFormVisible = false;
@@ -478,7 +507,7 @@ export default {
     getAllData() {
       var _this = this;
       this.$http
-        .get("http://127.0.0.1:8000/api/teacher/get")
+        .get("/api/teacher/get")
         .then(function(res) {
           var resbody = JSON.parse(res.bodyText);
           if (resbody["code"] == 0) {
@@ -524,14 +553,14 @@ export default {
     delData() {
       var _this = this;
       _this.dialogVisible = false;
-      this.sendGetRequest("http://127.0.0.1:8000/api/teacher/del", {
+      this.sendGetRequest("/api/teacher/del", {
         params: { id: this.delId }
       });
     },
 
     mysearchData() {
       console.log(this.simplify(this.form));
-      this.sendGetRequest("http://127.0.0.1:8000/api/teacher/get", {
+      this.sendGetRequest("/api/teacher/get", {
         params: this.simplify(this.form)
       });
     },

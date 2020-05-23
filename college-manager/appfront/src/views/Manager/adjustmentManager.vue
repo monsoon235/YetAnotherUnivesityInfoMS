@@ -29,58 +29,78 @@
             label-width="100px"
             class="demo-ruleForm"
           >
-            <el-form-item
-              label="异动编号"
-              prop="id"
-              style="width: 20%; left: 30px; position: absolute;"
-            >
-              <el-input v-model="form.id" :disabled="isEdit"></el-input>
-            </el-form-item>
-            <el-form-item label="学号" prop="student_id" style="width: 20%">
-              <el-input v-model="form.student_id"></el-input>
-            </el-form-item>
-            <el-form-item label="原班级代码" prop="from_class_id" style="width: 20%">
-              <el-input v-model="form.from_class_id"></el-input>
-            </el-form-item>
-            <el-form-item label="现班级代码" prop="to_class_id" style="width: 20%">
-              <el-input v-model="form.to_class_id"></el-input>
-            </el-form-item>
+            <el-row type="flex" class="row-bg">
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="异动编号" prop="id">
+                    <el-input v-model="form.id" :disabled="isEdit"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="学号" prop="student_id">
+                    <el-input v-model="form.student_id"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="原班级代码" prop="from_class_id">
+                    <el-input v-model="form.from_class_id"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="现班级代码" prop="to_class_id">
+                    <el-input v-model="form.to_class_id"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <el-button type="warning" plain @click="mysearchData">搜索</el-button>
+              </el-col>
+            </el-row>
 
-            <el-form-item>
-              <el-button type="warning" plain @click="mysearchData">搜索</el-button>
-            </el-form-item>
-          </el-form>
-          <el-form
-            :inline="true"
-            :model="form"
-            :rules="searchRules"
-            ref="form"
-            label-width="100px"
-            class="demo-ruleForm"
-          >
-            <el-form-item label="异动类型" prop="type">
-              <el-select v-model="form.type" placeholder="请选择类型">
-                <el-option label="转专业" value="0" autocomplete="off"></el-option>
-                <el-option label="降级" value="1" autocomplete="off"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="转出团关系" v-if="form.type==0" prop="yycl_change">
-              <el-select v-model="form.yycl_change">
-                <el-option label="是" value="0" autocomplete="off"></el-option>
-                <el-option label="否" value="1" autocomplete="off"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item
-              label="降级原因"
-              v-if="form.type==1"
-              prop="reason"
-              style="width: 20%; position: relative;"
-            >
-              <el-input v-model="form.reason"></el-input>
-            </el-form-item>
-            <el-form-item label="异动日期" prop="date" style="width: 20%; position: relative;">
-              <el-input v-model="form.date"></el-input>
-            </el-form-item>
+            <el-row type="flex" class="row-bg">
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="异动类型" prop="type">
+                    <el-select v-model="form.type" placeholder="请选择类型">
+                      <el-option label="转专业" value="0" autocomplete="off"></el-option>
+                      <el-option label="降级" value="1" autocomplete="off"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="转出团关系" v-if="form.type==0" prop="yycl_change">
+                    <el-select v-model="form.yycl_change">
+                      <el-option label="是" value="0" autocomplete="off"></el-option>
+                      <el-option label="否" value="1" autocomplete="off"></el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="降级原因" v-if="form.type==1" prop="reason">
+                    <el-input v-model="form.reason"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple-light">
+                  <el-form-item label="异动日期" prop="date">
+                    <el-input v-model="form.date"></el-input>
+                  </el-form-item>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content"></div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content"></div>
+              </el-col>
+            </el-row>
           </el-form>
         </div>
       </el-collapse-transition>
@@ -257,10 +277,10 @@ export default {
       this.$http
         .get(url, opt)
         .then(function(res) {
-          if (url === "http://127.0.0.1:8000/api/adjustment/del") {
+          if (url === "/api/adjustment/del") {
             console.log(_this.tableData);
             _this.tableData.splice(_this.delIndex, 1);
-          } else if (url === "http://127.0.0.1:8000/api/adjustment/get") {
+          } else if (url === "/api/adjustment/get") {
             console.log(res);
             _this.tableData = res.data["list"];
           }
@@ -278,18 +298,18 @@ export default {
         .then(function(res) {
           console.log(res);
           var resbody = JSON.parse(res.bodyText);
-          if (url === "http://127.0.0.1:8000/api/adjustment/add") {
+          if (url === "/api/adjustment/add") {
             if (resbody["code"] == 0) {
               _this.$message.error("添加学籍异动失败: " + resbody["msg"]);
             } else {
               _this.getAllData();
             }
-          } else if (url === "http://127.0.0.1:8000/api/adjustment/mod") {
+          } else if (url === "/api/adjustment/mod") {
             if (resbody["code"] == 0) {
               _this.$message.error("修改学籍异动信息失败: " + resbody["msg"]);
             } else {
               _this.$http
-                .get("http://127.0.0.1:8000/api/adjustment/get", {
+                .get("/api/adjustment/get", {
                   params: { id: _this.editId }
                 })
                 .then(function(res) {
@@ -318,16 +338,10 @@ export default {
               update: subForm
             };
             // 修改
-            that.sendPostRequest(
-              "http://127.0.0.1:8000/api/adjustment/mod",
-              opt
-            );
+            that.sendPostRequest("/api/adjustment/mod", opt);
           } else {
             // 新增
-            that.sendPostRequest(
-              "http://127.0.0.1:8000/api/adjustment/add",
-              that.form
-            );
+            that.sendPostRequest("/api/adjustment/add", that.form);
           }
 
           that.dialogFormVisible = false;
@@ -342,7 +356,7 @@ export default {
     getAllData() {
       var _this = this;
       this.$http
-        .get("http://127.0.0.1:8000/api/adjustment/get")
+        .get("/api/adjustment/get")
         .then(function(res) {
           var resbody = JSON.parse(res.bodyText);
           console.log(res);
@@ -382,14 +396,14 @@ export default {
     delData() {
       var _this = this;
       _this.dialogVisible = false;
-      this.sendGetRequest("http://127.0.0.1:8000/api/adjustment/del", {
+      this.sendGetRequest("/api/adjustment/del", {
         params: { id: this.delId }
       });
     },
 
     mysearchData() {
       console.log(this.simplify(this.form));
-      this.sendGetRequest("http://127.0.0.1:8000/api/adjustment/get", {
+      this.sendGetRequest("/api/adjustment/get", {
         params: this.simplify(this.form)
       });
     },
