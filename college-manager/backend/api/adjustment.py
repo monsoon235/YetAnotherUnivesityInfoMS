@@ -41,7 +41,8 @@ def get(request: HttpRequest):
 def add(request: HttpRequest):
     params = json.loads(request.body.decode())
     params = check_params(params)
-    return general_add(Adjustment, params)
+    Adjustment(**params).save()
+    return response_success()
 
 
 @check_admin
