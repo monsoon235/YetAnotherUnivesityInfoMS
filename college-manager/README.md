@@ -1,21 +1,12 @@
 ## 基于vue.js + django + mysql的数据库系统
 
-##环境搭建
-
-pip install -r requirements.txt
-
 ## 1. 后端django初始化
 
 ```bash
+
 cd backend
 
-pip intall django
-
-pip install django-cors-headers
-
-pip install mysqlclient   #直接安装无效，需要进入https://www.lfd.uci.edu/~gohlke/pythonlibs/#mysqlclient下载python对应的mysqlclient
-
-pip install web.py
+pip install -r requirements.txt
 
 ```
 

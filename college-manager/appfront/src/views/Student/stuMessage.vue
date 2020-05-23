@@ -15,8 +15,8 @@
       <el-table-column
         label="证件类型">
         <template slot-scope="scope">
-          <i v-if="scope.row.person_id_type==0">身份证</i>
-          <i v-else>护照</i>
+          <div class="cell" v-if="scope.row.person_id_type==0">身份证</div>
+          <div class="cell" v-else>护照</div>
         </template>
       </el-table-column>
       <el-table-column
@@ -30,8 +30,8 @@
       <el-table-column
         label="性别">
         <template slot-scope="scope">
-          <i v-if="scope.row.gender==0">男</i>
-          <i v-else>女</i>
+          <div class="cell" v-if="scope.row.gender==0">男</div>
+          <div class="cell" v-else>女</div>
         </template>
       </el-table-column>
       <el-table-column
@@ -160,12 +160,12 @@ export default {
         person_id_type: '',
         person_id: '',
         person_name: "",
-        person_gender: "",
-        person_birth: '',
-        person_country: '',
-        person_family_address: '',
-        person_family_zipcode: '',
-        person_family_tel: '',
+        gender: "",
+        birth: '',
+        country: '',
+        family_address: '',
+        family_zipcode: '',
+        family_tel: '',
         email: '',
         enroll_date: '',
         class_name: '',
