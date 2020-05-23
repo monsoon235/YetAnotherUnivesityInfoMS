@@ -1,4 +1,4 @@
-n<template>
+<template>
   <div class="register">
     <LoginHeader></LoginHeader>
     <div class="from">
@@ -6,13 +6,6 @@ n<template>
         <el-form-item label="请输入用户名" prop="id">
           <el-input type="text" v-model="ruleForm.id" label="输入学号,教职工号或是admin"></el-input>
         </el-form-item>
-        <!-- <el-form-item label="请选择类型" prop="category">
-          <el-select v-model="ruleForm.region" placeholder="请选择注册类型">
-            <el-option label="学生" value="xuesheng"></el-option>
-            <el-option label="教师" value="jiaoshi"></el-option>
-            <el-option label="教学管理者" value="manager"></el-option>
-          </el-select>
-        </el-form-item> -->
         <el-form-item label="请输入密码" prop="pass">
           <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
         </el-form-item>
@@ -21,9 +14,6 @@ n<template>
             <el-button type="info" @click="submitForm('ruleForm')">登录</el-button>
             <el-button type="info" @click="resetForm('ruleForm')">重置</el-button>
           </el-form-item>
-
-          <!-- 跳转到注册界面 -->
-          <!-- <router-link to="/register" tag="button" v-text="'去注册'"></router-link> -->
         </el-form-item>
       </el-form>
     </div>

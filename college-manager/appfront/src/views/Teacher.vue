@@ -120,8 +120,8 @@
     },
     created: function() {
         console.log('页面加载')
-        var username = JSON.parse(window.localStorage['id']);
-        this.username = username
+        var user = JSON.parse(window.localStorage['id'])
+        this.username = user
     }
 };
 </script>
